@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { formSchema as reimbursementRequestSchema } from "@/app/(main)/requests/reimbursements/form-schema";
+import { formSchema as reimbursementRequestSchema } from "@/app/(main)/reimbursements/new/form-schema";
 
 export type ExpenseVoucher = z.infer<typeof reimbursementRequestSchema>;
 

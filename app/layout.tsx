@@ -52,7 +52,7 @@ export default function RootLayout({
                 <span className="whitespace-nowrap">Generate FinOps</span>
               </Link>
               <Link
-                href="/requests/reimbursements"
+                href="/reimbursements/new"
                 className="transition-colors text-muted-foreground hover:text-foreground"
               >
                 Reimbursements
@@ -79,7 +79,7 @@ export default function RootLayout({
                     <span className="sr-only">Generate FinOps</span>
                   </Link>
                   <Link
-                    href="/requests/reimbursements"
+                    href="/reimbursements/new"
                     className="text-muted-foreground hover:text-foreground"
                   >
                     Reimbursements

@@ -1,4 +1,4 @@
-import { VoucherForm } from "@/app/(main)/requests/reimbursements/form";
+import { VoucherForm } from "@/app/(main)/reimbursements/new/form";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 

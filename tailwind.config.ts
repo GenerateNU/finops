@@ -33,6 +33,11 @@ const config = {
         sans: ["var(--font-outfit)", ...fontFamily.sans],
         mono: ["var(--font-space-mono)", ...fontFamily.mono],
       },
+      colors: {
+        generate: {
+          green: "#6fcf97",
+        },
+      },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
