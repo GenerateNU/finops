@@ -25,7 +25,6 @@ export async function ReimbursementsTable() {
   }
 
   const requests = await getReimbursementRequests();
-  console.log(requests);
 
   if (!requests || requests.length === 0) {
     return (
@@ -51,10 +50,10 @@ export async function ReimbursementsTable() {
         <TableRow>
           <TableHead>ID</TableHead>
           <TableHead>Purchaser</TableHead>
-          <TableHead className="hidden sm:table-cell">Budget</TableHead>
+          <TableHead>Budget</TableHead>
           <TableHead className="hidden md:table-cell">Purpose</TableHead>
           <TableHead className="hidden sm:table-cell">Status</TableHead>
-          <TableHead className="hidden md:table-cell">Purchased</TableHead>
+          <TableHead className="hidden lg:table-cell">Purchased</TableHead>
           <TableHead className="hidden md:table-cell">Submitted</TableHead>
           <TableHead className="text-right">Amount</TableHead>
           <TableHead></TableHead>
@@ -65,15 +64,19 @@ export async function ReimbursementsTable() {
         {requests?.map((request, i) => (
           <TableRow key={i} className="bg-accent">
             <TableCell>{request.id}</TableCell>
-            <TableCell className="hidden sm:table-cell">
-              <div className="font-medium">{request.requester ?? "--"}</div>
-              <div className="hidden text-sm text-muted-foreground md:inline">
+            <TableCell>
+              <div className="inline font-medium">
+                {request.requester ?? "--"}
+              </div>
+              <div className="hidden text-xs lg:text-sm leading-none text-slate-600 dark:test-slate-400 md:block">
                 {request.email ?? "--"}
               </div>
             </TableCell>
-            <TableCell className="hidden sm:table-cell">
-              <div className="font-medium">{request.branch ?? "--"}</div>
-              <div className="hidden text-sm text-muted-foreground md:inline">
+            <TableCell>
+              <div className="hidden sm:inline font-medium">
+                {request.branch ?? "--"}
+              </div>
+              <div className="sm:text-xs lg:text-sm leading-none sm:text-slate-600 sm:dark:test-slate-400">
                 {request.team ?? "--"}
               </div>
             </TableCell>
@@ -85,11 +88,17 @@ export async function ReimbursementsTable() {
                 Pending
               </Badge>
             </TableCell>
-            <TableCell className="hidden md:table-cell">
-              {dayjs(request.purchased).format("YYYY-MM-DD") ?? "--"}
+            <TableCell
+              className="hidden lg:table-cell"
+              title={dayjs(request.purchased).format("ddd, MMM DD, YYYY")}
+            >
+              {dayjs(request.purchased).format("MMM DD") ?? "--"}
             </TableCell>
-            <TableCell className="hidden md:table-cell">
-              {dayjs(request.submitted).format("YYYY-MM-DD") ?? "--"}
+            <TableCell
+              className="hidden md:table-cell"
+              title={dayjs(request.submitted).format("ddd, MMM DD, YYYY")}
+            >
+              {dayjs(request.submitted).format("MMM DD") ?? "--"}
             </TableCell>
             <TableCell className="text-right">
               {request.amount ?? "--"}

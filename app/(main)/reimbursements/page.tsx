@@ -50,10 +50,10 @@ const TableSkeleton = () => (
       <TableRow>
         <TableHead>ID</TableHead>
         <TableHead className="hidden sm:table-cell">Budget</TableHead>
-        <TableHead className="hidden md:table-cell">Purpose</TableHead>
-        <TableHead className="hidden sm:table-cell">Status</TableHead>
+        <TableHead>Purpose</TableHead>
+        <TableHead>Status</TableHead>
         <TableHead className="hidden md:table-cell">Purchased</TableHead>
-        <TableHead className="hidden md:table-cell">Submitted</TableHead>
+        <TableHead>Submitted</TableHead>
         <TableHead className="text-right">Amount</TableHead>
       </TableRow>
     </TableHeader>
@@ -64,23 +64,23 @@ const TableSkeleton = () => (
           <Skeleton className="w-full h-5" />
         </TableCell>
         <TableCell className="hidden sm:table-cell">
-          <div className="font-medium">
+          <div>
             <Skeleton className="w-full h-5" />
           </div>
-          <div className="hidden text-sm text-muted-foreground md:inline">
+          <div>
             <Skeleton className="mt-2 w-full h-3" />
           </div>
         </TableCell>
-        <TableCell className="hidden md:table-cell">
+        <TableCell>
           <Skeleton className="w-full h-5" />
         </TableCell>
-        <TableCell className="hidden sm:table-cell">
-          <Skeleton className="w-full h-5" />
-        </TableCell>
-        <TableCell className="hidden md:table-cell">
+        <TableCell>
           <Skeleton className="w-full h-5" />
         </TableCell>
         <TableCell className="hidden md:table-cell">
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell>
           <Skeleton className="w-full h-5" />
         </TableCell>
         <TableCell className="text-right">

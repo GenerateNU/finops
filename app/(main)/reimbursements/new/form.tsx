@@ -76,7 +76,7 @@ export function VoucherForm({ session }: { session: Session }) {
     // TEST DATA:
     // defaultValues: {
     //   name: "Burton Guster",
-    //   email: "burton.guster@northeastern.edu",
+    //   email: "burton.g@northeastern.edu",
     //   nuid: "002156789",
     //   address: "360 Huntington Ave, Boston, MA 02120",
     //   budgetBranch: "Engagement",

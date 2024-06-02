@@ -50,10 +50,10 @@ export async function ReimbursementsTable() {
         <TableRow>
           <TableHead>ID</TableHead>
           <TableHead className="hidden sm:table-cell">Budget</TableHead>
-          <TableHead className="hidden md:table-cell">Purpose</TableHead>
-          <TableHead className="hidden sm:table-cell">Status</TableHead>
+          <TableHead>Purpose</TableHead>
+          <TableHead>Status</TableHead>
           <TableHead className="hidden md:table-cell">Purchased</TableHead>
-          <TableHead className="hidden md:table-cell">Submitted</TableHead>
+          <TableHead>Submitted</TableHead>
           <TableHead className="text-right">Amount</TableHead>
         </TableRow>
       </TableHeader>
@@ -63,24 +63,27 @@ export async function ReimbursementsTable() {
           <TableRow key={i} className="bg-accent">
             <TableCell>{request.id}</TableCell>
             <TableCell className="hidden sm:table-cell">
-              <div className="font-medium">{request.branch ?? "--"}</div>
-              <div className="hidden text-sm text-muted-foreground md:inline">
+              <div className="inline font-medium">{request.branch ?? "--"}</div>
+              <div className="text-xs lg:text-sm text-slate-600 dark:test-slate-400">
                 {request.team ?? "--"}
               </div>
             </TableCell>
-            <TableCell className="hidden md:table-cell">
-              {request.purpose ?? "--"}
-            </TableCell>
-            <TableCell className="hidden sm:table-cell">
+            <TableCell>{request.purpose ?? "--"}</TableCell>
+            <TableCell>
               <Badge className="text-xs" variant="outline">
                 Pending
               </Badge>
             </TableCell>
-            <TableCell className="hidden md:table-cell">
-              {dayjs(request.purchased).format("YYYY-MM-DD") ?? "--"}
+            <TableCell
+              className="hidden md:table-cell"
+              title={dayjs(request.purchased).format("ddd, MMM DD, YYYY")}
+            >
+              {dayjs(request.purchased).format("MMM DD") ?? "--"}
             </TableCell>
-            <TableCell className="hidden md:table-cell">
-              {dayjs(request.submitted).format("YYYY-MM-DD") ?? "--"}
+            <TableCell
+              title={dayjs(request.submitted).format("ddd, MMM DD, YYYY")}
+            >
+              {dayjs(request.submitted).format("MMM DD") ?? "--"}
             </TableCell>
             <TableCell className="text-right">
               {request.amount ?? "--"}
