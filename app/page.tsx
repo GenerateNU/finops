@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 export default async function Home() {
-  return redirect("/reimbursements/new");
+  return redirect("/reimbursements");
 
   // const session = await auth();
   // if (!session) return redirect("/auth/login");

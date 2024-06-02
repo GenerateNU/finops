@@ -3,32 +3,12 @@ import dayjs from "dayjs";
 
 import { google, sheets_v4 } from "googleapis";
 
-// export async function getGoogleSheetsData(range: string) {
-//   const auth = await google.auth.getClient({
-//     projectId: process.env.GOOGLE_PROJECT_ID,
-//     credentials: {
-//       type: "service_account",
-//       private_key: process.env
-//         .GOOGLE_PRIVATE_KEY!.split(String.raw`\n`)
-//         .join("\n"),
-//       client_email: process.env.GOOGLE_CLIENT_EMAIL,
-//       client_id: process.env.GOOGLE_CLIENT_ID,
-//       token_url: "https://oauth2.googleapis.com/token",
-//       universe_domain: "googleapis.com",
-//     },
-//     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
-//   });
-
-//   const sheets = google.sheets({ version: "v4", auth });
-
-//   const data = await sheets.spreadsheets.values.get({
-//     spreadsheetId: process.env.GOOGLE_SHEET_ID,
-//     range: range,
-//   });
-
-//   return data.data;
-// }
-
+/**
+ * Create and autofill an expense voucher based on the spreadsheet template and the given expense data.
+ *
+ * @param expense the expense voucher data
+ * @returns the resulting spreadsheet
+ */
 export async function createExpenseVoucher(
   expense: ExpenseVoucher
 ): Promise<sheets_v4.Schema$Spreadsheet> {
@@ -81,11 +61,6 @@ export async function createExpenseVoucher(
     throw new Error("Could not create expense voucher");
   }
 
-  // delete a file
-  // await drive.files.delete({
-  //   fileId: newVoucher.data.spreadsheetId,
-  // });
-
   // share file with google drive user to view
   await drive.permissions
     .create({
@@ -122,7 +97,7 @@ export async function createExpenseVoucher(
     .catch((err) => console.log(err));
 
   // insert data
-  const rangePrefix = "'Page 1'!";
+  let rangePrefix = "'Page 1'!";
   await sheets.spreadsheets.values
     .batchUpdate({
       spreadsheetId: newVoucher.data.spreadsheetId,
@@ -186,9 +161,102 @@ export async function createExpenseVoucher(
     })
     .catch((err) => console.log(err));
 
+  // insert data
+  rangePrefix = "'Reimbursements'!";
+  await sheets.spreadsheets.values
+    .append({
+      spreadsheetId: process.env.REIMBURSEMENT_REQUESTS_DB_FILE_ID,
+      range: rangePrefix + "B3:K",
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: [
+          [
+            expense.name,
+            expense.email,
+            TODAY,
+            expense.budgetBranch,
+            expense.budgetTeam,
+            expense.expenseDate,
+            expense.expensePurpose,
+            expense.expenseTotal,
+            expense.expenseDescription,
+            newVoucher.data.spreadsheetId,
+          ],
+        ],
+      },
+    })
+    .catch((err) => console.log(err));
+
   return newVoucher.data;
 }
 
+/**
+ * Get all recorded reimbursement requests for the given purchaser's email. If not provided, returns all requests.
+ *
+ * @param email the purchaser's email to filter results by
+ * @returns the resulting rows
+ */
+export async function getReimbursementRequests(email?: string) {
+  try {
+    const auth = await google.auth.getClient({
+      projectId: process.env.GOOGLE_PROJECT_ID,
+      credentials: {
+        type: "service_account",
+        private_key: process.env
+          .GOOGLE_PRIVATE_KEY!.split(String.raw`\n`)
+          .join("\n"),
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        token_url: "https://oauth2.googleapis.com/token",
+        universe_domain: "googleapis.com",
+      },
+      scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+    });
+
+    const sheets = google.sheets({ version: "v4", auth });
+
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.REIMBURSEMENT_REQUESTS_DB_FILE_ID,
+      range: "B2:K",
+    });
+
+    const rows = response.data.values;
+    if (!rows || rows.length === 0) {
+      console.log("No data found.");
+      return;
+    }
+
+    const columnIndex = rows[0].indexOf("Email");
+    if (columnIndex === -1) {
+      console.log(`Column "Email" not found.`);
+      return [];
+    }
+
+    const objects = [];
+    for (let i = 1; i < rows.length; i++) {
+      const row = rows[i];
+      if (!email || (email && row[columnIndex] === email)) {
+        const obj: any = {};
+        rows[0].forEach((header, columnIndex) => {
+          obj[header.toLowerCase()] = row[columnIndex];
+        });
+        obj["id"] = i + 2; // add 2 to account for header rows
+        objects.push(obj);
+      }
+    }
+
+    return objects;
+  } catch (err) {
+    console.error("The API returned an error:", err);
+    throw err;
+  }
+}
+
+/**
+ * Delete a given file owned by the FinOps service account.
+ *
+ * @param fileId the ID of the file to delete
+ */
 export async function deleteFile(fileId: string): Promise<void> {
   const auth = await google.auth.getClient({
     projectId: process.env.GOOGLE_PROJECT_ID,
@@ -207,7 +275,7 @@ export async function deleteFile(fileId: string): Promise<void> {
 
   const drive = google.drive({ version: "v3", auth });
 
-  // delete a file
+  // delete the file
   await drive.files
     .delete({
       fileId,

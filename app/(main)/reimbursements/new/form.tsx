@@ -60,33 +60,33 @@ export function VoucherForm({ session }: { session: Session }) {
   // define form
   const form = useForm<z.output<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    // defaultValues: {
-    //   name: session.user?.name ?? "",
-    //   email: session.user?.email ?? "",
-    //   nuid: "",
-    //   address: "",
-    //   budgetBranch: undefined,
-    //   budgetTeam: undefined,
-    //   expenseDate: dayjs().format("YYYY-MM-DD"),
-    //   expenseTotal: "",
-    //   expenseDescription: "",
-    //   expensePurpose: "",
-    //   ...(state?.fields ?? {}),
-    // },
-    // TEST DATA:
     defaultValues: {
-      name: "Burton Guster",
-      email: "burton.guster@northeastern.edu",
-      nuid: "002156789",
-      address: "360 Huntington Ave, Boston, MA 02120",
-      budgetBranch: "Engagement",
-      budgetTeam: "Events",
-      expenseDate: dayjs().subtract(6, "days").format("YYYY-MM-DD"),
-      expenseTotal: "23.45",
-      expenseDescription: "Pizza and soda",
-      expensePurpose: "Morale",
+      name: session.user?.name ?? "",
+      email: session.user?.email ?? "",
+      nuid: "",
+      address: "",
+      budgetBranch: undefined,
+      budgetTeam: undefined,
+      expenseDate: dayjs().format("YYYY-MM-DD"),
+      expenseTotal: "",
+      expenseDescription: "",
+      expensePurpose: "",
       ...(state?.fields ?? {}),
     },
+    // TEST DATA:
+    // defaultValues: {
+    //   name: "Burton Guster",
+    //   email: "burton.guster@northeastern.edu",
+    //   nuid: "002156789",
+    //   address: "360 Huntington Ave, Boston, MA 02120",
+    //   budgetBranch: "Engagement",
+    //   budgetTeam: "Events",
+    //   expenseDate: dayjs().subtract(6, "days").format("YYYY-MM-DD"),
+    //   expenseTotal: "23.45",
+    //   expenseDescription: "Pizza and soda",
+    //   expensePurpose: "Morale",
+    //   ...(state?.fields ?? {}),
+    // },
   });
 
   const formRef = useRef<HTMLFormElement>(null);

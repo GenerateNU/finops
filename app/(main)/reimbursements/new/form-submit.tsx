@@ -1,5 +1,6 @@
 "use server";
 
+import { createExpenseVoucher } from "@/lib/sheets";
 import { formSchema } from "./form-schema";
 
 export type FormState = {
@@ -42,11 +43,11 @@ export async function onSubmitAction(
     };
   }
 
-  // const voucher = await createExpenseVoucher(parsed.data);
+  const voucher = await createExpenseVoucher(parsed.data);
 
   return {
     success: true,
     message: "Reimbursement request submitted",
-    // url: voucher.spreadsheetUrl || undefined,
+    url: voucher.spreadsheetUrl || undefined,
   };
 }
