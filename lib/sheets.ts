@@ -57,7 +57,7 @@ export async function createExpenseVoucher(
 
   // get template spreadsheet data
   const template = await sheets.spreadsheets.get({
-    spreadsheetId: process.env.EXPENSE_VOUCHER_SHEET_ID,
+    spreadsheetId: process.env.EXPENSE_VOUCHER_TEMPLATE_FILE_ID,
     includeGridData: true,
   });
 
