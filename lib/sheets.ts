@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { google, sheets_v4 } from "googleapis";
+import { drive_v3, google, sheets_v4 } from "googleapis";
 
 import { ExpenseVoucher } from "@/types";
 
@@ -252,6 +252,42 @@ export async function getReimbursementRequests(email?: string) {
     console.error("The API returned an error:", err);
     throw err;
   }
+}
+
+/**
+ * Get all non-trashed files in the expense vouchers folder.
+ *
+ * @returns the files
+ */
+export async function getExpenseVoucherFiles(): Promise<drive_v3.Schema$FileList> {
+  const auth = await google.auth.getClient({
+    projectId: process.env.GOOGLE_PROJECT_ID,
+    credentials: {
+      type: "service_account",
+      private_key: process.env
+        .GOOGLE_PRIVATE_KEY!.split(String.raw`\n`)
+        .join("\n"),
+      client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      token_url: "https://oauth2.googleapis.com/token",
+      universe_domain: "googleapis.com",
+    },
+    scopes: ["https://www.googleapis.com/auth/drive.file"],
+  });
+
+  const drive = google.drive({ version: "v3", auth });
+
+  // get the files
+  const files = await drive.files
+    .list({
+      q: `'${process.env.EXPENSE_VOUCHERS_FOLDER_ID}' in parents and trashed = false`,
+    })
+    .catch((err) => {
+      console.log(err);
+      throw new Error("Unable to list files");
+    });
+
+  return files.data;
 }
 
 /**

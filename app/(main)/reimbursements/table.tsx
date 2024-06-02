@@ -1,10 +1,14 @@
+import { PlusCircleIcon } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import dayjs from "@/lib/dayjs";
 import { getReimbursementRequests } from "@/lib/sheets";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -13,11 +17,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import dayjs from "@/lib/dayjs";
-import { PlusCircleIcon } from "lucide-react";
-import Link from "next/link";
 
-export async function ReimbursementsTable() {
+export async function MyReimbursementsTable() {
   const session = await auth();
   if (!session || !session.user || !session.user.email) {
     return redirect("/auth/login");
@@ -59,8 +60,8 @@ export async function ReimbursementsTable() {
       </TableHeader>
 
       <TableBody>
-        {requests?.map((request, i) => (
-          <TableRow key={i} className="bg-accent">
+        {requests.map((request) => (
+          <TableRow key={request.id} className="bg-accent">
             <TableCell>{request.id}</TableCell>
             <TableCell className="hidden sm:table-cell">
               <div className="inline font-medium">{request.branch ?? "--"}</div>
@@ -94,3 +95,50 @@ export async function ReimbursementsTable() {
     </Table>
   );
 }
+
+export const MyReimbursementsTableSkeleton = () => (
+  <Table>
+    <TableHeader>
+      <TableRow>
+        <TableHead>ID</TableHead>
+        <TableHead className="hidden sm:table-cell">Budget</TableHead>
+        <TableHead>Purpose</TableHead>
+        <TableHead>Status</TableHead>
+        <TableHead className="hidden md:table-cell">Purchased</TableHead>
+        <TableHead>Submitted</TableHead>
+        <TableHead className="text-right">Amount</TableHead>
+      </TableRow>
+    </TableHeader>
+
+    <TableBody>
+      <TableRow className="bg-accent">
+        <TableCell>
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell className="hidden sm:table-cell">
+          <div>
+            <Skeleton className="w-full h-5" />
+          </div>
+          <div>
+            <Skeleton className="mt-2 w-full h-3" />
+          </div>
+        </TableCell>
+        <TableCell>
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell>
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell className="hidden md:table-cell">
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell>
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell className="text-right">
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
+);

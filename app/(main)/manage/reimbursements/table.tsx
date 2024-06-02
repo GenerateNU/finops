@@ -1,10 +1,14 @@
+import { PlusCircleIcon, Table2Icon } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import dayjs from "@/lib/dayjs";
 import { getReimbursementRequests } from "@/lib/sheets";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -13,9 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import dayjs from "@/lib/dayjs";
-import { PlusCircleIcon, Table2Icon } from "lucide-react";
-import Link from "next/link";
 
 export async function ReimbursementsTable() {
   const session = await auth();
@@ -61,8 +62,8 @@ export async function ReimbursementsTable() {
       </TableHeader>
 
       <TableBody>
-        {requests?.map((request, i) => (
-          <TableRow key={i} className="bg-accent">
+        {requests.map((request) => (
+          <TableRow key={request.id} className="bg-accent">
             <TableCell>{request.id}</TableCell>
             <TableCell>
               <div className="inline font-medium">
@@ -104,7 +105,7 @@ export async function ReimbursementsTable() {
               {request.amount ?? "--"}
             </TableCell>
             <TableCell className="text-right">
-              <div className="inline-flex gap-4 items-center">
+              <div className="flex gap-4 items-center">
                 {request.voucherFileId ? (
                   <Link
                     href={`https://docs.google.com/spreadsheets/d/${request.voucherFileId}`}
@@ -130,3 +131,63 @@ export async function ReimbursementsTable() {
     </Table>
   );
 }
+
+export const ReimbursementsTableSkeleton = () => (
+  <Table>
+    <TableHeader>
+      <TableRow>
+        <TableHead>ID</TableHead>
+        <TableHead>Purchaser</TableHead>
+        <TableHead>Budget</TableHead>
+        <TableHead className="hidden md:table-cell">Purpose</TableHead>
+        <TableHead className="hidden sm:table-cell">Status</TableHead>
+        <TableHead className="hidden lg:table-cell">Purchased</TableHead>
+        <TableHead className="hidden md:table-cell">Submitted</TableHead>
+        <TableHead className="text-right">Amount</TableHead>
+        <TableHead></TableHead>
+      </TableRow>
+    </TableHeader>
+
+    <TableBody>
+      <TableRow className="bg-accent">
+        <TableCell>
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell>
+          <div className="inline">
+            <Skeleton className="w-full h-5" />
+          </div>
+          <div className="hidden md:block">
+            <Skeleton className="mt-2 w-full h-3" />
+          </div>
+        </TableCell>
+        <TableCell>
+          <div className="hidden sm:inline">
+            <Skeleton className="w-full h-5" />
+          </div>
+          <div>
+            <Skeleton className="sm:mt-2 w-full h-5 sm:h-3" />
+          </div>
+        </TableCell>
+        <TableCell className="hidden md:table-cell">
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell className="hidden sm:table-cell">
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell className="hidden lg:table-cell">
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell className="hidden md:table-cell">
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell className="text-right">
+          <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell className="text-right">
+          <Skeleton className="w-full h-5 aspect-square" />
+        </TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
+);
