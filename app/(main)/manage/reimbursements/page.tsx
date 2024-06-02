@@ -23,9 +23,9 @@ export default function MyReimbursementsPage() {
   return (
     <Card>
       <CardHeader className="px-7">
-        <CardTitle>My Submissions</CardTitle>
+        <CardTitle>Reimbursements</CardTitle>
         <CardDescription>
-          Your current and past reimbursement requests.
+          All current and past reimbursement requests.
         </CardDescription>
       </CardHeader>
 
@@ -49,6 +49,7 @@ const TableSkeleton = () => (
     <TableHeader>
       <TableRow>
         <TableHead>ID</TableHead>
+        <TableHead>Purchaser</TableHead>
         <TableHead className="hidden sm:table-cell">Budget</TableHead>
         <TableHead className="hidden md:table-cell">Purpose</TableHead>
         <TableHead className="hidden sm:table-cell">Status</TableHead>
@@ -62,6 +63,14 @@ const TableSkeleton = () => (
       <TableRow className="bg-accent">
         <TableCell>
           <Skeleton className="w-full h-5" />
+        </TableCell>
+        <TableCell className="hidden sm:table-cell">
+          <div className="font-medium">
+            <Skeleton className="w-full h-5" />
+          </div>
+          <div className="hidden text-sm text-muted-foreground md:inline">
+            <Skeleton className="mt-2 w-full h-3" />
+          </div>
         </TableCell>
         <TableCell className="hidden sm:table-cell">
           <div className="font-medium">

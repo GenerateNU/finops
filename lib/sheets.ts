@@ -1,7 +1,9 @@
-import { ExpenseVoucher } from "@/types";
 import dayjs from "dayjs";
-
 import { google, sheets_v4 } from "googleapis";
+
+import { ExpenseVoucher } from "@/types";
+
+import { camelize } from "./utils";
 
 /**
  * Create and autofill an expense voucher based on the spreadsheet template and the given expense data.
@@ -238,7 +240,7 @@ export async function getReimbursementRequests(email?: string) {
       if (!email || (email && row[columnIndex] === email)) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {
-          obj[header.toLowerCase()] = row[columnIndex];
+          obj[camelize(header)] = row[columnIndex];
         });
         obj["id"] = i + 2; // add 2 to account for header rows
         objects.push(obj);

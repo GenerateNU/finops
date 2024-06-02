@@ -14,27 +14,28 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import dayjs from "@/lib/dayjs";
-import { PlusCircleIcon } from "lucide-react";
+import { PlusCircleIcon, Table2Icon } from "lucide-react";
 import Link from "next/link";
 
 export async function ReimbursementsTable() {
   const session = await auth();
-  if (!session || !session.user || !session.user.email) {
+  // TODO: ensure user has perms
+  if (!session || !session.user) {
     return redirect("/auth/login");
   }
 
-  const requests = await getReimbursementRequests(session.user.email);
+  const requests = await getReimbursementRequests();
+  console.log(requests);
 
   if (!requests || requests.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm p-8">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
-            You have no reimbursements
+            There are no reimbursements
           </h3>
           <p className="text-sm text-muted-foreground">
-            We don&rsquo;t have any records of reimbursement requests associated
-            with your email address.
+            We don&rsquo;t currently have any records of reimbursement requests.
           </p>
           <Button className="mt-4" before={<PlusCircleIcon />} asChild>
             <Link href="/reimbursements/new">Submit Request</Link>
@@ -49,12 +50,14 @@ export async function ReimbursementsTable() {
       <TableHeader>
         <TableRow>
           <TableHead>ID</TableHead>
+          <TableHead>Purchaser</TableHead>
           <TableHead className="hidden sm:table-cell">Budget</TableHead>
           <TableHead className="hidden md:table-cell">Purpose</TableHead>
           <TableHead className="hidden sm:table-cell">Status</TableHead>
           <TableHead className="hidden md:table-cell">Purchased</TableHead>
           <TableHead className="hidden md:table-cell">Submitted</TableHead>
           <TableHead className="text-right">Amount</TableHead>
+          <TableHead></TableHead>
         </TableRow>
       </TableHeader>
 
@@ -62,6 +65,12 @@ export async function ReimbursementsTable() {
         {requests?.map((request, i) => (
           <TableRow key={i} className="bg-accent">
             <TableCell>{request.id}</TableCell>
+            <TableCell className="hidden sm:table-cell">
+              <div className="font-medium">{request.requester ?? "--"}</div>
+              <div className="hidden text-sm text-muted-foreground md:inline">
+                {request.email ?? "--"}
+              </div>
+            </TableCell>
             <TableCell className="hidden sm:table-cell">
               <div className="font-medium">{request.branch ?? "--"}</div>
               <div className="hidden text-sm text-muted-foreground md:inline">
@@ -84,6 +93,27 @@ export async function ReimbursementsTable() {
             </TableCell>
             <TableCell className="text-right">
               {request.amount ?? "--"}
+            </TableCell>
+            <TableCell className="text-right">
+              <div className="inline-flex gap-4 items-center">
+                {request.voucherFileId ? (
+                  <Link
+                    href={`https://docs.google.com/spreadsheets/d/${request.voucherFileId}`}
+                    target="_blank"
+                  >
+                    <Table2Icon className="size-5 text-generate-green" />
+                  </Link>
+                ) : (
+                  <Table2Icon className="size-5 text-slate-400 dark:text-slate-600" />
+                )}
+
+                {/* <Link
+                  href={`https://docs.google.com/spreadsheets/d/${request.voucherFileId}`}
+                  target="_blank"
+                >
+                  <ReceiptTextIcon className="size-5 text-generate-green" />
+                </Link> */}
+              </div>
             </TableCell>
           </TableRow>
         ))}

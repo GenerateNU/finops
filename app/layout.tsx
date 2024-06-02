@@ -1,4 +1,4 @@
-import { Menu } from "lucide-react";
+import { LockIcon, Menu } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -57,6 +57,13 @@ export default function RootLayout({
               >
                 Reimbursements
               </Link>
+              <Link
+                href="/manage"
+                className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2"
+              >
+                Manage
+                <LockIcon className="size-3 text-slate-400 dark:text-slate-600" />
+              </Link>
             </nav>
             <Sheet>
               <SheetTrigger asChild>
@@ -83,6 +90,13 @@ export default function RootLayout({
                     className="text-muted-foreground hover:text-foreground"
                   >
                     Reimbursements
+                  </Link>
+                  <Link
+                    href="/manage"
+                    className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2"
+                  >
+                    Manage
+                    <LockIcon className="size-3 text-slate-400 dark:text-slate-600" />
                   </Link>
                 </nav>
               </SheetContent>
