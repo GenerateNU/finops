@@ -36,7 +36,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
+import { BRANCH_TEAMS, BRANCHES } from "@/lib/globals";
 import Link from "next/link";
 import { formSchema } from "./form-schema";
 import { onSubmitAction } from "./form-submit";
@@ -50,29 +60,33 @@ export function VoucherForm({ session }: { session: Session }) {
   // define form
   const form = useForm<z.output<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: session.user?.name ?? "",
-      email: session.user?.email ?? "",
-      nuid: "",
-      address: "",
-      expenseDate: dayjs().format("YYYY-MM-DD"),
-      expenseTotal: "",
-      expenseDescription: "",
-      expensePurpose: "",
-      ...(state?.fields ?? {}),
-    },
-    // TEST DATA:
     // defaultValues: {
-    //   name: "Burton Guster",
-    //   email: "burton.guster@northeastern.edu",
-    //   nuid: "002156789",
-    //   address: "360 Huntington Ave, Boston, MA 02120",
-    //   expenseDate: dayjs().subtract(6, "days").format("YYYY-MM-DD"),
-    //   expenseTotal: "23.45",
-    //   expenseDescription: "Pizza and soda",
-    //   expensePurpose: "Morale",
+    //   name: session.user?.name ?? "",
+    //   email: session.user?.email ?? "",
+    //   nuid: "",
+    //   address: "",
+    //   budgetBranch: undefined,
+    //   budgetTeam: undefined,
+    //   expenseDate: dayjs().format("YYYY-MM-DD"),
+    //   expenseTotal: "",
+    //   expenseDescription: "",
+    //   expensePurpose: "",
     //   ...(state?.fields ?? {}),
     // },
+    // TEST DATA:
+    defaultValues: {
+      name: "Burton Guster",
+      email: "burton.guster@northeastern.edu",
+      nuid: "002156789",
+      address: "360 Huntington Ave, Boston, MA 02120",
+      budgetBranch: "Engagement",
+      budgetTeam: "Events",
+      expenseDate: dayjs().subtract(6, "days").format("YYYY-MM-DD"),
+      expenseTotal: "23.45",
+      expenseDescription: "Pizza and soda",
+      expensePurpose: "Morale",
+      ...(state?.fields ?? {}),
+    },
   });
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -190,6 +204,98 @@ export function VoucherForm({ session }: { session: Session }) {
                       </FormControl>
                       <FormDescription>
                         Your full mailing address where you can receive a check.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </DualColumn>
+
+              <SectionTitle>Budget Info</SectionTitle>
+
+              <DualColumn>
+                <FormField
+                  control={form.control}
+                  name="budgetBranch"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Branch</FormLabel>
+                      <Select
+                        name={field.name}
+                        value={field.value}
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              ref={field.ref}
+                              onBlur={field.onBlur}
+                              placeholder="Select a branch"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {BRANCHES.map((branch) => (
+                            <SelectItem
+                              key={branch.toLowerCase()}
+                              value={branch}
+                            >
+                              {branch}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        Which branch's budget should this purchase be expensed
+                        to?
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="budgetTeam"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Team</FormLabel>
+                      <Select
+                        name={field.name}
+                        value={field.value}
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              ref={field.ref}
+                              onBlur={field.onBlur}
+                              placeholder="Select a team"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent>
+                          {BRANCH_TEAMS.map((branch) => (
+                            <SelectGroup key={branch.name.toLowerCase()}>
+                              <SelectLabel>{branch.name}</SelectLabel>
+
+                              {branch.teams.map((team) => (
+                                <SelectItem
+                                  key={team.toLowerCase()}
+                                  value={team}
+                                >
+                                  {team}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        Which team's budget should this purchase be expensed to?
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
