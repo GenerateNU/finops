@@ -29,7 +29,7 @@ export default function Layout({
             className="flex flex-row gap-2.5 items-center group"
           >
             <PlusIcon className="size-8 p-2 bg-slate-100 border border-slate-200 text-primary rounded-md group-hover:border-generate-green group-hover:bg-generate-green group-hover:bg-opacity-30 transition-all" />
-            <span className="font-semibold text-primary">Request</span>
+            <span className="font-semibold text-primary">Submit Request</span>
           </Link>
         </nav>
 
