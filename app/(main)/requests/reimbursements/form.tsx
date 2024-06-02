@@ -302,7 +302,7 @@ export function VoucherForm({ session }: { session: Session }) {
                         <Input placeholder="Pizza and soda" {...field} />
                       </FormControl>
                       <FormDescription>
-                        An overview of the items purchased.
+                        What items were purchased?
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
