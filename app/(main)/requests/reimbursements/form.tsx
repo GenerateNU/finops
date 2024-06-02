@@ -281,13 +281,9 @@ export function VoucherForm({ session }: { session: Session }) {
                         />
                       </FormControl>
                       <FormDescription>
-                        The total amount being requested.{" "}
-                        <strong>
-                          Do NOT include sales tax in this calculation unless it
-                          is for prepared meals.
-                        </strong>{" "}
-                        Sales tax is not reimbursable as Northeastern is
-                        tax-exempt.
+                        The total amount requested.{" "}
+                        <strong>Do NOT include sales tax</strong> unless for
+                        prepared meals. Northeastern is tax-exempt.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -306,7 +302,7 @@ export function VoucherForm({ session }: { session: Session }) {
                         <Input placeholder="Pizza and soda" {...field} />
                       </FormControl>
                       <FormDescription>
-                        A brief description of the items purchased.
+                        An overview of the items purchased.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -323,8 +319,7 @@ export function VoucherForm({ session }: { session: Session }) {
                         <Input placeholder="Morale" {...field} />
                       </FormControl>
                       <FormDescription>
-                        A brief explanation of the purpose for the items
-                        purchased. Examples:{" "}
+                        What was this purchase for? Examples:{" "}
                         <span className="bg-slate-200 px-1 py-0.25 rounded-sm">
                           &ldquo;Morale&rdquo;
                         </span>
@@ -413,7 +408,7 @@ export function VoucherForm({ session }: { session: Session }) {
 }
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="font-semibold leading-none tracking-tight p-4 border-b bg-[#6FCF97] text-white rounded-md">
+  <h3 className="font-semibold font-mono uppercase leading-none tracking-tight p-3 border-b bg-[#6FCF97] text-white rounded-md section-header">
     {children}
   </h3>
 );

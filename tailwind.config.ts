@@ -31,6 +31,7 @@ const config = {
       },
       fontFamily: {
         sans: ["var(--font-outfit)", ...fontFamily.sans],
+        mono: ["var(--font-space-mono)", ...fontFamily.mono],
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

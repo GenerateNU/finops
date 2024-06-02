@@ -40,8 +40,6 @@ export default async function Login() {
         <Image
           src={groupPhoto}
           alt="Group photo"
-          // width="1920"
-          // height="1080"
           placeholder="blur"
           className="h-full w-full object-cover grayscale opacity-70 dark:opacity-100"
         />
