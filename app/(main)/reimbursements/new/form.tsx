@@ -7,6 +7,7 @@ import {
   CoinsIcon,
   LoaderIcon,
   PiggyBankIcon,
+  ReceiptTextIcon,
   ScanEyeIcon,
   StretchHorizontalIcon,
   UserIcon,
@@ -153,7 +154,7 @@ export function VoucherForm({ session }: { session: Session }) {
               )}
 
               <SectionTitle>
-                <UserIcon className="size-4" />
+                <UserIcon className="size-5" />
                 Purchaser Info
               </SectionTitle>
 
@@ -233,7 +234,7 @@ export function VoucherForm({ session }: { session: Session }) {
               </DualColumn>
 
               <SectionTitle>
-                <PiggyBankIcon className="size-4" />
+                <PiggyBankIcon className="size-5" />
                 Budget Info
               </SectionTitle>
 
@@ -328,7 +329,7 @@ export function VoucherForm({ session }: { session: Session }) {
               </DualColumn>
 
               <SectionTitle>
-                <CoinsIcon className="size-4" />
+                <CoinsIcon className="size-5" />
                 Expense Info
               </SectionTitle>
 
@@ -504,11 +505,21 @@ export function VoucherForm({ session }: { session: Session }) {
                   )}
                 /> */}
               </DualColumn>
+
+              <SectionTitle>
+                <ReceiptTextIcon className="size-5" />
+                Itemized Receipt(s)
+              </SectionTitle>
+
+              <div className="p-4 text-sm border rounded-md border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                An itemized receipt is required for all purchases in order to
+                receive reimbursement.
+              </div>
             </CardContent>
 
             <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
               <Alert>
-                <ScanEyeIcon className="size-4" />
+                <ScanEyeIcon className="size-5" />
                 <AlertTitle className="font-semibold">
                   Did you triple check?
                 </AlertTitle>
@@ -548,7 +559,7 @@ export function VoucherForm({ session }: { session: Session }) {
 
             <CardContent className="space-y-8">
               <Alert>
-                <CheckIcon className="size-4" />
+                <CheckIcon className="size-5" />
                 <AlertTitle className="font-semibold">
                   Request submitted!
                 </AlertTitle>
