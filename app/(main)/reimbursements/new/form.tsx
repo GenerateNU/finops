@@ -1,25 +1,28 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRightIcon,
   CheckIcon,
   CoinsIcon,
-  HomeIcon,
+  LoaderIcon,
   PiggyBankIcon,
   ScanEyeIcon,
+  StretchHorizontalIcon,
   UserIcon,
   XIcon,
 } from "lucide-react";
 import { Session } from "next-auth";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import dayjs from "@/lib/dayjs";
 import { BRANCH_TEAMS, BRANCHES, EXPENSE_PURPOSE_OPTIONS } from "@/lib/globals";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { camelize } from "@/lib/utils";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -51,49 +54,59 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { camelize } from "@/lib/utils";
 import { formSchema } from "./form-schema";
 import { onSubmitAction } from "./form-submit";
 
 export function VoucherForm({ session }: { session: Session }) {
+  const [loading, setTransitioning] = useTransition();
   const [state, formAction] = useFormState(onSubmitAction, {
     success: false,
     message: "",
   });
 
+  // override form visibility to allow multiple submissions
+  const [showForm, setShowForm] = useState(false);
+
   // define form
   const form = useForm<z.output<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: session.user?.name ?? "",
-      email: session.user?.email ?? "",
-      nuid: "",
-      address: "",
-      budgetBranch: undefined,
-      budgetTeam: undefined,
-      expenseDate: dayjs().format("YYYY-MM-DD"),
-      expenseTotal: "",
-      expenseDescription: "",
-      expensePurpose: "",
-      ...(state?.fields ?? {}),
-    },
-    // TEST DATA:
     // defaultValues: {
-    //   name: "Burton Guster",
-    //   email: "burton.g@northeastern.edu",
-    //   nuid: "002156789",
-    //   address: "360 Huntington Ave, Boston, MA 02120",
-    //   budgetBranch: "Engagement",
-    //   budgetTeam: "Events",
-    //   expenseDate: dayjs().subtract(6, "days").format("YYYY-MM-DD"),
-    //   expenseTotal: "23.45",
-    //   expenseDescription: "Pizza and soda",
-    //   expensePurpose: "Morale",
+    //   name: session.user?.name ?? "",
+    //   email: session.user?.email ?? "",
+    //   nuid: "",
+    //   address: "",
+    //   budgetBranch: undefined,
+    //   budgetTeam: undefined,
+    //   expenseDate: dayjs().format("YYYY-MM-DD"),
+    //   expenseTotal: "",
+    //   expenseDescription: "",
+    //   expensePurpose: "",
     //   ...(state?.fields ?? {}),
     // },
+    // TEST DATA:
+    defaultValues: {
+      name: "Burton Guster",
+      email: "burton.g@northeastern.edu",
+      nuid: "002156789",
+      address: "360 Huntington Ave, Boston, MA 02120",
+      budgetBranch: "Engagement",
+      budgetTeam: "Events",
+      expenseDate: dayjs().subtract(6, "days").format("YYYY-MM-DD"),
+      expenseTotal: "23.45",
+      expenseDescription: "Pizza and soda",
+      expensePurpose: "Morale",
+      ...(state?.fields ?? {}),
+    },
   });
 
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (state.success) {
+      toast.success(state.message);
+      form.reset();
+    }
+  }, [state.resetKey, state.success]);
 
   return (
     <Form {...form}>
@@ -101,13 +114,14 @@ export function VoucherForm({ session }: { session: Session }) {
         ref={formRef}
         action={formAction}
         onSubmit={(ev) => {
-          // ev.preventDefault();
-          form.handleSubmit(() => {
-            formAction(new FormData(formRef.current ?? undefined));
-          })(ev);
+          setTransitioning(async () => {
+            form.handleSubmit(() => {
+              formAction(new FormData(formRef.current ?? undefined));
+            })(ev);
+          });
         }}
       >
-        {!state.success ? (
+        {showForm || !state.success ? (
           <Card>
             <CardHeader>
               <CardTitle>Request Reimbursement</CardTitle>
@@ -505,7 +519,17 @@ export function VoucherForm({ session }: { session: Session }) {
                 </AlertDescription>
               </Alert>
 
-              <Button type="submit" after={<ArrowRightIcon />}>
+              <Button
+                type="submit"
+                after={
+                  loading ? (
+                    <LoaderIcon className="animate-spin" />
+                  ) : (
+                    <ArrowRightIcon />
+                  )
+                }
+                disabled={loading}
+              >
                 Submit
               </Button>
             </CardFooter>
@@ -553,8 +577,8 @@ export function VoucherForm({ session }: { session: Session }) {
             </CardContent>
 
             <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
-              <Button before={<HomeIcon />} asChild>
-                <Link href="/">Go Home</Link>
+              <Button before={<StretchHorizontalIcon />} asChild>
+                <Link href="/reimbursements">View Reimbursement Requests</Link>
               </Button>
             </CardFooter>
           </Card>

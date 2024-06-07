@@ -9,6 +9,7 @@ export type FormState = {
   fields?: Record<string, string>;
   issues?: string[];
   url?: string;
+  resetKey?: string;
 };
 
 export async function onSubmitAction(
@@ -45,7 +46,8 @@ export async function onSubmitAction(
 
   return {
     success: true,
-    message: "Reimbursement request submitted",
+    message: "Reimbursement request submitted!",
     url: voucher.spreadsheetUrl || undefined,
+    resetKey: Date.now().toString(),
   };
 }
