@@ -1,4 +1,5 @@
 export const BRANCHES = ["Engagement", "Hardware", "Operations", "Software"];
+
 export const BRANCH_TEAMS = [
   {
     name: "Engagement",
@@ -23,4 +24,11 @@ export const BRANCH_TEAMS = [
     name: "Software",
     teams: ["Carbon", "Care-Wallet", "Couplet", "SAC", "Tubender"],
   },
+];
+
+export const EXPENSE_PURPOSE_OPTIONS = [
+  "Client Projects",
+  "Morale",
+  "Showcase",
+  "Other",
 ];

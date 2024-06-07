@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import dayjs from "@/lib/dayjs";
-import { BRANCH_TEAMS, BRANCHES } from "@/lib/globals";
+import { BRANCH_TEAMS, BRANCHES, EXPENSE_PURPOSE_OPTIONS } from "@/lib/globals";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -51,6 +51,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { camelize } from "@/lib/utils";
 import { formSchema } from "./form-schema";
 import { onSubmitAction } from "./form-submit";
 
@@ -432,6 +433,44 @@ export function VoucherForm({ session }: { session: Session }) {
                   name="expensePurpose"
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Purpose</FormLabel>
+                      <Select
+                        name={field.name}
+                        value={field.value}
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              ref={field.ref}
+                              onBlur={field.onBlur}
+                              placeholder="Select a team"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent>
+                          {EXPENSE_PURPOSE_OPTIONS.map((purpose) => (
+                            <SelectItem key={camelize(purpose)} value={purpose}>
+                              {purpose}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        What was this purchase for?
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* <FormField
+                  control={form.control}
+                  name="expensePurpose"
+                  render={({ field }) => (
+                    <FormItem>
                       <FormLabel>Expense purpose</FormLabel>
                       <FormControl>
                         <Input placeholder="Morale" {...field} />
@@ -449,7 +488,7 @@ export function VoucherForm({ session }: { session: Session }) {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
               </DualColumn>
             </CardContent>
 
