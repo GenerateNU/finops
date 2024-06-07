@@ -27,16 +27,16 @@ export async function ExpenseVoucherFilesTable() {
 
   if (!vouchers || !vouchers.files || vouchers.files.length === 0) {
     return (
-      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm p-8">
+      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
             There are no expense vouchers
           </h3>
           <p className="text-sm text-muted-foreground">
-            We don&rsquo;t currently have any records of expense vouchers.
+            We don&rsquo;t currently have any active expense vouchers.
           </p>
           <Button className="mt-4" before={<PlusCircleIcon />} asChild>
-            <Link href="/reimbursements/new">Submit Request</Link>
+            <Link href="/reimbursements/new">Create Voucher</Link>
           </Button>
         </div>
       </div>
@@ -56,12 +56,17 @@ export async function ExpenseVoucherFilesTable() {
         {vouchers.files.map((voucher) => (
           <TableRow key={voucher.id} className="bg-accent">
             <TableCell className="font-semibold leading-tight">
-              <div className="flex items-center gap-2">
+              <div className="flex items-start gap-2">
                 {voucher.mimeType ===
                 "application/vnd.google-apps.spreadsheet" ? (
-                  <Table2Icon className="size-5 p-1 rounded-md bg-generate-green text-white" />
+                  <Table2Icon className="p-1 text-white rounded-md size-5 bg-generate-green shrink-0" />
                 ) : null}
-                {voucher.name}
+                <div>
+                  {voucher.name}
+                  <small className="block font-normal text-xs mt-0.5 text-slate-500 dark:text-slate-400">
+                    ID: {voucher.id}
+                  </small>
+                </div>
               </div>
             </TableCell>
             <TableCell className="text-right">

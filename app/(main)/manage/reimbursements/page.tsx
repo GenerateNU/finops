@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import dayjs from "@/lib/dayjs";
 
+import { DeleteFileForm } from "./delete-file-form";
 import { ReimbursementsTable, ReimbursementsTableSkeleton } from "./table";
 import {
   ExpenseVoucherFilesTable,
@@ -40,24 +41,40 @@ export default function MyReimbursementsPage() {
         </CardFooter>
       </Card>
 
-      <Card className="w-full md:max-w-lg">
-        <CardHeader className="px-7">
-          <CardTitle>Expense Vouchers</CardTitle>
-          <CardDescription>All expense vouchers.</CardDescription>
-        </CardHeader>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Expense Vouchers</CardTitle>
+            <CardDescription>All expense vouchers.</CardDescription>
+          </CardHeader>
 
-        <CardContent>
-          <Suspense fallback={<VouchersTableSkeleton />}>
-            <ExpenseVoucherFilesTable />
-          </Suspense>
-        </CardContent>
+          <CardContent>
+            <Suspense fallback={<VouchersTableSkeleton />}>
+              <ExpenseVoucherFilesTable />
+            </Suspense>
+          </CardContent>
 
-        <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t">
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Last updated: {dayjs().format("MMMM Do [at] h:mm a")}
-          </p>
-        </CardFooter>
-      </Card>
+          <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Last updated: {dayjs().format("MMMM Do [at] h:mm a")}
+            </p>
+          </CardFooter>
+        </Card>
+
+        <Card className="border-red-200">
+          <CardHeader>
+            <CardTitle>Delete File</CardTitle>
+            <CardDescription>
+              Permanently delete a file owned by the Generate FinOps service
+              account.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <DeleteFileForm />
+          </CardContent>
+        </Card>
+      </div>
     </>
   );
 }

@@ -1,6 +1,6 @@
 "use server";
 
-import { createExpenseVoucher } from "@/lib/sheets";
+import { deleteFile } from "@/lib/sheets";
 import { formSchema } from "./form-schema";
 
 export type FormState = {
@@ -8,7 +8,7 @@ export type FormState = {
   message: string;
   fields?: Record<string, string>;
   issues?: string[];
-  url?: string;
+  resetKey?: string;
 };
 
 export async function onSubmitAction(
@@ -18,12 +18,12 @@ export async function onSubmitAction(
   const formData = Object.fromEntries(data);
   const parsed = formSchema.safeParse(formData);
 
-  if (!parsed.success) {
-    const fields: Record<string, string> = {};
-    for (const key of Object.keys(formData)) {
-      fields[key] = formData[key].toString();
-    }
+  const fields: Record<string, string> = {};
+  for (const key of Object.keys(formData)) {
+    fields[key] = formData[key].toString();
+  }
 
+  if (!parsed.success) {
     return {
       success: false,
       message: "Invalid form data",
@@ -32,20 +32,19 @@ export async function onSubmitAction(
     };
   }
 
-  if (!parsed.data.expenseDate.match(/^\d{4}\-{1}\d{2}\-{1}\d{2}$/)) {
+  try {
+    await deleteFile(parsed.data.fileId);
+  } catch (err: any) {
     return {
       success: false,
-      message:
-        "Invalid expense date formatting; must be formatted as YYYY-MM-DD",
-      fields: parsed.data,
+      message: err?.message,
+      fields,
     };
   }
 
-  const voucher = await createExpenseVoucher(parsed.data);
-
   return {
     success: true,
-    message: "Reimbursement request submitted",
-    url: voucher.spreadsheetUrl || undefined,
+    message: "File deleted!",
+    resetKey: Date.now().toString(),
   };
 }

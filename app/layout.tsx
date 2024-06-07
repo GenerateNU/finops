@@ -1,13 +1,14 @@
 import { LockIcon, Menu } from "lucide-react";
+import type { Metadata } from "next";
+import { Outfit, Space_Mono } from "next/font/google";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
+import { Toaster } from "@/components/ui/sonner";
 import { UserDropdown } from "@/components/user-dropdown";
+
 import { cn } from "@/lib/utils";
-import type { Metadata } from "next";
-import { Outfit, Space_Mono } from "next/font/google";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -42,7 +43,7 @@ export default function RootLayout({
         )}
       >
         <div className="flex flex-col w-full min-h-screen">
-          <header className="sticky top-0 flex items-center h-16 gap-4 px-4 bg-white border-b bg-background md:px-6 z-10">
+          <header className="sticky top-0 z-10 flex items-center h-16 gap-4 px-4 bg-white border-b bg-background md:px-6">
             <nav className="flex-col hidden gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
               <Link
                 href="/"
@@ -59,7 +60,7 @@ export default function RootLayout({
               </Link>
               <Link
                 href="/manage"
-                className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2"
+                className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground"
               >
                 Manage
                 <LockIcon className="size-3 text-slate-400 dark:text-slate-600" />
@@ -93,7 +94,7 @@ export default function RootLayout({
                   </Link>
                   <Link
                     href="/manage"
-                    className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2"
+                    className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground"
                   >
                     Manage
                     <LockIcon className="size-3 text-slate-400 dark:text-slate-600" />
@@ -109,6 +110,8 @@ export default function RootLayout({
           </header>
 
           {children}
+
+          <Toaster />
         </div>
       </body>
     </html>

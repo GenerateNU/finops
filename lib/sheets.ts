@@ -319,7 +319,10 @@ export async function deleteFile(fileId: string): Promise<void> {
       fileId,
     })
     .catch((err) => {
-      console.log(err);
-      throw new Error("Unable to delete file");
+      if (err?.status && err.status === 404) {
+        throw new Error("Specified file not found");
+      }
+
+      throw new Error(err?.message || "Unable to delete file");
     });
 }
