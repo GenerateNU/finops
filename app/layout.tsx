@@ -75,7 +75,7 @@ export default function RootLayout({
                   size="icon"
                   className="shrink-0 md:hidden"
                 >
-                  <Menu className="w-5 h-5" />
+                  <Menu className="w-5 h-5 text-slate-800 dark:text-slate-200" />
                   <span className="sr-only">Toggle navigation menu</span>
                 </Button>
               </SheetTrigger>
@@ -85,18 +85,17 @@ export default function RootLayout({
                     href="/"
                     className="flex items-center gap-2 text-lg font-semibold"
                   >
-                    {/* <Package2 className="w-6 h-6" /> */}
                     <span className="sr-only">Generate FinOps</span>
                   </Link>
                   <Link
                     href="/reimbursements/new"
-                    className="text-slate-700 dark:text-slate-300 hover:text-slate-700"
+                    className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                   >
                     Reimbursements
                   </Link>
                   <Link
                     href="/manage"
-                    className="inline-flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-slate-700"
+                    className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                   >
                     Manage
                     <LockIcon className="size-3 text-slate-400 dark:text-slate-600" />
