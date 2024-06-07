@@ -3,8 +3,11 @@
 import {
   ArrowRightIcon,
   CheckIcon,
+  CoinsIcon,
   HomeIcon,
+  PiggyBankIcon,
   ScanEyeIcon,
+  UserIcon,
   XIcon,
 } from "lucide-react";
 import { Session } from "next-auth";
@@ -134,7 +137,10 @@ export function VoucherForm({ session }: { session: Session }) {
                 </ul>
               )}
 
-              <SectionTitle>Purchaser Info</SectionTitle>
+              <SectionTitle>
+                <UserIcon className="size-4" />
+                Purchaser Info
+              </SectionTitle>
 
               <DualColumn>
                 <FormField
@@ -211,7 +217,10 @@ export function VoucherForm({ session }: { session: Session }) {
                 />
               </DualColumn>
 
-              <SectionTitle>Budget Info</SectionTitle>
+              <SectionTitle>
+                <PiggyBankIcon className="size-4" />
+                Budget Info
+              </SectionTitle>
 
               <DualColumn>
                 <FormField
@@ -303,7 +312,10 @@ export function VoucherForm({ session }: { session: Session }) {
                 />
               </DualColumn>
 
-              <SectionTitle>Expense Info</SectionTitle>
+              <SectionTitle>
+                <CoinsIcon className="size-4" />
+                Expense Info
+              </SectionTitle>
 
               <DualColumn>
                 <FormField
@@ -337,7 +349,7 @@ export function VoucherForm({ session }: { session: Session }) {
                             variant={"outline"}
                             className={cn(
                               "h-9 pl-3 text-left font-normal shadow-sm",
-                              !field.value && "text-muted-foreground"
+                              !field.value && "text-slate-700 dark:text-slate-300"
                             )}
                           >
                             {field.value ? (
@@ -441,7 +453,7 @@ export function VoucherForm({ session }: { session: Session }) {
               </DualColumn>
             </CardContent>
 
-            <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t">
+            <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
               <Alert>
                 <ScanEyeIcon className="size-4" />
                 <AlertTitle className="font-semibold">
@@ -501,7 +513,7 @@ export function VoucherForm({ session }: { session: Session }) {
               </Alert>
             </CardContent>
 
-            <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t">
+            <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
               <Button before={<HomeIcon />} asChild>
                 <Link href="/">Go Home</Link>
               </Button>
@@ -514,7 +526,7 @@ export function VoucherForm({ session }: { session: Session }) {
 }
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="font-semibold font-mono uppercase leading-none tracking-tight p-3 border-b bg-[#6FCF97] text-white rounded-md section-header">
+  <h3 className="inline-flex items-center gap-2 p-3 font-mono font-semibold leading-none tracking-tight text-white uppercase border border-transparent rounded-md bg-generate-green dark:bg-slate-900 dark:border-slate-800 dark:text-generate-green">
     {children}
   </h3>
 );

@@ -28,12 +28,12 @@ export async function MyReimbursementsTable() {
 
   if (!requests || requests.length === 0) {
     return (
-      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm p-8">
+      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm border-slate-200 dark:border-slate-800">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
             You have no reimbursements
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-slate">
             We don&rsquo;t have any records of reimbursement requests associated
             with your email address.
           </p>
@@ -65,7 +65,7 @@ export async function MyReimbursementsTable() {
             <TableCell>{request.id}</TableCell>
             <TableCell className="hidden sm:table-cell">
               <div className="inline font-medium">{request.branch ?? "--"}</div>
-              <div className="text-xs lg:text-sm text-slate-600 dark:test-slate-400">
+              <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
                 {request.team ?? "--"}
               </div>
             </TableCell>
@@ -120,7 +120,7 @@ export const MyReimbursementsTableSkeleton = () => (
             <Skeleton className="w-full h-5" />
           </div>
           <div>
-            <Skeleton className="mt-2 w-full h-3" />
+            <Skeleton className="w-full h-3 mt-2" />
           </div>
         </TableCell>
         <TableCell>

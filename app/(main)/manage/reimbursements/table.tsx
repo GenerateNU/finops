@@ -29,12 +29,12 @@ export async function ReimbursementsTable() {
 
   if (!requests || requests.length === 0) {
     return (
-      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm p-8">
+      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm border-slate-200 dark:border-slate-800">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
             There are no reimbursements
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-slate-700 dark:text-slate-300">
             We don&rsquo;t currently have any records of reimbursement requests.
           </p>
           <Button className="mt-4" before={<PlusCircleIcon />} asChild>
@@ -69,15 +69,15 @@ export async function ReimbursementsTable() {
               <div className="inline font-medium">
                 {request.requester ?? "--"}
               </div>
-              <div className="hidden text-xs lg:text-sm leading-none text-slate-600 dark:test-slate-400 md:block">
+              <div className="hidden text-xs leading-none lg:text-sm text-slate-600 dark:text-slate-400 md:block">
                 {request.email ?? "--"}
               </div>
             </TableCell>
             <TableCell>
-              <div className="hidden sm:inline font-medium">
+              <div className="hidden font-medium sm:inline">
                 {request.branch ?? "--"}
               </div>
-              <div className="sm:text-xs lg:text-sm leading-none sm:text-slate-600 sm:dark:test-slate-400">
+              <div className="leading-none sm:text-xs lg:text-sm sm:text-slate-600 sm:dark:text-slate-400">
                 {request.team ?? "--"}
               </div>
             </TableCell>
@@ -105,7 +105,7 @@ export async function ReimbursementsTable() {
               {request.amount ?? "--"}
             </TableCell>
             <TableCell className="text-right">
-              <div className="flex gap-4 items-center">
+              <div className="flex items-center gap-4">
                 {request.voucherFileId ? (
                   <Link
                     href={`https://docs.google.com/spreadsheets/d/${request.voucherFileId}`}
@@ -158,7 +158,7 @@ export const ReimbursementsTableSkeleton = () => (
             <Skeleton className="w-full h-5" />
           </div>
           <div className="hidden md:block">
-            <Skeleton className="mt-2 w-full h-3" />
+            <Skeleton className="w-full h-3 mt-2" />
           </div>
         </TableCell>
         <TableCell>
@@ -166,7 +166,7 @@ export const ReimbursementsTableSkeleton = () => (
             <Skeleton className="w-full h-5" />
           </div>
           <div>
-            <Skeleton className="sm:mt-2 w-full h-5 sm:h-3" />
+            <Skeleton className="w-full h-5 sm:mt-2 sm:h-3" />
           </div>
         </TableCell>
         <TableCell className="hidden md:table-cell">

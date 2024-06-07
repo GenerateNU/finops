@@ -29,7 +29,7 @@ export default function MyReimbursementsPage() {
         </Suspense>
       </CardContent>
 
-      <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t">
+      <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
         <p className="text-xs text-slate-500 dark:text-slate-400">
           Last updated: {dayjs().format("MMMM Do [at] h:mm a")}
         </p>

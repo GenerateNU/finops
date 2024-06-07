@@ -17,7 +17,7 @@ export default async function Login() {
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Log In</h1>
-            <p className="text-balance text-muted-foreground">
+            <p className="text-balance text-slate-700 dark:text-slate-300">
               Click below to log into Generate FinOps using your Northeastern
               credentials.
             </p>

@@ -37,30 +37,32 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-white dark:bg-black font-sans antialiased",
           outfit.variable,
           spaceMono.variable
         )}
       >
         <div className="flex flex-col w-full min-h-screen">
-          <header className="sticky top-0 z-10 flex items-center h-16 gap-4 px-4 bg-white border-b bg-background md:px-6">
+          <header className="sticky top-0 z-10 flex items-center h-16 gap-4 px-4 bg-white border-b border-b-slate-100 dark:border-b-slate-900 dark:bg-black bg-background md:px-6">
             <nav className="flex-col hidden gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
               <Link
                 href="/"
                 className="flex items-center gap-2 text-lg font-semibold md:text-base"
               >
                 {/* <Package2 className="w-6 h-6" /> */}
-                <span className="whitespace-nowrap">Generate FinOps</span>
+                <span className="text-black whitespace-nowrap dark:text-white">
+                  Generate FinOps
+                </span>
               </Link>
               <Link
                 href="/reimbursements/new"
-                className="transition-colors text-muted-foreground hover:text-foreground"
+                className="transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
               >
                 Reimbursements
               </Link>
               <Link
                 href="/manage"
-                className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
               >
                 Manage
                 <LockIcon className="size-3 text-slate-400 dark:text-slate-600" />
@@ -88,13 +90,13 @@ export default function RootLayout({
                   </Link>
                   <Link
                     href="/reimbursements/new"
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-slate-700 dark:text-slate-300 hover:text-slate-700"
                   >
                     Reimbursements
                   </Link>
                   <Link
                     href="/manage"
-                    className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                    className="inline-flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-slate-700"
                   >
                     Manage
                     <LockIcon className="size-3 text-slate-400 dark:text-slate-600" />

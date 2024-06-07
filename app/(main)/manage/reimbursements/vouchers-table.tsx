@@ -27,12 +27,12 @@ export async function ExpenseVoucherFilesTable() {
 
   if (!vouchers || !vouchers.files || vouchers.files.length === 0) {
     return (
-      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm">
+      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm border-slate-200 dark:border-slate-800">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
             There are no expense vouchers
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-slate-700 dark:text-slate-300">
             We don&rsquo;t currently have any active expense vouchers.
           </p>
           <Button className="mt-4" before={<PlusCircleIcon />} asChild>
