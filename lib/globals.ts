@@ -3,7 +3,7 @@ export const BRANCHES = ["Engagement", "Hardware", "Operations", "Software"];
 export const BRANCH_TEAMS = [
   {
     name: "Engagement",
-    teams: ["Content", "Events", "Member Journeys"],
+    teams: ["Content", "Events", "Experiences"],
   },
   {
     name: "Hardware",
