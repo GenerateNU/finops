@@ -1,3 +1,4 @@
+import OpsLogo from "@/components/ops-logo";
 import { LockIcon, Menu } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -25,9 +26,9 @@ export const MainNavigation = () => (
     <nav className="flex-col hidden gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
       <Link
         href="/"
-        className="flex items-center gap-2 text-lg font-semibold md:text-base"
+        className="flex items-center gap-3 text-lg font-semibold md:text-base"
       >
-        {/* <Package2 className="w-6 h-6" /> */}
+        <OpsLogo className="size-6" />
         <span className="text-black whitespace-nowrap dark:text-white">
           Generate FinOps
         </span>
@@ -62,9 +63,12 @@ export const MainNavigation = () => (
           <SheetClose className="text-left" asChild>
             <Link
               href="/"
-              className="flex items-center gap-2 text-lg font-semibold"
+              className="flex items-center gap-3 text-lg font-semibold"
             >
-              <span>Generate FinOps</span>
+              <OpsLogo className="size-8" />
+              <span className="text-black dark:text-white">
+                Generate FinOps
+              </span>
             </Link>
           </SheetClose>
           {LINKS.map((link) => (
