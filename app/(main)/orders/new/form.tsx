@@ -74,33 +74,33 @@ export function OrderForm({ session }: { session: Session }) {
   // define form
   const form = useForm<z.output<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    // defaultValues: {
-    //   name: session.user?.name ?? "",
-    //   email: session.user?.email ?? "",
-    //   budgetBranch: undefined,
-    //   budgetTeam: undefined,
-    //   vendor: undefined,
-    //   productLink: "",
-    //   productDescription: "",
-    //   productQuantity: "1",
-    //   productCost: "",
-    //   purpose: "",
-    //   ...(state?.fields ?? {}),
-    // },
-    // TEST DATA:
     defaultValues: {
-      name: "Burton Guster",
-      email: "burton.g@northeastern.edu",
-      budgetBranch: "Engagement",
-      budgetTeam: "Events",
-      vendor: "Amazon",
-      productLink: "https://example.com",
-      productDescription: "Lorem ipsum delor",
+      name: session.user?.name ?? "",
+      email: session.user?.email ?? "",
+      budgetBranch: undefined,
+      budgetTeam: undefined,
+      vendor: undefined,
+      productLink: "",
+      productDescription: "",
       productQuantity: "1",
-      productCost: "23.45",
-      purpose: "Morale",
+      productCost: "",
+      purpose: "",
       ...(state?.fields ?? {}),
     },
+    // TEST DATA:
+    // defaultValues: {
+    //   name: "Burton Guster",
+    //   email: "burton.g@northeastern.edu",
+    //   budgetBranch: "Engagement",
+    //   budgetTeam: "Events",
+    //   vendor: "Amazon",
+    //   productLink: "https://example.com",
+    //   productDescription: "Lorem ipsum delor",
+    //   productQuantity: "1",
+    //   productCost: "23.45",
+    //   purpose: "Morale",
+    //   ...(state?.fields ?? {}),
+    // },
   });
 
   const formRef = useRef<HTMLFormElement>(null);
