@@ -18,7 +18,7 @@ export async function UserDropdown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="icon" className="rounded-full">
-          <CircleUser className="h-5 w-5" />
+          <CircleUser className="w-5 h-5" />
           <span className="sr-only">Toggle user menu</span>
         </Button>
       </DropdownMenuTrigger>
@@ -31,7 +31,7 @@ export async function UserDropdown() {
         ) : null}
 
         <DropdownMenuItem asChild>
-          <Link href={process.env.SLACK_HELP_CHANNEL_URL || "/"}>
+          <Link href={process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL || "/"}>
             Help (Slack)
           </Link>
         </DropdownMenuItem>

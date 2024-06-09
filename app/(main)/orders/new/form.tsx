@@ -3,12 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRightIcon,
-  CheckIcon,
-  CoinsIcon,
   LoaderIcon,
+  LockIcon,
   PiggyBankIcon,
-  ReceiptTextIcon,
   ScanEyeIcon,
+  ShoppingCartIcon,
   StretchHorizontalIcon,
   UserIcon,
   XIcon,
@@ -21,8 +20,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import dayjs from "@/lib/dayjs";
-import { BRANCH_TEAMS, BRANCHES, EXPENSE_PURPOSE_OPTIONS } from "@/lib/globals";
+import {
+  BRANCH_TEAMS,
+  BRANCHES,
+  EXPENSE_PURPOSE_OPTIONS,
+  VENDORS,
+} from "@/lib/globals";
 import { camelize } from "@/lib/utils";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -58,7 +61,7 @@ import {
 import { formSchema } from "./form-schema";
 import { onSubmitAction } from "./form-submit";
 
-export function ExpenseVoucherForm({ session }: { session: Session }) {
+export function OrderForm({ session }: { session: Session }) {
   const [loading, setTransitioning] = useTransition();
   const [state, formAction] = useFormState(onSubmitAction, {
     success: false,
@@ -71,33 +74,33 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
   // define form
   const form = useForm<z.output<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: session.user?.name ?? "",
-      email: session.user?.email ?? "",
-      nuid: "",
-      address: "",
-      budgetBranch: undefined,
-      budgetTeam: undefined,
-      expenseDate: dayjs().format("YYYY-MM-DD"),
-      expenseTotal: "",
-      expenseDescription: "",
-      expensePurpose: "",
-      ...(state?.fields ?? {}),
-    },
-    // TEST DATA:
     // defaultValues: {
-    //   name: "Burton Guster",
-    //   email: "burton.g@northeastern.edu",
-    //   nuid: "002156789",
-    //   address: "360 Huntington Ave, Boston, MA 02120",
-    //   budgetBranch: "Engagement",
-    //   budgetTeam: "Events",
-    //   expenseDate: dayjs().subtract(6, "days").format("YYYY-MM-DD"),
-    //   expenseTotal: "23.45",
-    //   expenseDescription: "Pizza and soda",
-    //   expensePurpose: "Morale",
+    //   name: session.user?.name ?? "",
+    //   email: session.user?.email ?? "",
+    //   budgetBranch: undefined,
+    //   budgetTeam: undefined,
+    //   vendor: undefined,
+    //   productLink: "",
+    //   productDescription: "",
+    //   productQuantity: "1",
+    //   productCost: "",
+    //   purpose: "",
     //   ...(state?.fields ?? {}),
     // },
+    // TEST DATA:
+    defaultValues: {
+      name: "Burton Guster",
+      email: "burton.g@northeastern.edu",
+      budgetBranch: "Engagement",
+      budgetTeam: "Events",
+      vendor: "Amazon",
+      productLink: "https://example.com",
+      productDescription: "Lorem ipsum delor",
+      productQuantity: "1",
+      productCost: "23.45",
+      purpose: "Morale",
+      ...(state?.fields ?? {}),
+    },
   });
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -122,15 +125,12 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
           });
         }}
       >
-        {showForm || !state.success ? (
+        {showForm || state.success ? (
           <Card>
             <CardHeader>
-              <CardTitle>Request Reimbursement</CardTitle>
+              <CardTitle>Request Order</CardTitle>
               <CardDescription>
-                Seek reimbursement for pre-approved Generate expenses personally
-                incurred. Typically, these should only be{" "}
-                <strong>morale</strong>
-                -related purchases.
+                Request that a product be procured for your team.
               </CardDescription>
             </CardHeader>
 
@@ -142,6 +142,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                   {state.message}
                 </div>
               )}
+
               {state?.issues && (
                 <ul className="text-red-500">
                   {state.issues.map((issue, i) => (
@@ -155,7 +156,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
 
               <SectionTitle>
                 <UserIcon className="size-5" />
-                Purchaser Info
+                Requestor Info
               </SectionTitle>
 
               <DualColumn>
@@ -166,7 +167,17 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                     <FormItem>
                       <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Burton Guster" {...field} />
+                        <div className="relative">
+                          <Input
+                            placeholder="Burton Guster"
+                            className="pl-11"
+                            readOnly
+                            {...field}
+                          />
+                          <div className="absolute inset-y-0 flex items-center justify-center start-0 aspect-square shrink-0 bg-slate-200 dark:bg-slate-800 rounded-l-md text-slate-400 dark:text-slate-600">
+                            <LockIcon className="size-4" />
+                          </div>
+                        </div>
                       </FormControl>
                       <FormDescription>
                         Your full name, as recorded in University documents.
@@ -183,50 +194,21 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="burton.guster@generatenu.com"
-                          {...field}
-                        />
+                        <div className="relative">
+                          <Input
+                            type="email"
+                            placeholder="burton.guster@generatenu.com"
+                            className="pl-11"
+                            readOnly
+                            {...field}
+                          />
+                          <div className="absolute inset-y-0 flex items-center justify-center start-0 aspect-square shrink-0 bg-slate-200 dark:bg-slate-800 rounded-l-md text-slate-400 dark:text-slate-600">
+                            <LockIcon className="size-4" />
+                          </div>
+                        </div>
                       </FormControl>
                       <FormDescription>
                         Your official Northeastern email address.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </DualColumn>
-
-              <DualColumn>
-                <FormField
-                  control={form.control}
-                  name="nuid"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>NUID</FormLabel>
-                      <FormControl>
-                        <Input placeholder="001234567" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="360 Huntington Ave, Boston, MA 02120"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Your full mailing address where you can receive a check.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -330,95 +312,66 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
               </DualColumn>
 
               <SectionTitle>
-                <CoinsIcon className="size-5" />
-                Expense Info
+                <ShoppingCartIcon className="size-5" />
+                Product Info
               </SectionTitle>
 
               <DualColumn>
                 <FormField
                   control={form.control}
-                  name="expenseDate"
+                  name="vendor"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Expense date</FormLabel>
-                      <FormControl>
-                        <Input placeholder="YYYY-MM-DD" {...field} />
-                      </FormControl>
+                      <FormLabel>Vendor</FormLabel>
+                      <Select
+                        name={field.name}
+                        value={field.value}
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              ref={field.ref}
+                              onBlur={field.onBlur}
+                              placeholder="Select a vendor"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent>
+                          {VENDORS.map((vendor) => (
+                            <SelectItem key={camelize(vendor)} value={vendor}>
+                              {vendor}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormDescription>
-                        This must be the date the transaction occurred and match
-                        the date on your receipt.
+                        Where is this item sold?
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                {/* <FormField
-                control={form.control}
-                name="expenseDate"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Expense date</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "h-9 pl-3 text-left font-normal shadow-sm",
-                              !field.value && "text-slate-700 dark:text-slate-300"
-                            )}
-                          >
-                            {field.value ? (
-                              dayjs(field.value).format("MMMM Do, YYYY")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormDescription>
-                      This must be the date the transaction occurred and match
-                      the date on your receipt.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
                 <FormField
                   control={form.control}
-                  name="expenseTotal"
+                  name="productLink"
                   render={({ field }) => (
                     <FormItem>
-                      {/* <FormItem className="md:-mt-2"> */}
-                      <FormLabel>Expense total cost ($)</FormLabel>
+                      <FormLabel>Product link</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="12.34"
-                          type="number"
-                          min="0"
-                          step="any"
                           {...field}
+                          placeholder="https://example.com/product-page"
+                          type="url"
                         />
                       </FormControl>
                       <FormDescription>
-                        The total amount requested.{" "}
-                        <strong>Do NOT include sales tax</strong> unless for
-                        prepared meals. Northeastern is tax-exempt.
+                        A direct link to the desired item's product page, with
+                        all configuration options applied, if applicable and
+                        possible.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -426,18 +379,49 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                 />
               </DualColumn>
 
-              <DualColumn>
+              <FormField
+                control={form.control}
+                name="productDescription"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Product description</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={
+                          "3.2 ft x 9.8 ft Metallic Tinsel Foil Fringe Curtains (Green)"
+                        }
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      A detailed description of the desired product. Include any
+                      necessary product configurations, such as size, bundle
+                      quantity, or color.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <TripleColumn>
                 <FormField
                   control={form.control}
-                  name="expenseDescription"
+                  name="productQuantity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Expense description</FormLabel>
+                      <FormLabel>Quantity</FormLabel>
                       <FormControl>
-                        <Input placeholder="Pizza and soda" {...field} />
+                        <Input
+                          {...field}
+                          placeholder="1"
+                          type="number"
+                          min="0"
+                        />
                       </FormControl>
                       <FormDescription>
-                        What items were purchased?
+                        How many of this product to buy. A requested quantity of
+                        2 for a product sold as a 3-pack would result in 6 total
+                        items.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -446,7 +430,30 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
 
                 <FormField
                   control={form.control}
-                  name="expensePurpose"
+                  name="productCost"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cost ($)</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="12.34"
+                          type="number"
+                          min="0"
+                          step="any"
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        This product's expected list price.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="purpose"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Purpose</FormLabel>
@@ -475,47 +482,13 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                         </SelectContent>
                       </Select>
                       <FormDescription>
-                        What was this purchase for?
+                        What is this purchase for?
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-                {/* <FormField
-                  control={form.control}
-                  name="expensePurpose"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Expense purpose</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Morale" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        What was this purchase for? Examples:{" "}
-                        <span className="bg-slate-200 px-1 py-0.25 rounded-sm">
-                          &ldquo;Morale&rdquo;
-                        </span>
-                        ,{" "}
-                        <span className="bg-slate-200 px-1 py-0.25 rounded-sm">
-                          &ldquo;Showcase&rdquo;
-                        </span>
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
-              </DualColumn>
-
-              <SectionTitle>
-                <ReceiptTextIcon className="size-5" />
-                Itemized Receipt(s)
-              </SectionTitle>
-
-              <div className="p-4 text-sm border rounded-md border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
-                An itemized receipt is required for all purchases in order to
-                receive reimbursement.
-              </div>
+              </TripleColumn>
             </CardContent>
 
             <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
@@ -547,53 +520,53 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
             </CardFooter>
           </Card>
         ) : (
-          <Card>
-            <CardHeader>
-              <CardTitle>Request Reimbursement</CardTitle>
-              <CardDescription>
-                Seek reimbursement for pre-approved Generate expenses personally
-                incurred. Typically, these should only be{" "}
-                <strong>morale</strong>
-                -related purchases.
-              </CardDescription>
-            </CardHeader>
+          <div className="space-y-8">
+            <Card className="bg-slate-950 dark:bg-slate-50">
+              <CardContent className="p-6 py-8">
+                <div className="text-center">
+                  <p className="text-sm uppercase text-slate-400 dark:text-slate-600">
+                    Request No.
+                  </p>
+                  <p className="mt-1 font-mono text-7xl text-generate-green">
+                    #1AB23
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-            <CardContent className="space-y-8">
-              <Alert>
-                <CheckIcon className="size-5" />
-                <AlertTitle className="font-semibold">
-                  Request submitted!
-                </AlertTitle>
-                <AlertDescription>
+            <Card>
+              <CardHeader>
+                <CardTitle>Request Submitted!</CardTitle>
+                <CardDescription>
                   <p>
-                    Your reimbursement request has been successfully submitted.
-                    If approved, reimbursements are typically processed by
-                    Northeastern within 2-3 weeks.
+                    Your order request has been successfully submitted. If
+                    approved, orders are typically placed on{" "}
+                    {process.env.NEXT_PUBLIC_ORDER_PLACEMENT_SCHEDULE}.
                   </p>
 
-                  {state.url ? (
-                    <Button
-                      className="mt-4"
-                      variant="outline"
-                      size="sm"
-                      after={<ArrowRightIcon />}
-                      asChild
+                  <p>
+                    Please reach out in{" "}
+                    <Link
+                      href={
+                        process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL ?? "/"
+                      }
                     >
-                      <Link href={state.url} target="_blank">
-                        View Generated Voucher
-                      </Link>
-                    </Button>
-                  ) : null}
-                </AlertDescription>
-              </Alert>
-            </CardContent>
+                      <code>
+                        #{process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME}
+                      </code>
+                    </Link>{" "}
+                    if you have any questions or concerns.
+                  </p>
+                </CardDescription>
+              </CardHeader>
 
-            <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
-              <Button before={<StretchHorizontalIcon />} asChild>
-                <Link href="/reimbursements">View Reimbursement Requests</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+              <CardContent>
+                <Button before={<StretchHorizontalIcon />} asChild>
+                  <Link href="/orders">View Order Requests</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         )}
       </form>
     </Form>
@@ -607,7 +580,11 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 );
 
 const DualColumn = ({ children }: { children: React.ReactNode[] }) => (
-  <div className="grid grid-cols-1 gap-y-8 gap-x-12 md:grid-cols-2">
+  <div className="grid grid-cols-1 gap-8 md:grid-cols-2">{children}</div>
+);
+
+const TripleColumn = ({ children }: { children: React.ReactNode[] }) => (
+  <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
     {children}
   </div>
 );

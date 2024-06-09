@@ -32,3 +32,5 @@ export const EXPENSE_PURPOSE_OPTIONS = [
   "Showcase",
   "Other",
 ];
+
+export const VENDORS = ["Amazon", "Other"];

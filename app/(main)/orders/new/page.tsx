@@ -2,11 +2,11 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 
-import { ExpenseVoucherForm } from "./form";
+import { OrderForm } from "./form";
 
-export default async function NewReimbursementPage() {
+export default async function NewOrderPage() {
   const session = await auth();
   if (!session) return redirect("/auth/login");
 
-  return <ExpenseVoucherForm session={session} />;
+  return <OrderForm session={session} />;
 }
