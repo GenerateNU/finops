@@ -35,7 +35,12 @@ const config = {
       },
       colors: {
         generate: {
+          black: "#231f20",
+          blue: "#187dff",
+          gold: "#ffbf3c",
           green: "#6fcf97",
+          purple: "#a559ec",
+          red: "#ff6660",
         },
       },
       animation: {
