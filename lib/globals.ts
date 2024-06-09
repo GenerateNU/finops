@@ -33,4 +33,28 @@ export const EXPENSE_PURPOSE_OPTIONS = [
   "Other",
 ];
 
-export const VENDORS = ["Amazon", "Other"];
+export const VENDORS = [
+  "4imprint",
+  "Adafruit",
+  "Amazon",
+  "AndyMark",
+  "Arduino",
+  "Custom Ink",
+  "DigiKey",
+  "eBay",
+  // "Foambymail",
+  "Formlabs",
+  // "Grainger Industrial Supplies",
+  "McMaster Carr",
+  "Misumi",
+  "Mouser",
+  "Prolabs",
+  "Protolabs",
+  // "SendCutSend",
+  "ServoCity",
+  "Sparkfun",
+  "Sticker Mule",
+  "Vex Robotics",
+  "Vistaprint",
+  "Other",
+];
