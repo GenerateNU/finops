@@ -125,7 +125,7 @@ export function OrderForm({ session }: { session: Session }) {
           });
         }}
       >
-        {showForm || state.success ? (
+        {showForm || !state.success ? (
           <Card>
             <CardHeader>
               <CardTitle>Request Order</CardTitle>
@@ -165,10 +165,11 @@ export function OrderForm({ session }: { session: Session }) {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel htmlFor="name">Name</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
+                            id="name"
                             placeholder="Burton Guster"
                             className="pl-11"
                             readOnly
@@ -192,10 +193,11 @@ export function OrderForm({ session }: { session: Session }) {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel htmlFor="email">Email</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
+                            id="email"
                             type="email"
                             placeholder="burton.guster@generatenu.com"
                             className="pl-11"
@@ -528,7 +530,7 @@ export function OrderForm({ session }: { session: Session }) {
                     Request No.
                   </p>
                   <p className="mt-1 font-mono text-7xl text-generate-green">
-                    #1AB23
+                    #{state.requestNo}
                   </p>
                 </div>
               </CardContent>
