@@ -1,7 +1,7 @@
 import { LockIcon, Menu } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 import { UserDropdown } from "./user-dropdown";
 
 type Link = {
@@ -59,28 +59,33 @@ export const MainNavigation = () => (
       </SheetTrigger>
       <SheetContent side="left">
         <nav className="grid gap-6 text-lg font-medium">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-lg font-semibold"
-          >
-            <span className="sr-only">Generate FinOps</span>
-          </Link>
-          {LINKS.map((link) => (
+          <SheetClose className="text-left" asChild>
             <Link
-              key={link.href}
-              href={link.href}
-              className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+              href="/"
+              className="flex items-center gap-2 text-lg font-semibold"
             >
-              {link.label}
+              <span>Generate FinOps</span>
             </Link>
+          </SheetClose>
+          {LINKS.map((link) => (
+            <SheetClose key={link.href} className="text-left" asChild>
+              <Link
+                href={link.href}
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+              >
+                {link.label}
+              </Link>
+            </SheetClose>
           ))}
-          <Link
-            href="/manage"
-            className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-          >
-            Manage
-            <LockIcon className="size-3 text-slate-400 dark:text-slate-600" />
-          </Link>
+          <SheetClose className="text-left" asChild>
+            <Link
+              href="/manage"
+              className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+            >
+              Manage
+              <LockIcon className="size-3 text-slate-400 dark:text-slate-600" />
+            </Link>
+          </SheetClose>
         </nav>
       </SheetContent>
     </Sheet>
