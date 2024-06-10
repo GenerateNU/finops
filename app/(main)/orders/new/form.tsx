@@ -5,7 +5,7 @@ import {
   ArrowRightIcon,
   LoaderIcon,
   LockIcon,
-  ScanEyeIcon,
+  OctagonPauseIcon,
   StretchHorizontalIcon,
   XIcon,
 } from "lucide-react";
@@ -25,7 +25,6 @@ import {
 } from "@/lib/globals";
 import { camelize } from "@/lib/utils";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -505,35 +504,39 @@ export function OrderForm({ session }: { session: Session }) {
               </CardContent>
             </Card>
 
-            <Alert className="shadow rounded-xl">
-              <ScanEyeIcon className="size-5" />
-              <AlertTitle className="font-semibold">
-                Did you triple check?
-              </AlertTitle>
-              <AlertDescription>
-                <p>
+            <Card>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Verify &amp; Submit
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent>
+                <OctagonPauseIcon className="mt-4 size-16 text-generate-gold" />
+                <p className="max-w-sm mt-4">
                   Before submitting, make sure that all information is 100%
                   correct. If it&rsquo;s not, processing may be delayed or
                   impossible.
                 </p>
 
-                <Button
-                  type="submit"
-                  size="sm"
-                  after={
-                    loading ? (
-                      <LoaderIcon className="animate-spin" />
-                    ) : (
-                      <ArrowRightIcon />
-                    )
-                  }
-                  disabled={loading}
-                  className="mt-4"
-                >
-                  Submit
-                </Button>
-              </AlertDescription>
-            </Alert>
+                <div className="mt-8">
+                  <Button
+                    type="submit"
+                    after={
+                      loading ? (
+                        <LoaderIcon className="animate-spin" />
+                      ) : (
+                        <ArrowRightIcon />
+                      )
+                    }
+                    disabled={loading}
+                  >
+                    I&rsquo;m sure, submit
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </>
         ) : (
           <div className="space-y-8">

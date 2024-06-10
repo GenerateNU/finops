@@ -4,13 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRightIcon,
   CheckIcon,
-  CoinsIcon,
   LoaderIcon,
-  PiggyBankIcon,
-  ReceiptTextIcon,
-  ScanEyeIcon,
+  OctagonPauseIcon,
   StretchHorizontalIcon,
-  UserIcon,
   XIcon,
 } from "lucide-react";
 import { Session } from "next-auth";
@@ -121,20 +117,11 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
             })(ev);
           });
         }}
+        className="space-y-8"
       >
         {showForm || !state.success ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>Request Reimbursement</CardTitle>
-              <CardDescription>
-                Seek reimbursement for pre-approved Generate expenses personally
-                incurred. Typically, these should only be{" "}
-                <strong>morale</strong>
-                -related purchases.
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-8">
+          <>
+            <div>
               {state?.message !== "" && !state.issues && (
                 <div
                   className={state.success ? "text-green-500" : "text-red-500"}
@@ -152,208 +139,227 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                   ))}
                 </ul>
               )}
+            </div>
 
-              <SectionTitle>
-                <UserIcon className="size-5" />
-                Purchaser Info
-              </SectionTitle>
+            <Card>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Purchaser
+                </CardTitle>
+              </CardHeader>
 
-              <DualColumn>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Burton Guster" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Your full name, as recorded in University documents.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="burton.guster@generatenu.com"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Your official Northeastern email address.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </DualColumn>
-
-              <DualColumn>
-                <FormField
-                  control={form.control}
-                  name="nuid"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>NUID</FormLabel>
-                      <FormControl>
-                        <Input placeholder="001234567" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="360 Huntington Ave, Boston, MA 02120"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Your full mailing address where you can receive a check.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </DualColumn>
-
-              <SectionTitle>
-                <PiggyBankIcon className="size-5" />
-                Budget Info
-              </SectionTitle>
-
-              <DualColumn>
-                <FormField
-                  control={form.control}
-                  name="budgetBranch"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Branch</FormLabel>
-                      <Select
-                        name={field.name}
-                        value={field.value}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
+              <CardContent className="space-y-8">
+                <DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              ref={field.ref}
-                              onBlur={field.onBlur}
-                              placeholder="Select a branch"
-                            />
-                          </SelectTrigger>
+                          <Input placeholder="Burton Guster" {...field} />
                         </FormControl>
-                        <SelectContent>
-                          {BRANCHES.map((branch) => (
-                            <SelectItem
-                              key={branch.toLowerCase()}
-                              value={branch}
-                            >
-                              {branch}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Which branch's budget should this purchase be expensed
-                        to?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormDescription>
+                          Your full name, as recorded in University documents.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="budgetTeam"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Team</FormLabel>
-                      <Select
-                        name={field.name}
-                        value={field.value}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              ref={field.ref}
-                              onBlur={field.onBlur}
-                              placeholder="Select a team"
-                            />
-                          </SelectTrigger>
+                          <Input
+                            type="email"
+                            placeholder="burton.guster@generatenu.com"
+                            {...field}
+                          />
                         </FormControl>
+                        <FormDescription>
+                          Your official Northeastern email address.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </DualColumn>
 
-                        <SelectContent>
-                          {BRANCH_TEAMS.map((branch) => (
-                            <SelectGroup key={branch.name.toLowerCase()}>
-                              <SelectLabel>{branch.name}</SelectLabel>
+                <DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="nuid"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>NUID</FormLabel>
+                        <FormControl>
+                          <Input placeholder="001234567" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                              {branch.teams.map((team) => (
-                                <SelectItem
-                                  key={team.toLowerCase()}
-                                  value={team}
-                                >
-                                  {team}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Which team's budget should this purchase be expensed to?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Address</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="360 Huntington Ave, Boston, MA 02120"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Your full mailing address where you can receive a
+                          check.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </DualColumn>
+              </CardContent>
+            </Card>
 
-              <SectionTitle>
-                <CoinsIcon className="size-5" />
-                Expense Info
-              </SectionTitle>
+            <Card>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Budget
+                </CardTitle>
+              </CardHeader>
 
-              <DualColumn>
-                <FormField
-                  control={form.control}
-                  name="expenseDate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Expense date</FormLabel>
-                      <FormControl>
-                        <Input placeholder="YYYY-MM-DD" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        This must be the date the transaction occurred and match
-                        the date on your receipt.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <CardContent className="space-y-8">
+                <DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="budgetBranch"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Branch</FormLabel>
+                        <Select
+                          name={field.name}
+                          value={field.value}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                ref={field.ref}
+                                onBlur={field.onBlur}
+                                placeholder="Select a branch"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {BRANCHES.map((branch) => (
+                              <SelectItem
+                                key={branch.toLowerCase()}
+                                value={branch}
+                              >
+                                {branch}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          Which branch's budget should this purchase be expensed
+                          to?
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                {/* <FormField
+                  <FormField
+                    control={form.control}
+                    name="budgetTeam"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Team</FormLabel>
+                        <Select
+                          name={field.name}
+                          value={field.value}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                ref={field.ref}
+                                onBlur={field.onBlur}
+                                placeholder="Select a team"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+
+                          <SelectContent>
+                            {BRANCH_TEAMS.map((branch) => (
+                              <SelectGroup key={branch.name.toLowerCase()}>
+                                <SelectLabel>{branch.name}</SelectLabel>
+
+                                {branch.teams.map((team) => (
+                                  <SelectItem
+                                    key={team.toLowerCase()}
+                                    value={team}
+                                  >
+                                    {team}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          Which team's budget should this purchase be expensed
+                          to?
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </DualColumn>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Expense
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent className="space-y-8">
+                <DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="expenseDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Expense date</FormLabel>
+                        <FormControl>
+                          <Input placeholder="YYYY-MM-DD" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          This must be the date the transaction occurred and
+                          match the date on your receipt.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* <FormField
                 control={form.control}
                 name="expenseDate"
                 render={({ field }) => (
@@ -399,90 +405,93 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                 )}
               /> */}
 
-                <FormField
-                  control={form.control}
-                  name="expenseTotal"
-                  render={({ field }) => (
-                    <FormItem>
-                      {/* <FormItem className="md:-mt-2"> */}
-                      <FormLabel>Expense total cost ($)</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="12.34"
-                          type="number"
-                          min="0"
-                          step="any"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        The total amount requested.{" "}
-                        <strong>Do NOT include sales tax</strong> unless for
-                        prepared meals. Northeastern is tax-exempt.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </DualColumn>
-
-              <DualColumn>
-                <FormField
-                  control={form.control}
-                  name="expenseDescription"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Expense description</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Pizza and soda" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        What items were purchased?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="expensePurpose"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Purpose</FormLabel>
-                      <Select
-                        name={field.name}
-                        value={field.value}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
+                  <FormField
+                    control={form.control}
+                    name="expenseTotal"
+                    render={({ field }) => (
+                      <FormItem>
+                        {/* <FormItem className="md:-mt-2"> */}
+                        <FormLabel>Expense total cost ($)</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              ref={field.ref}
-                              onBlur={field.onBlur}
-                              placeholder="Select a purpose"
-                            />
-                          </SelectTrigger>
+                          <Input
+                            placeholder="12.34"
+                            type="number"
+                            min="0"
+                            step="any"
+                            {...field}
+                          />
                         </FormControl>
+                        <FormDescription>
+                          The total amount requested.{" "}
+                          <strong>Do NOT include sales tax</strong> unless for
+                          prepared meals. Northeastern is tax-exempt.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </DualColumn>
 
-                        <SelectContent>
-                          {EXPENSE_PURPOSE_OPTIONS.map((purpose) => (
-                            <SelectItem key={camelize(purpose)} value={purpose}>
-                              {purpose}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        What was this purchase for?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="expenseDescription"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Expense description</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Pizza and soda" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          What items were purchased?
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                {/* <FormField
+                  <FormField
+                    control={form.control}
+                    name="expensePurpose"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Purpose</FormLabel>
+                        <Select
+                          name={field.name}
+                          value={field.value}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                ref={field.ref}
+                                onBlur={field.onBlur}
+                                placeholder="Select a purpose"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+
+                          <SelectContent>
+                            {EXPENSE_PURPOSE_OPTIONS.map((purpose) => (
+                              <SelectItem
+                                key={camelize(purpose)}
+                                value={purpose}
+                              >
+                                {purpose}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          What was this purchase for?
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* <FormField
                   control={form.control}
                   name="expensePurpose"
                   render={({ field }) => (
@@ -505,47 +514,60 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                     </FormItem>
                   )}
                 /> */}
-              </DualColumn>
+                </DualColumn>
+              </CardContent>
+            </Card>
 
-              <SectionTitle>
-                <ReceiptTextIcon className="size-5" />
-                Itemized Receipt(s)
-              </SectionTitle>
+            <Card>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Itemized Receipt(s)
+                </CardTitle>
+              </CardHeader>
 
-              <div className="p-4 text-sm border rounded-md border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
-                An itemized receipt is required for all purchases in order to
-                receive reimbursement.
-              </div>
-            </CardContent>
+              <CardContent className="space-y-8">
+                <div className="p-4 text-sm border rounded-md border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                  An itemized receipt is required for all purchases in order to
+                  receive reimbursement.
+                </div>
+              </CardContent>
+            </Card>
 
-            <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
-              <Alert>
-                <ScanEyeIcon className="size-5" />
-                <AlertTitle className="font-semibold">
-                  Did you triple check?
-                </AlertTitle>
-                <AlertDescription>
+            <Card>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Verify &amp; Submit
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent>
+                <OctagonPauseIcon className="mt-4 size-16 text-generate-gold" />
+                <p className="max-w-sm mt-4">
                   Before submitting, make sure that all information is 100%
                   correct. If it&rsquo;s not, processing may be delayed or
                   impossible.
-                </AlertDescription>
-              </Alert>
+                </p>
 
-              <Button
-                type="submit"
-                after={
-                  loading ? (
-                    <LoaderIcon className="animate-spin" />
-                  ) : (
-                    <ArrowRightIcon />
-                  )
-                }
-                disabled={loading}
-              >
-                Submit
-              </Button>
-            </CardFooter>
-          </Card>
+                <div className="mt-8">
+                  <Button
+                    type="submit"
+                    after={
+                      loading ? (
+                        <LoaderIcon className="animate-spin" />
+                      ) : (
+                        <ArrowRightIcon />
+                      )
+                    }
+                    disabled={loading}
+                  >
+                    I&rsquo;m sure, submit
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </>
         ) : (
           <Card>
             <CardHeader>
@@ -607,7 +629,5 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 );
 
 const DualColumn = ({ children }: { children: React.ReactNode[] }) => (
-  <div className="grid grid-cols-1 gap-y-8 gap-x-12 md:grid-cols-2">
-    {children}
-  </div>
+  <div className="grid grid-cols-1 gap-8 md:grid-cols-2">{children}</div>
 );
