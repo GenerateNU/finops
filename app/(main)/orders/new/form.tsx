@@ -5,11 +5,8 @@ import {
   ArrowRightIcon,
   LoaderIcon,
   LockIcon,
-  PiggyBankIcon,
   ScanEyeIcon,
-  ShoppingCartIcon,
   StretchHorizontalIcon,
-  UserIcon,
   XIcon,
 } from "lucide-react";
 import { Session } from "next-auth";
@@ -34,7 +31,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -124,17 +120,11 @@ export function OrderForm({ session }: { session: Session }) {
             })(ev);
           });
         }}
+        className="space-y-8"
       >
         {showForm || !state.success ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>Request Order</CardTitle>
-              <CardDescription>
-                Request that a product be procured for your team.
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-8">
+          <>
+            <div>
               {state?.message !== "" && !state.issues && (
                 <div
                   className={state.success ? "text-green-500" : "text-red-500"}
@@ -153,374 +143,398 @@ export function OrderForm({ session }: { session: Session }) {
                   ))}
                 </ul>
               )}
+            </div>
 
-              <SectionTitle>
-                <UserIcon className="size-5" />
-                Requestor Info
-              </SectionTitle>
+            <Card>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Requestor
+                </CardTitle>
+              </CardHeader>
 
-              <DualColumn>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="name">Name</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            id="name"
-                            placeholder="Burton Guster"
-                            className="pl-11"
-                            readOnly
-                            {...field}
-                          />
-                          <div className="absolute inset-y-0 flex items-center justify-center start-0 aspect-square shrink-0 bg-slate-200 dark:bg-slate-800 rounded-l-md text-slate-400 dark:text-slate-600">
-                            <LockIcon className="size-4" />
+              <CardContent className="space-y-8">
+                <DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel htmlFor="name">Name</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              id="name"
+                              placeholder="Burton Guster"
+                              className="pl-11"
+                              readOnly
+                              {...field}
+                            />
+                            <div className="absolute inset-y-0 flex items-center justify-center start-0 aspect-square shrink-0 bg-slate-200 dark:bg-slate-800 rounded-l-md text-slate-400 dark:text-slate-600">
+                              <LockIcon className="size-4" />
+                            </div>
                           </div>
-                        </div>
-                      </FormControl>
-                      <FormDescription>
-                        Your full name, as recorded in University documents.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        </FormControl>
+                        <FormDescription>
+                          Your full name, as recorded in University documents.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="email">Email</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            id="email"
-                            type="email"
-                            placeholder="burton.guster@generatenu.com"
-                            className="pl-11"
-                            readOnly
-                            {...field}
-                          />
-                          <div className="absolute inset-y-0 flex items-center justify-center start-0 aspect-square shrink-0 bg-slate-200 dark:bg-slate-800 rounded-l-md text-slate-400 dark:text-slate-600">
-                            <LockIcon className="size-4" />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel htmlFor="email">Email</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              id="email"
+                              type="email"
+                              placeholder="burton.guster@generatenu.com"
+                              className="pl-11"
+                              readOnly
+                              {...field}
+                            />
+                            <div className="absolute inset-y-0 flex items-center justify-center start-0 aspect-square shrink-0 bg-slate-200 dark:bg-slate-800 rounded-l-md text-slate-400 dark:text-slate-600">
+                              <LockIcon className="size-4" />
+                            </div>
                           </div>
-                        </div>
-                      </FormControl>
-                      <FormDescription>
-                        Your official Northeastern email address.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </DualColumn>
-
-              <SectionTitle>
-                <PiggyBankIcon className="size-5" />
-                Budget Info
-              </SectionTitle>
-
-              <DualColumn>
-                <FormField
-                  control={form.control}
-                  name="budgetBranch"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Branch</FormLabel>
-                      <Select
-                        name={field.name}
-                        value={field.value}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              ref={field.ref}
-                              onBlur={field.onBlur}
-                              placeholder="Select a branch"
-                            />
-                          </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
-                          {BRANCHES.map((branch) => (
-                            <SelectItem
-                              key={branch.toLowerCase()}
-                              value={branch}
-                            >
-                              {branch}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Which branch's budget should this purchase be expensed
-                        to?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormDescription>
+                          Your official Northeastern email address.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </DualColumn>
+              </CardContent>
+            </Card>
 
-                <FormField
-                  control={form.control}
-                  name="budgetTeam"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Team</FormLabel>
-                      <Select
-                        name={field.name}
-                        value={field.value}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
+            <Card>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Budget
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent className="space-y-8">
+                <DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="budgetBranch"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Branch</FormLabel>
+                        <Select
+                          name={field.name}
+                          value={field.value}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                ref={field.ref}
+                                onBlur={field.onBlur}
+                                placeholder="Select a branch"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {BRANCHES.map((branch) => (
+                              <SelectItem
+                                key={branch.toLowerCase()}
+                                value={branch}
+                              >
+                                {branch}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          Which branch's budget should this purchase be expensed
+                          to?
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="budgetTeam"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Team</FormLabel>
+                        <Select
+                          name={field.name}
+                          value={field.value}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                ref={field.ref}
+                                onBlur={field.onBlur}
+                                placeholder="Select a team"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+
+                          <SelectContent>
+                            {BRANCH_TEAMS.map((branch) => (
+                              <SelectGroup key={branch.name.toLowerCase()}>
+                                <SelectLabel>{branch.name}</SelectLabel>
+
+                                {branch.teams.map((team) => (
+                                  <SelectItem
+                                    key={team.toLowerCase()}
+                                    value={team}
+                                  >
+                                    {team}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          Which team's budget should this purchase be expensed
+                          to?
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </DualColumn>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Product
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent className="space-y-8">
+                <DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="vendor"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Vendor</FormLabel>
+                        <Select
+                          name={field.name}
+                          value={field.value}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                ref={field.ref}
+                                onBlur={field.onBlur}
+                                placeholder="Select a vendor"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+
+                          <SelectContent>
+                            {VENDORS.map((vendor) => (
+                              <SelectItem key={camelize(vendor)} value={vendor}>
+                                {vendor}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          Where is this item sold?
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="productLink"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Product link</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              ref={field.ref}
-                              onBlur={field.onBlur}
-                              placeholder="Select a team"
-                            />
-                          </SelectTrigger>
+                          <Input
+                            {...field}
+                            placeholder="https://example.com/product-page"
+                            type="url"
+                          />
                         </FormControl>
-
-                        <SelectContent>
-                          {BRANCH_TEAMS.map((branch) => (
-                            <SelectGroup key={branch.name.toLowerCase()}>
-                              <SelectLabel>{branch.name}</SelectLabel>
-
-                              {branch.teams.map((team) => (
-                                <SelectItem
-                                  key={team.toLowerCase()}
-                                  value={team}
-                                >
-                                  {team}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Which team's budget should this purchase be expensed to?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </DualColumn>
-
-              <SectionTitle>
-                <ShoppingCartIcon className="size-5" />
-                Product Info
-              </SectionTitle>
-
-              <DualColumn>
-                <FormField
-                  control={form.control}
-                  name="vendor"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Vendor</FormLabel>
-                      <Select
-                        name={field.name}
-                        value={field.value}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              ref={field.ref}
-                              onBlur={field.onBlur}
-                              placeholder="Select a vendor"
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-
-                        <SelectContent>
-                          {VENDORS.map((vendor) => (
-                            <SelectItem key={camelize(vendor)} value={vendor}>
-                              {vendor}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Where is this item sold?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormDescription>
+                          A direct link to the desired item's product page, with
+                          all configuration options applied, if applicable and
+                          possible.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </DualColumn>
 
                 <FormField
                   control={form.control}
-                  name="productLink"
+                  name="productDescription"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Product link</FormLabel>
+                      <FormLabel>Product description</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="https://example.com/product-page"
-                          type="url"
+                          placeholder={
+                            "3.2 ft x 9.8 ft Metallic Tinsel Foil Fringe Curtains (Green)"
+                          }
                         />
                       </FormControl>
                       <FormDescription>
-                        A direct link to the desired item's product page, with
-                        all configuration options applied, if applicable and
-                        possible.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </DualColumn>
-
-              <FormField
-                control={form.control}
-                name="productDescription"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Product description</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder={
-                          "3.2 ft x 9.8 ft Metallic Tinsel Foil Fringe Curtains (Green)"
-                        }
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      A detailed description of the desired product. Include any
-                      necessary product configurations, such as size, bundle
-                      quantity, or color.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <TripleColumn>
-                <FormField
-                  control={form.control}
-                  name="productQuantity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Quantity</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="1"
-                          type="number"
-                          min="0"
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        How many of this product to buy. A requested quantity of
-                        2 for a product sold as a 3-pack would result in 6 total
-                        items.
+                        A detailed description of the desired product. Include
+                        any necessary product configurations, such as size,
+                        bundle quantity, or color.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="productCost"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Cost ($)</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="12.34"
-                          type="number"
-                          min="0"
-                          step="any"
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        This product's expected list price.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="purpose"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Purpose</FormLabel>
-                      <Select
-                        name={field.name}
-                        value={field.value}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
+                <TripleColumn>
+                  <FormField
+                    control={form.control}
+                    name="productQuantity"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Quantity</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              ref={field.ref}
-                              onBlur={field.onBlur}
-                              placeholder="Select a purpose"
-                            />
-                          </SelectTrigger>
+                          <Input
+                            {...field}
+                            placeholder="1"
+                            type="number"
+                            min="0"
+                          />
                         </FormControl>
+                        <FormDescription>
+                          How many of this product to buy. A requested quantity
+                          of 2 for a product sold as a 3-pack would result in 6
+                          total items.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                        <SelectContent>
-                          {EXPENSE_PURPOSE_OPTIONS.map((purpose) => (
-                            <SelectItem key={camelize(purpose)} value={purpose}>
-                              {purpose}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        What is this purchase for?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </TripleColumn>
-            </CardContent>
+                  <FormField
+                    control={form.control}
+                    name="productCost"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Cost ($)</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="12.34"
+                            type="number"
+                            min="0"
+                            step="any"
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          This product's expected list price.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-            <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
-              <Alert>
-                <ScanEyeIcon className="size-5" />
-                <AlertTitle className="font-semibold">
-                  Did you triple check?
-                </AlertTitle>
-                <AlertDescription>
+                  <FormField
+                    control={form.control}
+                    name="purpose"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Purpose</FormLabel>
+                        <Select
+                          name={field.name}
+                          value={field.value}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                ref={field.ref}
+                                onBlur={field.onBlur}
+                                placeholder="Select a purpose"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+
+                          <SelectContent>
+                            {EXPENSE_PURPOSE_OPTIONS.map((purpose) => (
+                              <SelectItem
+                                key={camelize(purpose)}
+                                value={purpose}
+                              >
+                                {purpose}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          What is this purchase for?
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TripleColumn>
+              </CardContent>
+            </Card>
+
+            <Alert className="shadow rounded-xl">
+              <ScanEyeIcon className="size-5" />
+              <AlertTitle className="font-semibold">
+                Did you triple check?
+              </AlertTitle>
+              <AlertDescription>
+                <p>
                   Before submitting, make sure that all information is 100%
                   correct. If it&rsquo;s not, processing may be delayed or
                   impossible.
-                </AlertDescription>
-              </Alert>
+                </p>
 
-              <Button
-                type="submit"
-                after={
-                  loading ? (
-                    <LoaderIcon className="animate-spin" />
-                  ) : (
-                    <ArrowRightIcon />
-                  )
-                }
-                disabled={loading}
-              >
-                Submit
-              </Button>
-            </CardFooter>
-          </Card>
+                <Button
+                  type="submit"
+                  size="sm"
+                  after={
+                    loading ? (
+                      <LoaderIcon className="animate-spin" />
+                    ) : (
+                      <ArrowRightIcon />
+                    )
+                  }
+                  disabled={loading}
+                  className="mt-4"
+                >
+                  Submit
+                </Button>
+              </AlertDescription>
+            </Alert>
+          </>
         ) : (
           <div className="space-y-8">
             <Card className="bg-slate-950 dark:bg-slate-50">
@@ -574,12 +588,6 @@ export function OrderForm({ session }: { session: Session }) {
     </Form>
   );
 }
-
-const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="inline-flex items-center gap-2 p-3 font-mono font-semibold leading-none tracking-tight text-white uppercase border border-transparent rounded-md bg-generate-green dark:bg-slate-900 dark:border-slate-800 dark:text-generate-green">
-    {children}
-  </h3>
-);
 
 const DualColumn = ({ children }: { children: React.ReactNode[] }) => (
   <div className="grid grid-cols-1 gap-8 md:grid-cols-2">{children}</div>
