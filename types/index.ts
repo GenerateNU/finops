@@ -11,3 +11,8 @@ export enum Branch {
   Software = "Software",
 }
 
+export type NavLink = {
+  href: string;
+  label: string;
+  icon?: any;
+};

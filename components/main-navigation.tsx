@@ -1,16 +1,21 @@
-import OpsLogo from "@/components/ops-logo";
 import { LockIcon, Menu } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
+
+import { NavLink } from "@/types";
+
+import OpsLogo from "@/components/ops-logo";
+
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
 import { UserDropdown } from "./user-dropdown";
 
-type Link = {
-  href: string;
-  label: string;
-};
-
-const LINKS = [
+const LINKS: NavLink[] = [
   {
     href: "/orders/new",
     label: "Orders",
