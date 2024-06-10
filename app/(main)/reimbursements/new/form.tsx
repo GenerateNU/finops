@@ -158,7 +158,11 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Burton Guster" {...field} />
+                          <Input
+                            autoComplete="name"
+                            placeholder="Burton Guster"
+                            {...field}
+                          />
                         </FormControl>
                         <FormDescription>
                           Your full name, as recorded in University documents.
@@ -177,6 +181,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                         <FormControl>
                           <Input
                             type="email"
+                            autoComplete="email"
                             placeholder="burton.guster@generatenu.com"
                             {...field}
                           />
@@ -213,6 +218,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                         <FormLabel>Address</FormLabel>
                         <FormControl>
                           <Input
+                            autoComplete="billing street-address"
                             placeholder="360 Huntington Ave, Boston, MA 02120"
                             {...field}
                           />

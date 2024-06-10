@@ -164,6 +164,7 @@ export function OrderForm({ session }: { session: Session }) {
                           <div className="relative">
                             <Input
                               id="name"
+                              autoComplete="name"
                               placeholder="Burton Guster"
                               className="pl-11"
                               readOnly
@@ -193,6 +194,7 @@ export function OrderForm({ session }: { session: Session }) {
                             <Input
                               id="email"
                               type="email"
+                              autoComplete="email"
                               placeholder="burton.guster@generatenu.com"
                               className="pl-11"
                               readOnly
