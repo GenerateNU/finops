@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { drive_v3, google, sheets_v4 } from "googleapis";
+import { drive_v3, google } from "googleapis";
 
 import { ExpenseVoucher } from "@/types";
 
@@ -13,7 +13,7 @@ import { camelize } from "./utils";
  */
 export async function createExpenseVoucher(
   expense: ExpenseVoucher
-): Promise<sheets_v4.Schema$Spreadsheet> {
+): Promise<{ requestId: string; voucherUrl: string }> {
   const TODAY = dayjs().format("MM/DD/YYYY");
 
   const auth = await google.auth.getClient({
@@ -165,7 +165,7 @@ export async function createExpenseVoucher(
 
   // insert data
   rangePrefix = "'Reimbursements'!";
-  await sheets.spreadsheets.values
+  const newDbRowId = await sheets.spreadsheets.values
     .append({
       spreadsheetId: process.env.REIMBURSEMENT_REQUESTS_DB_FILE_ID,
       range: rangePrefix + "B3:K",
@@ -187,9 +187,28 @@ export async function createExpenseVoucher(
         ],
       },
     })
+    .then((res) => {
+      const range = res.data.updates?.updatedRange;
+      if (range) {
+        const matches = range.match(/\d+/);
+        if (matches) {
+          return matches[0].padStart(2, "0");
+        }
+      }
+      return "?";
+    })
     .catch((err) => console.log(err));
 
-  return newVoucher.data;
+  let requestId = expense.budgetBranch.charAt(0);
+  requestId += expense.budgetTeam.charAt(0);
+  requestId += expense.budgetTeam.charAt(1);
+  requestId += newDbRowId;
+  requestId = requestId.toUpperCase();
+
+  return {
+    requestId: requestId,
+    voucherUrl: newVoucher.data.spreadsheetUrl ?? "",
+  };
 }
 
 /**

@@ -9,7 +9,7 @@ export type FormState = {
   issues?: string[];
   url?: string;
   resetKey?: string;
-  requestNo?: string;
+  requestId?: string;
 };
 
 export async function onSubmitAction(
@@ -45,9 +45,9 @@ export async function onSubmitAction(
 
   return {
     success: true,
-    message: "Reimbursement request submitted!",
+    message: "Order request submitted!",
     // requestNo: order.requestNo || undefined,
-    requestNo: "AB234",
+    requestId: "AB234",
     resetKey: Date.now().toString(),
   };
 }

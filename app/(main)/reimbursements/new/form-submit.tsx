@@ -10,6 +10,7 @@ export type FormState = {
   issues?: string[];
   url?: string;
   resetKey?: string;
+  requestId?: string;
 };
 
 export async function onSubmitAction(
@@ -42,12 +43,13 @@ export async function onSubmitAction(
     };
   }
 
-  const voucher = await createExpenseVoucher(parsed.data);
+  const res = await createExpenseVoucher(parsed.data);
 
   return {
     success: true,
     message: "Reimbursement request submitted!",
-    url: voucher.spreadsheetUrl || undefined,
+    url: res.voucherUrl || undefined,
+    requestId: res.requestId,
     resetKey: Date.now().toString(),
   };
 }

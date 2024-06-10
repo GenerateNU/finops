@@ -549,23 +549,26 @@ export function OrderForm({ session }: { session: Session }) {
                     Request No.
                   </p>
                   <p className="mt-1 font-mono text-7xl text-generate-green">
-                    #{state.requestNo}
+                    #{state.requestId}
                   </p>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle>Request Submitted!</CardTitle>
-                <CardDescription>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px my-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Request Submitted!
+                </CardTitle>
+                <CardDescription className="mt-8">
                   <p>
-                    Your order request has been successfully submitted. If
-                    approved, orders are typically placed on{" "}
+                    Your request has been successfully submitted. If approved,
+                    orders are typically placed on{" "}
                     {process.env.NEXT_PUBLIC_ORDER_PLACEMENT_SCHEDULE}.
                   </p>
 
-                  <p>
+                  <p className="mt-2">
                     Please reach out in{" "}
                     <Link
                       href={

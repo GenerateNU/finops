@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRightIcon,
-  CheckIcon,
   LoaderIcon,
   OctagonPauseIcon,
   StretchHorizontalIcon,
@@ -21,13 +20,11 @@ import dayjs from "@/lib/dayjs";
 import { BRANCH_TEAMS, BRANCHES, EXPENSE_PURPOSE_OPTIONS } from "@/lib/globals";
 import { camelize } from "@/lib/utils";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -556,7 +553,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                   impossible.
                 </p>
 
-                <div className="mt-8">
+                <div className="inline-flex items-center gap-4 mt-8">
                   <Button
                     type="submit"
                     after={
@@ -570,58 +567,68 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                   >
                     I&rsquo;m sure, submit
                   </Button>
+                  {loading ? (
+                    <span className="text-sm text-slate-600 dark:text-slate-400 animate-pulse animate-in">
+                      Grab your coffee, this may take a minute...
+                    </span>
+                  ) : null}
                 </div>
               </CardContent>
             </Card>
           </>
         ) : (
-          <Card>
-            <CardHeader>
-              <CardTitle>Request Reimbursement</CardTitle>
-              <CardDescription>
-                Seek reimbursement for pre-approved Generate expenses personally
-                incurred. Typically, these should only be{" "}
-                <strong>morale</strong>
-                -related purchases.
-              </CardDescription>
-            </CardHeader>
+          <div className="space-y-8">
+            <Card className="bg-slate-950 dark:bg-slate-50">
+              <CardContent className="p-6 py-8">
+                <div className="text-center">
+                  <p className="text-sm uppercase text-slate-400 dark:text-slate-600">
+                    Request No.
+                  </p>
+                  <p className="mt-1 font-mono text-7xl text-generate-green">
+                    #{state.requestId}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-            <CardContent className="space-y-8">
-              <Alert>
-                <CheckIcon className="size-5" />
-                <AlertTitle className="font-semibold">
-                  Request submitted!
-                </AlertTitle>
-                <AlertDescription>
+            <Card>
+              <CardHeader className="relative w-full">
+                <hr className="w-full h-px my-3.5 border-0 bg-generate-green" />
+                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
+                  Request Submitted!
+                </CardTitle>
+                <CardDescription>
                   <p>
-                    Your reimbursement request has been successfully submitted.
-                    If approved, reimbursements are typically processed by
-                    Northeastern within 2-3 weeks.
+                    Your request has been successfully submitted. If approved,
+                    reimbursements are typically processed by Northeastern
+                    within 2-3 weeks.
                   </p>
 
-                  {state.url ? (
-                    <Button
-                      className="mt-4"
-                      variant="outline"
-                      size="sm"
-                      after={<ArrowRightIcon />}
-                      asChild
+                  <p className="mt-2">
+                    Please reach out in{" "}
+                    <Link
+                      href={
+                        process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL ?? "/"
+                      }
                     >
-                      <Link href={state.url} target="_blank">
-                        View Generated Voucher
-                      </Link>
-                    </Button>
-                  ) : null}
-                </AlertDescription>
-              </Alert>
-            </CardContent>
+                      <code>
+                        #{process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME}
+                      </code>
+                    </Link>{" "}
+                    if you have any questions or concerns.
+                  </p>
+                </CardDescription>
+              </CardHeader>
 
-            <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
-              <Button before={<StretchHorizontalIcon />} asChild>
-                <Link href="/reimbursements">View Reimbursement Requests</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+              <CardContent>
+                <Button before={<StretchHorizontalIcon />} asChild>
+                  <Link href="/reimbursements">
+                    View Reimbursement Requests
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         )}
       </form>
     </Form>

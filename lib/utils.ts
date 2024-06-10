@@ -12,3 +12,15 @@ export function camelize(str: string) {
     })
     .replace(/\s+/g, "");
 }
+
+/**
+ * Get initials for the given name.
+ *
+ * @param name name to get initials from
+ * @returns extracted initials
+ */
+export function getInitials(name: string): string {
+  const words = name.split(" ");
+  const initials = words.map((word) => word.charAt(0).toUpperCase());
+  return initials.join("");
+}
