@@ -7,31 +7,67 @@ export const formSchema = z.object({
   email: z.string().trim().email({
     message: "Email is required",
   }),
-  budgetBranch: z.enum(["Engagement", "Hardware", "Operations", "Software"]),
-  budgetTeam: z.enum([
-    // Engagement
-    "Content",
-    "Events",
-    "Member Journeys",
-    // Hardware
-    "C-Star",
-    "FuFu Pot",
-    "Makerspace",
-    "Muscle Recovery",
-    "WaveWise",
-    "Workshops",
-    // Operations
-    "Finance",
-    "Information",
-    "Strategy",
-    // Software
-    "Carbon",
-    "Care-Wallet",
-    "Couplet",
-    "SAC",
-    "Tubender",
-  ]),
-  vendor: z.enum(["Amazon", "Other"]),
+  budgetBranch: z.enum(["Engagement", "Hardware", "Operations", "Software"], {
+    message: "A valid branch is required",
+  }),
+  budgetTeam: z.enum(
+    [
+      // Engagement
+      "Content",
+      "Events",
+      "Member Journeys",
+      // Hardware
+      "C-Star",
+      "FuFu Pot",
+      "Makerspace",
+      "Muscle Recovery",
+      "WaveWise",
+      "Workshops",
+      // Operations
+      "Finance",
+      "Information",
+      "Strategy",
+      // Software
+      "Carbon",
+      "Care-Wallet",
+      "Couplet",
+      "SAC",
+      "Tubender",
+    ],
+    {
+      message: "A valid team is required",
+    }
+  ),
+  vendor: z.enum(
+    [
+      "4imprint",
+      "Adafruit",
+      "Amazon",
+      "AndyMark",
+      "Arduino",
+      "Custom Ink",
+      "DigiKey",
+      "eBay",
+      // "Foambymail",
+      "Formlabs",
+      // "Grainger Industrial Supplies",
+      "McMaster Carr",
+      "Misumi",
+      "Mouser",
+      "Prolabs",
+      "Protolabs",
+      // "SendCutSend",
+      "ServoCity",
+      "Sparkfun",
+      "Sticker Mule",
+      "Vex Robotics",
+      "Vistaprint",
+      "Other",
+    ],
+    {
+      message: "A valid vendor is required",
+    }
+  ),
   productLink: z.string().trim().url({ message: "Invalid product link" }),
   productDescription: z.string().trim().min(3, {
     message: "Product description is required",

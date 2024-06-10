@@ -19,30 +19,35 @@ export const formSchema = z.object({
   address: z.string().trim().min(10, {
     message: "Address is required",
   }),
-  budgetBranch: z.enum(["Engagement", "Hardware", "Operations", "Software"]),
-  budgetTeam: z.enum([
-    // Engagement
-    "Content",
-    "Events",
-    "Member Journeys",
-    // Hardware
-    "C-Star",
-    "FuFu Pot",
-    "Makerspace",
-    "Muscle Recovery",
-    "WaveWise",
-    "Workshops",
-    // Operations
-    "Finance",
-    "Information",
-    "Strategy",
-    // Software
-    "Carbon",
-    "Care-Wallet",
-    "Couplet",
-    "SAC",
-    "Tubender",
-  ]),
+  budgetBranch: z.enum(["Engagement", "Hardware", "Operations", "Software"], {
+    message: "A valid branch is required",
+  }),
+  budgetTeam: z.enum(
+    [
+      // Engagement
+      "Content",
+      "Events",
+      "Member Journeys",
+      // Hardware
+      "C-Star",
+      "FuFu Pot",
+      "Makerspace",
+      "Muscle Recovery",
+      "WaveWise",
+      "Workshops",
+      // Operations
+      "Finance",
+      "Information",
+      "Strategy",
+      // Software
+      "Carbon",
+      "Care-Wallet",
+      "Couplet",
+      "SAC",
+      "Tubender",
+    ],
+    { message: "A valid team is required" }
+  ),
   expenseDate: z
     .string()
     .length(10, {
