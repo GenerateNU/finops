@@ -1,4 +1,4 @@
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -40,14 +40,7 @@ export async function UserDropdown() {
 
         <DropdownMenuItem asChild>
           {session ? (
-            <form
-              action={async () => {
-                "use server";
-                await signOut();
-              }}
-            >
-              <button type="submit">Log Out</button>
-            </form>
+            <Link href="/api/auth/signout">Log Out</Link>
           ) : (
             <Link href="/auth/login">Log In</Link>
           )}
