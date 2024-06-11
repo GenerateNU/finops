@@ -347,11 +347,12 @@ export async function deleteFile(fileId: string): Promise<void> {
 }
 
 /**
- * Get all active member data for the given member's email. If not provided, returns all members.
+ * Get the membership data for the given member by their email address
  *
+ * @param email the member's email address
  * @returns the resulting rows
  */
-export async function getMembers(email?: string) {
+export async function getMember(email: string) {
   try {
     const auth = await google.auth.getClient({
       projectId: process.env.GOOGLE_PROJECT_ID,
@@ -400,20 +401,8 @@ export async function getMembers(email?: string) {
       }
     }
 
-    // const objects = [];
-    // for (let i = 1; i < rows.length; i++) {
-    //   const row = rows[i];
-    //   const obj: any = {};
-
-    //   rows[0].forEach((header, columnIndex) => {
-    //     obj[camelize(header)] = row[columnIndex];
-    //   });
-
-    //   objects.push(obj);
-    // }
-
     if (objects.length === 0) {
-      throw new Error("No matching members")
+      throw new Error("No matching member");
     }
 
     return objects[0];

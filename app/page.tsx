@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import dayjs from "@/lib/dayjs";
-import { getMembers } from "@/lib/sheets";
+import { getMember } from "@/lib/sheets";
 import { getGreeting } from "@/lib/utils";
 import {
   ArrowRightIcon,
@@ -28,7 +28,7 @@ export default async function Dashboard() {
     return redirect("/auth/login");
   }
 
-  const member = await getMembers(session.user.email).catch(() =>
+  const member = await getMember(session.user.email).catch(() =>
     redirect("/access-denied")
   );
 

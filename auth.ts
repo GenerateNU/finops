@@ -24,8 +24,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const graphProfile = await getUserProfile(
           account?.access_token as string
         );
+
         // Fetch additional user data from Microsoft Graph
         // const isAdmin = await fetchIsAdmin(user.email as string);
+
         // Enrich token with user details
         token.user = {
           name: user.name,
