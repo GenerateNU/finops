@@ -43,7 +43,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -139,11 +138,8 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
             </div>
 
             <Card>
-              <CardHeader className="relative w-full">
-                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
-                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
-                  Purchaser
-                </CardTitle>
+              <CardHeader>
+                <CardTitle>Purchaser</CardTitle>
               </CardHeader>
 
               <CardContent className="space-y-8">
@@ -233,11 +229,8 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
             </Card>
 
             <Card>
-              <CardHeader className="relative w-full">
-                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
-                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
-                  Budget
-                </CardTitle>
+              <CardHeader>
+                <CardTitle>Budget</CardTitle>
               </CardHeader>
 
               <CardContent className="space-y-8">
@@ -294,6 +287,10 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                           value={field.value}
                           defaultValue={field.value}
                           onValueChange={field.onChange}
+                          disabled={
+                            typeof form.getValues("budgetBranch") ===
+                            "undefined"
+                          }
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -306,9 +303,19 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                           </FormControl>
 
                           <SelectContent>
-                            {BRANCH_TEAMS.map((branch) => (
+                            {BRANCH_TEAMS.filter((branch) => {
+                              const selectedBranch =
+                                form.getValues("budgetBranch");
+                              if (selectedBranch) {
+                                return (
+                                  branch.name.toLowerCase() ===
+                                  selectedBranch.toLowerCase()
+                                );
+                              }
+                              return true;
+                            }).map((branch) => (
                               <SelectGroup key={branch.name.toLowerCase()}>
-                                <SelectLabel>{branch.name}</SelectLabel>
+                                {/* <SelectLabel>{branch.name}</SelectLabel> */}
 
                                 {branch.teams.map((team) => (
                                   <SelectItem
@@ -335,11 +342,8 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
             </Card>
 
             <Card>
-              <CardHeader className="relative w-full">
-                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
-                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
-                  Expense
-                </CardTitle>
+              <CardHeader>
+                <CardTitle>Expense</CardTitle>
               </CardHeader>
 
               <CardContent className="space-y-8">
@@ -522,11 +526,8 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
             </Card>
 
             <Card>
-              <CardHeader className="relative w-full">
-                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
-                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
-                  Itemized Receipt(s)
-                </CardTitle>
+              <CardHeader>
+                <CardTitle>Itemized Receipt(s)</CardTitle>
               </CardHeader>
 
               <CardContent className="space-y-8">
@@ -538,11 +539,8 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
             </Card>
 
             <Card>
-              <CardHeader className="relative w-full">
-                <hr className="w-full h-px mt-3.5 border-0 bg-generate-green" />
-                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
-                  Verify &amp; Submit
-                </CardTitle>
+              <CardHeader>
+                <CardTitle>Verify &amp; Submit</CardTitle>
               </CardHeader>
 
               <CardContent>
@@ -592,11 +590,8 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
             </Card>
 
             <Card>
-              <CardHeader className="relative w-full">
-                <hr className="w-full h-px my-3.5 border-0 bg-generate-green" />
-                <CardTitle className="absolute pb-2 pr-3 font-mono font-bold uppercase bg-white dark:bg-slate-950 left-6">
-                  Request Submitted!
-                </CardTitle>
+              <CardHeader>
+                <CardTitle>Request Submitted!</CardTitle>
                 <CardDescription>
                   <p>
                     Your request has been successfully submitted. If approved,

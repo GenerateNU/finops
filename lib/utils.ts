@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import dayjs from "./dayjs";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -23,4 +24,21 @@ export function getInitials(name: string): string {
   const words = name.split(" ");
   const initials = words.map((word) => word.charAt(0).toUpperCase());
   return initials.join("");
+}
+
+/**
+ * Returns a greeting message based on the current time of day.
+ *
+ * @returns A greeting message: "Good morning", "Good afternoon", or "Good evening".
+ */
+export function getGreeting(): string {
+  const currentHour = dayjs().hour();
+
+  if (currentHour >= 5 && currentHour < 12) {
+    return "Good morning";
+  } else if (currentHour >= 12 && currentHour < 18) {
+    return "Good afternoon";
+  } else {
+    return "Good evening";
+  }
 }

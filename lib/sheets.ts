@@ -345,3 +345,80 @@ export async function deleteFile(fileId: string): Promise<void> {
       throw new Error(err?.message || "Unable to delete file");
     });
 }
+
+/**
+ * Get all active member data for the given member's email. If not provided, returns all members.
+ *
+ * @returns the resulting rows
+ */
+export async function getMembers(email?: string) {
+  try {
+    const auth = await google.auth.getClient({
+      projectId: process.env.GOOGLE_PROJECT_ID,
+      credentials: {
+        type: "service_account",
+        private_key: process.env
+          .GOOGLE_PRIVATE_KEY!.split(String.raw`\n`)
+          .join("\n"),
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        token_url: "https://oauth2.googleapis.com/token",
+        universe_domain: "googleapis.com",
+      },
+      scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+    });
+
+    const sheets = google.sheets({ version: "v4", auth });
+
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.MEMBERS_ROSTER_FILE_ID,
+      range: "B2:L",
+    });
+
+    const rows = response.data.values;
+    if (!rows || rows.length === 0) {
+      console.log("No data found.");
+      return;
+    }
+
+    const columnIndex = rows[0].indexOf("Email");
+    if (columnIndex === -1) {
+      console.log(`Column "Email" not found.`);
+      return [];
+    }
+
+    const objects = [];
+    for (let i = 1; i < rows.length; i++) {
+      const row = rows[i];
+      if (!email || (email && row[columnIndex] === email)) {
+        const obj: any = {};
+        rows[0].forEach((header, columnIndex) => {
+          obj[camelize(header)] = row[columnIndex];
+        });
+        obj["id"] = i + 2; // add 2 to account for header rows
+        objects.push(obj);
+      }
+    }
+
+    // const objects = [];
+    // for (let i = 1; i < rows.length; i++) {
+    //   const row = rows[i];
+    //   const obj: any = {};
+
+    //   rows[0].forEach((header, columnIndex) => {
+    //     obj[camelize(header)] = row[columnIndex];
+    //   });
+
+    //   objects.push(obj);
+    // }
+
+    if (objects.length === 0) {
+      throw new Error("No matching members")
+    }
+
+    return objects[0];
+  } catch (err) {
+    console.error("The API returned an error:", err);
+    throw err;
+  }
+}

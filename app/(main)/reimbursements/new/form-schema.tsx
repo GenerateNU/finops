@@ -27,7 +27,7 @@ export const formSchema = z.object({
       // Engagement
       "Content",
       "Events",
-      "Member Journeys",
+      "Experiences",
       // Hardware
       "C-Star",
       "FuFu Pot",
