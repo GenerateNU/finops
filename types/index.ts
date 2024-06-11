@@ -4,6 +4,14 @@ import { formSchema as reimbursementRequestSchema } from "@/app/(main)/reimburse
 
 export type ExpenseVoucher = z.infer<typeof reimbursementRequestSchema>;
 
+export type User = {
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  nuid?: string;
+  isAdmin: boolean;
+};
+
 export enum Branch {
   Engagement = "Engagement",
   Hardware = "Hardware",

@@ -66,7 +66,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
     defaultValues: {
       name: session.user?.name ?? "",
       email: session.user?.email ?? "",
-      nuid: "",
+      nuid: session.user?.nuid ?? "",
       address: "",
       budgetBranch: undefined,
       budgetTeam: undefined,
