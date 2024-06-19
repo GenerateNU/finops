@@ -4,6 +4,8 @@ import { auth } from "@/auth";
 
 import { ExpenseVoucherForm } from "./form";
 
+export const maxDuration = 120;
+
 export default async function NewReimbursementPage() {
   const session = await auth();
   if (!session) return redirect("/auth/login");
