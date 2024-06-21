@@ -3,7 +3,7 @@ import { drive_v3, google } from "googleapis";
 
 import { ExpenseVoucher } from "@/types";
 
-import { camelize } from "./utils";
+import { camelize, getEnv } from "./utils";
 
 /**
  * Create and autofill an expense voucher based on the spreadsheet template and the given expense data.
@@ -13,23 +13,27 @@ import { camelize } from "./utils";
  */
 export async function createExpenseVoucher(
   voucherData: ExpenseVoucher
-): Promise<{ requestId: string; voucherUrl: string }> {
+): Promise<{
+  requestId: string;
+  voucherUrl: string;
+  receiptsFolderUrl: string;
+}> {
   const TODAY = dayjs().format("MM/DD/YYYY");
 
   const auth = await google.auth.getClient({
-    projectId: process.env.GOOGLE_PROJECT_ID,
+    projectId: getEnv("GOOGLE_PROJECT_ID"),
     credentials: {
       type: "service_account",
-      private_key: process.env
-        .GOOGLE_PRIVATE_KEY!.split(String.raw`\n`)
+      private_key: getEnv("GOOGLE_PRIVATE_KEY")
+        .split(String.raw`\n`)
         .join("\n"),
-      client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_email: getEnv("GOOGLE_CLIENT_EMAIL"),
+      client_id: getEnv("GOOGLE_CLIENT_ID"),
       token_url: "https://oauth2.googleapis.com/token",
       universe_domain: "googleapis.com",
     },
     scopes: [
-      "https://www.googleapis.com/auth/drive.file",
+      "https://www.googleapis.com/auth/drive",
       "https://www.googleapis.com/auth/spreadsheets",
     ],
   });
@@ -44,7 +48,7 @@ export async function createExpenseVoucher(
 
   // get template spreadsheet data
   const template = await sheets.spreadsheets.get({
-    spreadsheetId: process.env.EXPENSE_VOUCHER_TEMPLATE_FILE_ID,
+    spreadsheetId: getEnv("EXPENSE_VOUCHER_TEMPLATE_FILE_ID"),
     includeGridData: true,
   });
 
@@ -75,7 +79,7 @@ export async function createExpenseVoucher(
       requestBody: {
         role: "writer",
         type: "user",
-        emailAddress: process.env.GOOGLE_OWNER_EMAIL,
+        emailAddress: getEnv("GOOGLE_OWNER_EMAIL"),
       },
     })
     .catch((err) => console.log(err));
@@ -91,11 +95,11 @@ export async function createExpenseVoucher(
       if (
         !previousParents ||
         previousParents.length === 0 ||
-        !previousParents?.includes(process.env.EXPENSE_VOUCHERS_FOLDER_ID!)
+        !previousParents?.includes(getEnv("EXPENSE_VOUCHERS_FOLDER_ID"))
       ) {
         drive.files.update({
           fileId: newVoucher.data.spreadsheetId!,
-          addParents: process.env.EXPENSE_VOUCHERS_FOLDER_ID,
+          addParents: getEnv("EXPENSE_VOUCHERS_FOLDER_ID"),
           removeParents: previousParents,
           fields: "id, parents",
         });
@@ -103,7 +107,7 @@ export async function createExpenseVoucher(
     })
     .catch((err) => console.log(err));
 
-  // insert data
+  // insert data into voucher
   let rangePrefix = "'Page 1'!";
   await sheets.spreadsheets.values
     .batchUpdate({
@@ -144,7 +148,7 @@ export async function createExpenseVoucher(
           // supervisor details
           {
             range: rangePrefix + "D47",
-            values: [[process.env.EXPENSE_VOUCHER_SUPERVISOR]],
+            values: [[getEnv("EXPENSE_VOUCHER_SUPERVISOR")]],
           },
         ],
         valueInputOption: "USER_ENTERED",
@@ -152,12 +156,26 @@ export async function createExpenseVoucher(
     })
     .catch((err) => console.log(err));
 
-  // insert data
+  // create folder for receipts
+  const receiptsFolderFileMetadata = {
+    name: `RECEIPTS - ${dayjs().format("YYYY-MM-DD")} - ${voucherData.name}`,
+    mimeType: "application/vnd.google-apps.folder",
+    parents: [getEnv("RECEIPTS_FOLDER_ID")],
+  };
+
+  const receiptsFolderId = await drive.files
+    .create({
+      requestBody: receiptsFolderFileMetadata,
+      fields: "id",
+    })
+    .then((file) => file.data.id);
+
+  // insert data into database
   rangePrefix = "'Reimbursements'!";
   const newDbRowId = await sheets.spreadsheets.values
     .append({
-      spreadsheetId: process.env.REIMBURSEMENT_REQUESTS_DB_FILE_ID,
-      range: rangePrefix + "B3:K",
+      spreadsheetId: getEnv("REIMBURSEMENT_REQUESTS_DB_FILE_ID"),
+      range: rangePrefix + "B3:L",
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [
@@ -172,6 +190,7 @@ export async function createExpenseVoucher(
             voucherData.expenseTotal,
             voucherData.expenseDescription,
             newVoucher.data.spreadsheetId,
+            receiptsFolderId,
           ],
         ],
       },
@@ -197,6 +216,8 @@ export async function createExpenseVoucher(
   return {
     requestId: requestId,
     voucherUrl: newVoucher.data.spreadsheetUrl ?? "",
+    receiptsFolderUrl:
+      "https://drive.google.com/drive/folders/" + receiptsFolderId,
   };
 }
 
@@ -209,14 +230,14 @@ export async function createExpenseVoucher(
 export async function getReimbursementRequests(email?: string) {
   try {
     const auth = await google.auth.getClient({
-      projectId: process.env.GOOGLE_PROJECT_ID,
+      projectId: getEnv("GOOGLE_PROJECT_ID"),
       credentials: {
         type: "service_account",
-        private_key: process.env
-          .GOOGLE_PRIVATE_KEY!.split(String.raw`\n`)
+        private_key: getEnv("GOOGLE_PRIVATE_KEY")
+          .split(String.raw`\n`)
           .join("\n"),
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_email: getEnv("GOOGLE_CLIENT_EMAIL"),
+        client_id: getEnv("GOOGLE_CLIENT_ID"),
         token_url: "https://oauth2.googleapis.com/token",
         universe_domain: "googleapis.com",
       },
@@ -226,7 +247,7 @@ export async function getReimbursementRequests(email?: string) {
     const sheets = google.sheets({ version: "v4", auth });
 
     const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.REIMBURSEMENT_REQUESTS_DB_FILE_ID,
+      spreadsheetId: getEnv("REIMBURSEMENT_REQUESTS_DB_FILE_ID"),
       range: "B2:K",
     });
 
@@ -269,14 +290,14 @@ export async function getReimbursementRequests(email?: string) {
  */
 export async function getExpenseVoucherFiles(): Promise<drive_v3.Schema$FileList> {
   const auth = await google.auth.getClient({
-    projectId: process.env.GOOGLE_PROJECT_ID,
+    projectId: getEnv("GOOGLE_PROJECT_ID"),
     credentials: {
       type: "service_account",
-      private_key: process.env
-        .GOOGLE_PRIVATE_KEY!.split(String.raw`\n`)
+      private_key: getEnv("GOOGLE_PRIVATE_KEY")
+        .split(String.raw`\n`)
         .join("\n"),
-      client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_email: getEnv("GOOGLE_CLIENT_EMAIL"),
+      client_id: getEnv("GOOGLE_CLIENT_ID"),
       token_url: "https://oauth2.googleapis.com/token",
       universe_domain: "googleapis.com",
     },
@@ -288,7 +309,9 @@ export async function getExpenseVoucherFiles(): Promise<drive_v3.Schema$FileList
   // get the files
   const files = await drive.files
     .list({
-      q: `'${process.env.EXPENSE_VOUCHERS_FOLDER_ID}' in parents and trashed = false`,
+      q: `'${getEnv(
+        "EXPENSE_VOUCHERS_FOLDER_ID"
+      )}' in parents and trashed = false`,
     })
     .catch((err) => {
       console.log(err);
@@ -305,14 +328,14 @@ export async function getExpenseVoucherFiles(): Promise<drive_v3.Schema$FileList
  */
 export async function deleteFile(fileId: string): Promise<void> {
   const auth = await google.auth.getClient({
-    projectId: process.env.GOOGLE_PROJECT_ID,
+    projectId: getEnv("GOOGLE_PROJECT_ID"),
     credentials: {
       type: "service_account",
-      private_key: process.env
-        .GOOGLE_PRIVATE_KEY!.split(String.raw`\n`)
+      private_key: getEnv("GOOGLE_PRIVATE_KEY")
+        .split(String.raw`\n`)
         .join("\n"),
-      client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_email: getEnv("GOOGLE_CLIENT_EMAIL"),
+      client_id: getEnv("GOOGLE_CLIENT_ID"),
       token_url: "https://oauth2.googleapis.com/token",
       universe_domain: "googleapis.com",
     },
@@ -344,14 +367,14 @@ export async function deleteFile(fileId: string): Promise<void> {
 export async function getMember(email: string) {
   try {
     const auth = await google.auth.getClient({
-      projectId: process.env.GOOGLE_PROJECT_ID,
+      projectId: getEnv("GOOGLE_PROJECT_ID"),
       credentials: {
         type: "service_account",
-        private_key: process.env
-          .GOOGLE_PRIVATE_KEY!.split(String.raw`\n`)
+        private_key: getEnv("GOOGLE_PRIVATE_KEY")
+          .split(String.raw`\n`)
           .join("\n"),
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_email: getEnv("GOOGLE_CLIENT_EMAIL"),
+        client_id: getEnv("GOOGLE_CLIENT_ID"),
         token_url: "https://oauth2.googleapis.com/token",
         universe_domain: "googleapis.com",
       },
@@ -361,7 +384,7 @@ export async function getMember(email: string) {
     const sheets = google.sheets({ version: "v4", auth });
 
     const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.MEMBERS_ROSTER_FILE_ID,
+      spreadsheetId: getEnv("MEMBERS_ROSTER_FILE_ID"),
       range: "B2:L",
     });
 
