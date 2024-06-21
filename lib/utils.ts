@@ -38,7 +38,7 @@ export function getEnv(name: string): string {
     throw new Error(`Environment variable ${name} undefined.`);
   }
 
-  return process.env[name];
+  return process.env[name]!;
 }
 
 /**
