@@ -8,11 +8,11 @@ import { camelize } from "./utils";
 /**
  * Create and autofill an expense voucher based on the spreadsheet template and the given expense data.
  *
- * @param expense the expense voucher data
+ * @param voucherData the expense voucher data
  * @returns the resulting spreadsheet
  */
 export async function createExpenseVoucher(
-  expense: ExpenseVoucher
+  voucherData: ExpenseVoucher
 ): Promise<{ requestId: string; voucherUrl: string }> {
   const TODAY = dayjs().format("MM/DD/YYYY");
 
@@ -37,6 +37,11 @@ export async function createExpenseVoucher(
   const drive = google.drive({ version: "v3", auth });
   const sheets = google.sheets({ version: "v4", auth });
 
+  const indexCode =
+    voucherData.expensePurpose === "Client Project Materials"
+      ? "390255"
+      : "368429";
+
   // get template spreadsheet data
   const template = await sheets.spreadsheets.get({
     spreadsheetId: process.env.EXPENSE_VOUCHER_TEMPLATE_FILE_ID,
@@ -48,7 +53,7 @@ export async function createExpenseVoucher(
     ...template.data,
     spreadsheetId: null,
     properties: {
-      title: `VOUCHER - ${dayjs().format("YYYY-MM-DD")} - ${expense.name}`,
+      title: `VOUCHER - ${dayjs().format("YYYY-MM-DD")} - ${voucherData.name}`,
     },
   };
 
@@ -107,55 +112,39 @@ export async function createExpenseVoucher(
         data: [
           {
             range: rangePrefix + "C4:C6",
-            values: [[TODAY], [expense.name], [expense.nuid]],
+            values: [[TODAY], [voucherData.name], [voucherData.nuid]],
           },
           {
             range: rangePrefix + "F5",
-            values: [[expense.address]],
+            values: [[voucherData.address]],
           },
           {
             range: rangePrefix + "G6",
-            values: [[expense.email]],
+            values: [[voucherData.email]],
           },
           // expense metadata
           {
             range: rangePrefix + "H10:H12",
             values: [
-              [expense.expenseDescription],
-              [dayjs(expense.expenseDate).format("MM/DD/YYYY")],
-              [expense.expensePurpose],
+              [voucherData.expenseDescription],
+              [dayjs(voucherData.expenseDate).format("MM/DD/YYYY")],
+              [voucherData.expensePurpose],
             ],
           },
           // expense details
           {
             range: rangePrefix + "E30:G30",
-            values: [[368429, 73325, expense.expenseTotal]],
+            values: [[indexCode, 73325, voucherData.expenseTotal]],
           },
           // student details
           {
             range: rangePrefix + "D42",
-            values: [[expense.name]],
-          },
-          {
-            range: rangePrefix + "G42",
-            values: [[expense.name]],
-          },
-          {
-            range: rangePrefix + "L42",
-            values: [[TODAY]],
+            values: [[voucherData.name]],
           },
           // supervisor details
           {
             range: rangePrefix + "D47",
             values: [[process.env.EXPENSE_VOUCHER_SUPERVISOR]],
-          },
-          {
-            range: rangePrefix + "G47",
-            values: [[process.env.EXPENSE_VOUCHER_SUPERVISOR]],
-          },
-          {
-            range: rangePrefix + "L47",
-            values: [[TODAY]],
           },
         ],
         valueInputOption: "USER_ENTERED",
@@ -173,15 +162,15 @@ export async function createExpenseVoucher(
       requestBody: {
         values: [
           [
-            expense.name,
-            expense.email,
+            voucherData.name,
+            voucherData.email,
             TODAY,
-            expense.budgetBranch,
-            expense.budgetTeam,
-            expense.expenseDate,
-            expense.expensePurpose,
-            expense.expenseTotal,
-            expense.expenseDescription,
+            voucherData.budgetBranch,
+            voucherData.budgetTeam,
+            voucherData.expenseDate,
+            voucherData.expensePurpose,
+            voucherData.expenseTotal,
+            voucherData.expenseDescription,
             newVoucher.data.spreadsheetId,
           ],
         ],
@@ -199,9 +188,9 @@ export async function createExpenseVoucher(
     })
     .catch((err) => console.log(err));
 
-  let requestId = expense.budgetBranch.charAt(0);
-  requestId += expense.budgetTeam.charAt(0);
-  requestId += expense.budgetTeam.charAt(1);
+  let requestId = voucherData.budgetBranch.charAt(0);
+  requestId += voucherData.budgetTeam.charAt(0);
+  requestId += voucherData.budgetTeam.charAt(1);
   requestId += newDbRowId;
   requestId = requestId.toUpperCase();
 
