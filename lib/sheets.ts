@@ -42,7 +42,8 @@ export async function createExpenseVoucher(
   const sheets = google.sheets({ version: "v4", auth });
 
   const indexCode =
-    voucherData.expensePurpose === "Client Project Materials"
+    voucherData.expensePurpose === "Client Project Materials" ||
+    voucherData.expensePurpose === "Showcase"
       ? "390255"
       : "368429";
 
