@@ -1,6 +1,7 @@
 "use server";
 
 import { createExpenseVoucher } from "@/lib/sheets";
+
 import { formSchema } from "./form-schema";
 
 export type FormState = {
@@ -9,6 +10,7 @@ export type FormState = {
   fields?: Record<string, string>;
   issues?: string[];
   url?: string;
+  receiptsFolderUrl?: string;
   resetKey?: string;
   requestId?: string;
 };
@@ -50,6 +52,7 @@ export async function onSubmitAction(
     message: "Reimbursement request submitted!",
     url: res.voucherUrl || undefined,
     requestId: res.requestId,
+    receiptsFolderUrl: res.receiptsFolderUrl,
     resetKey: Date.now().toString(),
   };
 }

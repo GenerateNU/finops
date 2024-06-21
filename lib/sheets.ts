@@ -169,6 +169,18 @@ export async function createExpenseVoucher(
       fields: "id",
     })
     .then((file) => file.data.id);
+  if (!receiptsFolderId) throw new Error("Receipts folder not created");
+
+  // allow anyone to upload files
+  await drive.permissions
+    .create({
+      fileId: receiptsFolderId,
+      requestBody: {
+        role: "writer",
+        type: "anyone",
+      },
+    })
+    .catch((err) => console.log(err));
 
   // insert data into database
   rangePrefix = "'Reimbursements'!";

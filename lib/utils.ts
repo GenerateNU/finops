@@ -21,8 +21,21 @@ export function camelize(str: string) {
  * @returns the environment variable's value
  */
 export function getEnv(name: string): string {
+  // handle public environment variables
+  switch (name) {
+    case "NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME":
+      return process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME ?? "";
+    case "NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL":
+      return process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL ?? "";
+    case "NEXT_PUBLIC_ORDER_PLACEMENT_SCHEDULE":
+      return process.env.NEXT_PUBLIC_ORDER_PLACEMENT_SCHEDULE ?? "";
+    default:
+      break;
+  }
+
+  // handle all other environment variables
   if (typeof process.env[name] === "undefined") {
-    throw new Error("Environment variable ${name} undefined.");
+    throw new Error(`Environment variable ${name} undefined.`);
   }
 
   return process.env[name];

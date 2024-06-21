@@ -6,6 +6,7 @@ import {
   LoaderIcon,
   OctagonPauseIcon,
   StretchHorizontalIcon,
+  UploadCloudIcon,
   XIcon,
 } from "lucide-react";
 import { Session } from "next-auth";
@@ -21,13 +22,7 @@ import { BRANCH_TEAMS, BRANCHES, EXPENSE_PURPOSE_OPTIONS } from "@/lib/globals";
 import { camelize, getEnv } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -63,33 +58,33 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
   // define form
   const form = useForm<z.output<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: session.user?.name ?? "",
-      email: session.user?.email ?? "",
-      nuid: session.user?.nuid ?? "",
-      address: "",
-      budgetBranch: undefined,
-      budgetTeam: undefined,
-      expenseDate: dayjs().format("YYYY-MM-DD"),
-      expenseTotal: "",
-      expenseDescription: "",
-      expensePurpose: "",
-      ...(state?.fields ?? {}),
-    },
-    // TEST DATA:
     // defaultValues: {
-    //   name: "Burton Guster",
-    //   email: "burton.g@northeastern.edu",
-    //   nuid: "002156789",
-    //   address: "360 Huntington Ave, Boston, MA 02120",
-    //   budgetBranch: "Engagement",
-    //   budgetTeam: "Events",
-    //   expenseDate: dayjs().subtract(6, "days").format("YYYY-MM-DD"),
-    //   expenseTotal: "23.45",
-    //   expenseDescription: "Pizza and soda",
-    //   expensePurpose: "Morale",
+    //   name: session.user?.name ?? "",
+    //   email: session.user?.email ?? "",
+    //   nuid: session.user?.nuid ?? "",
+    //   address: "",
+    //   budgetBranch: undefined,
+    //   budgetTeam: undefined,
+    //   expenseDate: dayjs().format("YYYY-MM-DD"),
+    //   expenseTotal: "",
+    //   expenseDescription: "",
+    //   expensePurpose: "",
     //   ...(state?.fields ?? {}),
     // },
+    // TEST DATA:
+    defaultValues: {
+      name: "Burton Guster",
+      email: "burton.g@northeastern.edu",
+      nuid: "002156789",
+      address: "360 Huntington Ave, Boston, MA 02120",
+      budgetBranch: "Engagement",
+      budgetTeam: "Events",
+      expenseDate: dayjs().subtract(6, "days").format("YYYY-MM-DD"),
+      expenseTotal: "23.45",
+      expenseDescription: "Pizza and soda",
+      expensePurpose: "Morale",
+      ...(state?.fields ?? {}),
+    },
   });
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -533,7 +528,11 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
               <CardContent className="space-y-8">
                 <div className="p-4 text-sm border rounded-md border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
                   An itemized receipt is required for all purchases in order to
-                  receive reimbursement.
+                  receive reimbursement.{" "}
+                  <strong>
+                    On the next page, you will need to upload your receipt(s).
+                  </strong>{" "}
+                  Without this, your request will not be processed.
                 </div>
               </CardContent>
             </Card>
@@ -576,43 +575,67 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
           </>
         ) : (
           <div className="space-y-8">
-            <Card className="bg-slate-950 dark:bg-slate-50">
-              <CardContent className="p-6 py-8">
-                <div className="text-center">
-                  <p className="text-sm uppercase text-slate-400 dark:text-slate-600">
-                    Request No.
+            <div className="grid md:grid-cols-2 gap-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Upload Receipt(s)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p>
+                    To complete your reimbursement request, please upload an
+                    itemized receipt for this transaction.
                   </p>
-                  <p className="mt-1 font-mono text-7xl text-generate-green">
-                    #{state.requestId}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+
+                  <div className="mt-8 flex gap-4">
+                    <Button before={<UploadCloudIcon />} asChild>
+                      <Link href={state.receiptsFolderUrl!} target="_blank">
+                        Upload
+                      </Link>
+                    </Button>
+                    {/* <Button variant="link" before={<CheckIcon />}>
+                      I&apos;m done uploading
+                    </Button> */}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-950 dark:bg-slate-50">
+                <CardContent className="p-6 py-8 h-full flex items-center justify-center pt-6">
+                  <div className="text-center">
+                    <p className="text-sm uppercase text-slate-400 dark:text-slate-600">
+                      Request No.
+                    </p>
+                    <p className="mt-1 font-mono text-7xl text-generate-green">
+                      #{state.requestId}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
             <Card>
               <CardHeader>
                 <CardTitle>Request Submitted!</CardTitle>
-                <CardDescription>
-                  <p>
-                    Your request has been successfully submitted. If approved,
-                    reimbursements are typically processed by Northeastern
-                    within 2-3 weeks.
-                  </p>
-
-                  <p className="mt-2">
-                    Please reach out in{" "}
-                    <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
-                      <code>
-                        #{getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME")}
-                      </code>
-                    </Link>{" "}
-                    if you have any questions or concerns.
-                  </p>
-                </CardDescription>
               </CardHeader>
 
               <CardContent>
-                <Button before={<StretchHorizontalIcon />} asChild>
+                <p>
+                  Once you upload your receipt(s), your request is submitted. If
+                  approved, reimbursements are typically processed by
+                  Northeastern within 2-3 weeks. Please reach out in{" "}
+                  <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
+                    <code>
+                      #{getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME")}
+                    </code>
+                  </Link>{" "}
+                  if you have any questions or concerns.
+                </p>
+
+                <Button
+                  className="mt-8"
+                  before={<StretchHorizontalIcon />}
+                  asChild
+                >
                   <Link href="/reimbursements">
                     View Reimbursement Requests
                   </Link>
