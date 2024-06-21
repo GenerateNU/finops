@@ -27,7 +27,7 @@ export const BRANCH_TEAMS = [
 ];
 
 export const EXPENSE_PURPOSE_OPTIONS = [
-  "Client Projects",
+  "Client Project Materials",
   "Morale",
   "Showcase",
   "Other",
