@@ -23,7 +23,7 @@ import {
   EXPENSE_PURPOSE_OPTIONS,
   VENDORS,
 } from "@/lib/globals";
-import { camelize } from "@/lib/utils";
+import { camelize, getEnv } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -563,18 +563,14 @@ export function OrderForm({ session }: { session: Session }) {
                   <p>
                     Your request has been successfully submitted. If approved,
                     orders are typically placed on{" "}
-                    {process.env.NEXT_PUBLIC_ORDER_PLACEMENT_SCHEDULE}.
+                    {getEnv("NEXT_PUBLIC_ORDER_PLACEMENT_SCHEDULE")}.
                   </p>
 
                   <p className="mt-2">
                     Please reach out in{" "}
-                    <Link
-                      href={
-                        process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL ?? "/"
-                      }
-                    >
+                    <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
                       <code>
-                        #{process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME}
+                        #{getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME")}
                       </code>
                     </Link>{" "}
                     if you have any questions or concerns.

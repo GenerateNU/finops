@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getEnv } from "@/lib/utils";
 import { CircleUser } from "lucide-react";
 import Link from "next/link";
 
@@ -31,7 +32,7 @@ export async function UserDropdown() {
         ) : null}
 
         <DropdownMenuItem asChild>
-          <Link href={process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL || "/"}>
+          <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
             Help (Slack)
           </Link>
         </DropdownMenuItem>

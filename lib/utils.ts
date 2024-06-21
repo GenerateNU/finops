@@ -15,6 +15,20 @@ export function camelize(str: string) {
 }
 
 /**
+ * Get the given environment variable, if defined.
+ *
+ * @param name name of the desired environment variable
+ * @returns the environment variable's value
+ */
+export function getEnv(name: string): string {
+  if (typeof process.env[name] === "undefined") {
+    throw new Error("Environment variable ${name} undefined.");
+  }
+
+  return process.env[name];
+}
+
+/**
  * Get initials for the given name.
  *
  * @param name name to get initials from

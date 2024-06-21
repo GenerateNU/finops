@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import dayjs from "@/lib/dayjs";
 import { getMember } from "@/lib/sheets";
-import { getGreeting } from "@/lib/utils";
+import { getEnv, getGreeting } from "@/lib/utils";
 import {
   ArrowRightIcon,
   CheckCircle2Icon,
@@ -161,7 +161,7 @@ export default async function Dashboard() {
                   className="justify-start"
                   asChild
                 >
-                  <Link href={process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL!}>
+                  <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
                     Get Help
                   </Link>
                 </Button>

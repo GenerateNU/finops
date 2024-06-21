@@ -18,7 +18,7 @@ import { z } from "zod";
 
 import dayjs from "@/lib/dayjs";
 import { BRANCH_TEAMS, BRANCHES, EXPENSE_PURPOSE_OPTIONS } from "@/lib/globals";
-import { camelize } from "@/lib/utils";
+import { camelize, getEnv } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -601,13 +601,9 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
 
                   <p className="mt-2">
                     Please reach out in{" "}
-                    <Link
-                      href={
-                        process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL ?? "/"
-                      }
-                    >
+                    <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
                       <code>
-                        #{process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME}
+                        #{getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME")}
                       </code>
                     </Link>{" "}
                     if you have any questions or concerns.

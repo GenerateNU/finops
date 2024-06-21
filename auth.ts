@@ -2,13 +2,14 @@ import NextAuth from "next-auth";
 import EntraIDProvider from "next-auth/providers/microsoft-entra-id";
 
 import { getUserProfile } from "@/lib/profile";
+import { getEnv } from "./lib/utils";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     EntraIDProvider({
-      clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID,
-      clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET,
-      tenantId: process.env.AUTH_MICROSOFT_ENTRA_ID_TENANT_ID,
+      clientId: getEnv("AUTH_MICROSOFT_ENTRA_ID_ID"),
+      clientSecret: getEnv("AUTH_MICROSOFT_ENTRA_ID_SECRET"),
+      tenantId: getEnv("AUTH_MICROSOFT_ENTRA_ID_TENANT_ID"),
       authorization: {
         params: {
           scope: "openid email profile User.Read",

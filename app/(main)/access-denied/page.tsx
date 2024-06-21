@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 import groupPhoto from "@/images/group-photo.jpg";
+import { getEnv } from "@/lib/utils";
 
 export default async function AccessDenied() {
   const session = await auth();
@@ -25,8 +26,8 @@ export default async function AccessDenied() {
               You do not have access to Generate FinOps. If you believe this is
               an error, please ensure you have completed all necessary Generate
               onboarding. Afterwards, please reach out in{" "}
-              <Link href={process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL!}>
-                <code>#{process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME}</code>
+              <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
+                <code>#{getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME")}</code>
               </Link>
               .
             </p>
