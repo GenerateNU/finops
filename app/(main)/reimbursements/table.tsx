@@ -79,7 +79,7 @@ export async function MyReimbursementsTable() {
             <TableCell>{request.purpose ?? "--"}</TableCell>
             <TableCell>
               <Badge className="text-xs" variant="outline">
-                {request.status}
+                {request.status ?? "Unknown"}
               </Badge>
             </TableCell>
             <TableCell

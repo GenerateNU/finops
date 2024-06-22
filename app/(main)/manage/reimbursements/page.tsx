@@ -21,7 +21,7 @@ export default function MyReimbursementsPage() {
   return (
     <>
       <Card>
-        <CardHeader className="px-7">
+        <CardHeader>
           <CardTitle>Reimbursements</CardTitle>
           <CardDescription>
             All current and past reimbursement requests.
