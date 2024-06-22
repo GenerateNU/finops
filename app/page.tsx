@@ -69,8 +69,8 @@ export default async function Dashboard() {
                   Attended Orientation
                 </div>
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
-                  <Indicator predicate={member.shermContractComplete} />
-                  Submitted Sherm Space Contract
+                  <Indicator predicate={member.shermWelcomeComplete} />
+                  Submitted Sherm Welcome Form
                 </div>
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
                   <Indicator predicate={member.makerspaceTrainingComplete} />
