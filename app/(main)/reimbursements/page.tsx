@@ -16,7 +16,7 @@ import { MyReimbursementsTable, MyReimbursementsTableSkeleton } from "./table";
 export default function MyReimbursementsPage() {
   return (
     <Card>
-      <CardHeader className="px-7">
+      <CardHeader>
         <CardTitle>My Submissions</CardTitle>
         <CardDescription>
           Your current and past reimbursement requests.

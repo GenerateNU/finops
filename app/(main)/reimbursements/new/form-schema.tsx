@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-export const formSchema = z.object({
+import dayjs from "@/lib/dayjs";
+
+const baseSchema = {
   name: z.string().trim().min(2, {
     message: "Name is required",
   }),
@@ -19,45 +21,45 @@ export const formSchema = z.object({
   address: z.string().trim().min(10, {
     message: "Address is required",
   }),
-  budgetBranch: z.enum(["Engagement", "Hardware", "Operations", "Software"], {
-    message: "A valid branch is required",
-  }),
-  budgetTeam: z.enum(
+  budget: z.enum(
     [
       // Engagement
-      "Content",
-      "Events",
-      "Experiences",
+      "Content < Engagement",
+      "Events < Engagement",
+      "Experiences < Engagement",
+
       // Hardware
-      "C-Star",
-      "FuFu Pot",
-      "Makerspace",
-      "Muscle Recovery",
-      "WaveWise",
-      "Workshops",
+      "C-Star < Hardware",
+      "FuFu Pot < Hardware",
+      "Makerspace < Hardware",
+      "Muscle Recovery < Hardware",
+      "WaveWise < Hardware",
+      "Workshops < Hardware",
+
       // Operations
-      "Finance",
-      "Information",
-      "Strategy",
+      "Finance < Operations",
+      "Information < Operations",
+      "Strategy < Operations",
+
       // Software
-      "Carbon",
-      "Care-Wallet",
-      "Couplet",
-      "SAC",
-      "Tubender",
+      "Carbon < Software",
+      "Care-Wallet < Software",
+      "Couplet < Software",
+      "SAC < Software",
+      "Tubender < Software",
     ],
-    { message: "A valid team is required" }
+    { message: "A valid budget is required" }
   ),
-  expenseDate: z
-    .string()
-    .length(10, {
-      message: "Expense date is required",
-    })
-    .regex(
-      /^\d{4}\-{1}\d{2}\-{1}\d{2}$/,
-      "Expense date must be formatted as YYYY-MM-DD"
-    ),
-  // expenseDate: z.date().optional(),
+  preApproved: z.boolean().default(false).optional(),
+  hasReceipt: z.literal<boolean>(true, {
+    errorMap: () => ({
+      message: "Please acknowledge the itemized receipt requirement",
+    }),
+  }),
+  // hasReceipt: z.boolean({
+  //   message: "Please acknowledge the itemized receipt requirement",
+  // }),
+  transactionDate: z.date({ message: "Transaction date is required" }),
   // expenseTotal: z.preprocess(
   //   (a) => parseFloat(z.string().parse(a)),
   //   z.number().gte(1, "Must be at least $1")
@@ -73,4 +75,31 @@ export const formSchema = z.object({
   expensePurpose: z.string().trim().min(5, {
     message: "Expense purpose is required",
   }),
+};
+
+export const formSchema = z.object({
+  ...baseSchema,
+});
+
+export const formServerSchema = z.object({
+  ...baseSchema,
+  preApproved: z
+    .string()
+    .toLowerCase()
+    .transform((x) => x === "on")
+    .pipe(z.boolean().default(false))
+    .optional(),
+  hasReceipt: z
+    .string({ message: "Please acknowledge the itemized receipt requirement" })
+    .toLowerCase()
+    .transform((x) => x === "on")
+    .pipe(z.boolean()),
+  transactionDate: z
+    .string({ message: "Transaction date is required" })
+    .regex(
+      /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+      "Transaction date must be a valid ISO date"
+    )
+    .transform((x) => dayjs(x).toDate())
+    .pipe(z.date()),
 });

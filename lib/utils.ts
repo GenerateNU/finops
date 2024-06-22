@@ -69,3 +69,22 @@ export function getGreeting(): string {
     return "Good evening";
   }
 }
+
+/**
+ * Compose a URL to the specified Google Drive file based on its file type.
+ *
+ * @param type the type of Google Drive file
+ * @param fileId the unique file ID
+ * @returns the composed Google Drive URL
+ */
+export function getDriveUrl(
+  type: "folder" | "sheet",
+  fileId: string
+): string {
+  switch (type) {
+    case "folder":
+      return "https://drive.google.com/drive/folders/" + fileId;
+    case "sheet":
+      return "https://docs.google.com/spreadsheets/d/" + fileId;
+  }
+}

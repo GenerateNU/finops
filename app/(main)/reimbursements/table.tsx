@@ -1,4 +1,4 @@
-import { PlusCircleIcon } from "lucide-react";
+import { PlusCircleIcon, ReceiptTextIcon } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -17,6 +17,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn, getDriveUrl } from "@/lib/utils";
 
 export async function MyReimbursementsTable() {
   const session = await auth();
@@ -56,6 +62,7 @@ export async function MyReimbursementsTable() {
           <TableHead className="hidden md:table-cell">Purchased</TableHead>
           <TableHead>Submitted</TableHead>
           <TableHead className="text-right">Amount</TableHead>
+          <TableHead className="text-right"></TableHead>
         </TableRow>
       </TableHeader>
 
@@ -72,7 +79,7 @@ export async function MyReimbursementsTable() {
             <TableCell>{request.purpose ?? "--"}</TableCell>
             <TableCell>
               <Badge className="text-xs" variant="outline">
-                Pending
+                {request.status}
               </Badge>
             </TableCell>
             <TableCell
@@ -88,6 +95,34 @@ export async function MyReimbursementsTable() {
             </TableCell>
             <TableCell className="text-right">
               {request.amount ?? "--"}
+            </TableCell>
+            <TableCell className="text-right">
+              {request.receiptsFolderId ? (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={getDriveUrl("folder", request.receiptsFolderId)}
+                      target="_blank"
+                    >
+                      <ReceiptTextIcon
+                        className={cn(
+                          "size-5",
+                          request.status === "Missing Receipt"
+                            ? "text-generate-green"
+                            : "text-slate-400"
+                        )}
+                      />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      {request.status === "Missing Receipt"
+                        ? "Upload receipt"
+                        : "View receipt"}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              ) : null}
             </TableCell>
           </TableRow>
         ))}

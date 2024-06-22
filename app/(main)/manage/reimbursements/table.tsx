@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getDriveUrl } from "@/lib/utils";
 
 export async function ReimbursementsTable() {
   const session = await auth();
@@ -108,7 +109,7 @@ export async function ReimbursementsTable() {
               <div className="flex items-center gap-4">
                 {request.voucherFileId ? (
                   <Link
-                    href={`https://docs.google.com/spreadsheets/d/${request.voucherFileId}`}
+                    href={getDriveUrl("sheet", request.voucherFileId)}
                     target="_blank"
                   >
                     <Table2Icon className="size-5 text-generate-green" />
@@ -118,7 +119,7 @@ export async function ReimbursementsTable() {
                 )}
 
                 {/* <Link
-                  href={`https://docs.google.com/spreadsheets/d/${request.voucherFileId}`}
+                  href={getDriveUrl("sheet", request.voucherFileId)}
                   target="_blank"
                 >
                   <ReceiptTextIcon className="size-5 text-generate-green" />

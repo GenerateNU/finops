@@ -2,7 +2,7 @@
 
 import { createExpenseVoucher } from "@/lib/sheets";
 
-import { formSchema } from "./form-schema";
+import { formServerSchema } from "./form-schema";
 
 export type FormState = {
   success: boolean;
@@ -20,7 +20,7 @@ export async function onSubmitAction(
   data: FormData
 ): Promise<FormState> {
   const formData = Object.fromEntries(data);
-  const parsed = formSchema.safeParse(formData);
+  const parsed = formServerSchema.safeParse(formData);
 
   if (!parsed.success) {
     const fields: Record<string, string> = {};
@@ -33,15 +33,6 @@ export async function onSubmitAction(
       message: "Invalid form data",
       fields,
       issues: parsed.error.issues.map((issue) => issue.message),
-    };
-  }
-
-  if (!parsed.data.expenseDate.match(/^\d{4}\-{1}\d{2}\-{1}\d{2}$/)) {
-    return {
-      success: false,
-      message:
-        "Invalid expense date formatting; must be formatted as YYYY-MM-DD",
-      fields: parsed.data,
     };
   }
 

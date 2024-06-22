@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import { cn } from "@/lib/utils";
 
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -39,13 +40,15 @@ export default function RootLayout({
           spaceMono.variable
         )}
       >
-        <div className="flex flex-col w-full min-h-screen">
-          <MainNavigation />
+        <TooltipProvider>
+          <div className="flex flex-col w-full min-h-screen">
+            <MainNavigation />
 
-          {children}
+            {children}
 
-          <Toaster />
-        </div>
+            <Toaster />
+          </div>
+        </TooltipProvider>
       </body>
     </html>
   );

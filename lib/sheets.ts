@@ -3,7 +3,7 @@ import { drive_v3, google } from "googleapis";
 
 import { ExpenseVoucher } from "@/types";
 
-import { camelize, getEnv } from "./utils";
+import { camelize, getDriveUrl, getEnv } from "./utils";
 
 /**
  * Create and autofill an expense voucher based on the spreadsheet template and the given expense data.
@@ -19,6 +19,19 @@ export async function createExpenseVoucher(
   receiptsFolderUrl: string;
 }> {
   const TODAY = dayjs().format("MM/DD/YYYY");
+
+  const budgetSplit = voucherData.budget.split(" < ");
+  if (budgetSplit.length != 2) {
+    throw new Error("Invalid budget");
+  }
+  const branch = budgetSplit[1];
+  const team = budgetSplit[0];
+
+  const indexCode =
+    voucherData.expensePurpose === "Client Project Materials" ||
+    voucherData.expensePurpose === "Showcase"
+      ? "390255"
+      : "368429";
 
   const auth = await google.auth.getClient({
     projectId: getEnv("GOOGLE_PROJECT_ID"),
@@ -40,12 +53,6 @@ export async function createExpenseVoucher(
 
   const drive = google.drive({ version: "v3", auth });
   const sheets = google.sheets({ version: "v4", auth });
-
-  const indexCode =
-    voucherData.expensePurpose === "Client Project Materials" ||
-    voucherData.expensePurpose === "Showcase"
-      ? "390255"
-      : "368429";
 
   // get template spreadsheet data
   const template = await sheets.spreadsheets.get({
@@ -132,7 +139,7 @@ export async function createExpenseVoucher(
             range: rangePrefix + "H10:H12",
             values: [
               [voucherData.expenseDescription],
-              [dayjs(voucherData.expenseDate).format("MM/DD/YYYY")],
+              [dayjs(voucherData.transactionDate).format("MM/DD/YYYY")],
               [voucherData.expensePurpose],
             ],
           },
@@ -159,7 +166,7 @@ export async function createExpenseVoucher(
 
   // create folder for receipts
   const receiptsFolderFileMetadata = {
-    name: `RECEIPTS - ${dayjs().format("YYYY-MM-DD")} - ${voucherData.name}`,
+    name: `ERV-R - ${dayjs().format("YYYY-MM-DD")} - ${voucherData.name}`,
     mimeType: "application/vnd.google-apps.folder",
     parents: [getEnv("RECEIPTS_FOLDER_ID")],
   };
@@ -188,7 +195,7 @@ export async function createExpenseVoucher(
   const newDbRowId = await sheets.spreadsheets.values
     .append({
       spreadsheetId: getEnv("REIMBURSEMENT_REQUESTS_DB_FILE_ID"),
-      range: rangePrefix + "B3:L",
+      range: rangePrefix + "B3:N",
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [
@@ -196,11 +203,13 @@ export async function createExpenseVoucher(
             voucherData.name,
             voucherData.email,
             TODAY,
-            voucherData.budgetBranch,
-            voucherData.budgetTeam,
-            voucherData.expenseDate,
+            "Missing Receipt",
+            branch,
+            team,
+            dayjs(voucherData.transactionDate).format("YYYY-MM-DD"),
             voucherData.expensePurpose,
             voucherData.expenseTotal,
+            voucherData.preApproved ? true : false,
             voucherData.expenseDescription,
             newVoucher.data.spreadsheetId,
             receiptsFolderId,
@@ -220,17 +229,16 @@ export async function createExpenseVoucher(
     })
     .catch((err) => console.log(err));
 
-  let requestId = voucherData.budgetBranch.charAt(0);
-  requestId += voucherData.budgetTeam.charAt(0);
-  requestId += voucherData.budgetTeam.charAt(1);
+  let requestId = branch.charAt(0);
+  requestId += team.charAt(0);
+  requestId += team.charAt(1);
   requestId += newDbRowId;
   requestId = requestId.toUpperCase();
 
   return {
     requestId: requestId,
     voucherUrl: newVoucher.data.spreadsheetUrl ?? "",
-    receiptsFolderUrl:
-      "https://drive.google.com/drive/folders/" + receiptsFolderId,
+    receiptsFolderUrl: getDriveUrl("folder", receiptsFolderId),
   };
 }
 
@@ -261,7 +269,7 @@ export async function getReimbursementRequests(email?: string) {
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: getEnv("REIMBURSEMENT_REQUESTS_DB_FILE_ID"),
-      range: "B2:K",
+      range: "B2:N",
     });
 
     const rows = response.data.values;
