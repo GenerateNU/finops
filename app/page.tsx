@@ -72,6 +72,10 @@ export default async function Dashboard() {
                   <Indicator predicate={member.shermContractComplete} />
                   Submitted Sherm Space Contract
                 </div>
+                <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
+                  <Indicator predicate={member.makerspaceTrainingComplete} />
+                  Attended Makerspace Training
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -85,10 +89,6 @@ export default async function Dashboard() {
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
                   <Indicator predicate={member.level1Access} />
                   General Sherm Access
-                </div>
-                <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
-                  <Indicator predicate={member.makerspaceTrainingComplete} />
-                  Attended Makerspace Training
                 </div>
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
                   <Indicator predicate={member.level2Access} />
