@@ -66,7 +66,7 @@ export default async function Dashboard() {
               <div className="flex flex-col gap-2">
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
                   <Indicator predicate={member.orientationComplete} />
-                  Attended Session
+                  Attended Orientation
                 </div>
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
                   <Indicator predicate={member.shermContractComplete} />
