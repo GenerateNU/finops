@@ -58,7 +58,7 @@ export async function createExpenseVoucher(
     ...template.data,
     spreadsheetId: null,
     properties: {
-      title: `VOUCHER - ${dayjs().format("YYYY-MM-DD")} - ${voucherData.name}`,
+      title: `ERV - ${dayjs().format("YYYY-MM-DD")} - ${voucherData.name}`,
     },
   };
 
