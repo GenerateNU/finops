@@ -87,11 +87,11 @@ export default async function Dashboard() {
             <CardContent>
               <div className="flex flex-col gap-2">
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
-                  <Indicator predicate={member.level1Access} />
+                  <Indicator predicate={member.generalShermAccess} />
                   General Sherm Access
                 </div>
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
-                  <Indicator predicate={member.level2Access} />
+                  <Indicator predicate={member.makerspaceAccess} />
                   Makerspace Access
                 </div>
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
