@@ -111,14 +111,21 @@ export async function ReimbursementsTable() {
               {request.amount ?? "--"}
             </TableCell>
             <TableCell className="text-right">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 {request.voucherFileId ? (
-                  <Link
-                    href={getDriveUrl("sheet", request.voucherFileId)}
-                    target="_blank"
-                  >
-                    <Table2Icon className="size-5 text-generate-green" />
-                  </Link>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        href={getDriveUrl("sheet", request.voucherFileId)}
+                        target="_blank"
+                      >
+                        <Table2Icon className="size-5 text-generate-green" />
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>View voucher</p>
+                    </TooltipContent>
+                  </Tooltip>
                 ) : (
                   <Table2Icon className="size-5 text-slate-400 dark:text-slate-600" />
                 )}
@@ -148,7 +155,9 @@ export async function ReimbursementsTable() {
                       </p>
                     </TooltipContent>
                   </Tooltip>
-                ) : null}
+                ) : (
+                  <ReceiptTextIcon className="size-5 text-slate-400" />
+                )}
               </div>
             </TableCell>
           </TableRow>
