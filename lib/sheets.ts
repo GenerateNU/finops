@@ -1,8 +1,10 @@
 import dayjs from "dayjs";
 import { drive_v3, google } from "googleapis";
+import PDFMerger from "pdf-merger-js";
 
 import { ExpenseVoucher } from "@/types";
 
+import { Readable } from "stream";
 import { camelize, getDriveUrl, getEnv } from "./utils";
 
 /**
@@ -340,6 +342,89 @@ export async function getExpenseVoucherFiles(): Promise<drive_v3.Schema$FileList
     });
 
   return files.data;
+}
+
+/**
+ * Create an Expense Reimbursement Voucher packet.
+ *
+ * @returns the files
+ */
+export async function createERVPacket(
+  filePrefix: string,
+  voucherFileId: string,
+  receiptFolderId: string
+): Promise<any> {
+  const auth = await google.auth.getClient({
+    projectId: getEnv("GOOGLE_PROJECT_ID"),
+    credentials: {
+      type: "service_account",
+      private_key: getEnv("GOOGLE_PRIVATE_KEY")
+        .split(String.raw`\n`)
+        .join("\n"),
+      client_email: getEnv("GOOGLE_CLIENT_EMAIL"),
+      client_id: getEnv("GOOGLE_CLIENT_ID"),
+      token_url: "https://oauth2.googleapis.com/token",
+      universe_domain: "googleapis.com",
+    },
+    scopes: ["https://www.googleapis.com/auth/drive"],
+  });
+
+  const drive = google.drive({ version: "v3", auth });
+
+  // export voucher file
+  const voucherFileBlob = await drive.files
+    .export({
+      fileId: voucherFileId,
+      mimeType: "application/pdf",
+    })
+    .then(async (res) => res.data);
+
+  // get ID of first file in the receipt folder
+  const receiptFileId = await drive.files
+    .list({
+      q: `'${receiptFolderId}' in parents and trashed = false`,
+    })
+    .then((res) => {
+      if (!res.data.files || res.data.files?.length === 0) {
+        throw new Error("No receipts");
+      }
+
+      return res.data.files[0].id;
+    });
+  if (!receiptFileId) {
+    throw new Error("Could not got receipt file ID");
+  }
+
+  // get receipt file contents
+  const receiptFileBlob = await drive.files
+    .get({
+      fileId: receiptFileId,
+      alt: "media",
+    })
+    .then(async (res) => res.data);
+
+  // merge voucher with receipt
+  const merger = new PDFMerger();
+  await merger.add(await (voucherFileBlob as any).arrayBuffer());
+  await merger.add(await (receiptFileBlob as any).arrayBuffer());
+  const mergedFileBuffer = await merger.saveAsBuffer();
+
+  // upload merged PDF
+  const requestBody = {
+    name: filePrefix + ".pdf",
+    parents: [getEnv("EXPENSE_VOUCHERS_FOLDER_ID")],
+    fields: "id",
+  };
+  const media = {
+    mimeType: "application/pdf",
+    body: Readable.from(mergedFileBuffer),
+  };
+  const file = await drive.files.create({
+    requestBody,
+    media: media,
+  });
+
+  return file.data.id;
 }
 
 /**

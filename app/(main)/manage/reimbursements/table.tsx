@@ -1,10 +1,16 @@
-import { PlusCircleIcon, ReceiptTextIcon, Table2Icon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  PlusCircleIcon,
+  ReceiptTextIcon,
+  SparklesIcon,
+  Table2Icon,
+} from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import dayjs from "@/lib/dayjs";
-import { getReimbursementRequests } from "@/lib/sheets";
+import { createERVPacket, getReimbursementRequests } from "@/lib/sheets";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,6 +29,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn, getDriveUrl } from "@/lib/utils";
+import { z } from "zod";
 
 export async function ReimbursementsTable() {
   const session = await auth();
@@ -32,6 +39,27 @@ export async function ReimbursementsTable() {
   }
 
   const requests = await getReimbursementRequests();
+
+  async function getERVPacket(data: FormData) {
+    "use server";
+
+    const schema = z.object({
+      filePrefix: z.string(),
+      voucherFileId: z.string(),
+      receiptFolderId: z.string(),
+    });
+
+    const formData = Object.fromEntries(data);
+    const parsed = schema.safeParse(formData);
+
+    if (!parsed.data) return;
+
+    await createERVPacket(
+      parsed.data.filePrefix,
+      parsed.data.voucherFileId,
+      parsed.data.receiptFolderId
+    );
+  }
 
   if (!requests || requests.length === 0) {
     return (
@@ -111,7 +139,7 @@ export async function ReimbursementsTable() {
               {request.amount ?? "--"}
             </TableCell>
             <TableCell className="text-right">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-end">
                 {request.voucherFileId ? (
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -158,6 +186,38 @@ export async function ReimbursementsTable() {
                 ) : (
                   <ReceiptTextIcon className="size-5 text-slate-400" />
                 )}
+
+                <ArrowRightIcon className="size-3 text-slate-400" />
+
+                <form className="flex items-center" action={getERVPacket}>
+                  <input
+                    type="hidden"
+                    name="filePrefix"
+                    value={`ERV - ${dayjs(request.submitted).format(
+                      "YYYY-MM-DD"
+                    )} - ${request.requester}`}
+                  />
+                  <input
+                    type="hidden"
+                    name="voucherFileId"
+                    value={request.voucherFileId}
+                  />
+                  <input
+                    type="hidden"
+                    name="receiptFolderId"
+                    value={request.receiptsFolderId}
+                  />
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button type="submit">
+                        <SparklesIcon className="size-5 text-generate-green" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Generate merged packet</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </form>
               </div>
             </TableCell>
           </TableRow>
