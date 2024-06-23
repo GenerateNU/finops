@@ -70,16 +70,18 @@ export async function ExpenseVoucherFilesTable() {
                 </div>
               </div>
             </TableCell>
-            <TableCell className="text-right">
-              <Link
-                href={getDriveUrl("sheet", voucher.id)}
-                target="_blank"
-                className="inline-flex gap-1.5 items-center text-generate-green font-mono uppercase font-semibold hover:bg-generate-green hover:text-white transition-colors px-1 rounded-sm text-base"
-              >
-                Open
-                <ArrowUpRightIcon className="size-5" />
-              </Link>
-            </TableCell>
+            {voucher.id ? (
+              <TableCell className="text-right">
+                <Link
+                  href={getDriveUrl("sheet", voucher.id)}
+                  target="_blank"
+                  className="inline-flex gap-1.5 items-center text-generate-green font-mono uppercase font-semibold hover:bg-generate-green hover:text-white transition-colors px-1 rounded-sm text-base"
+                >
+                  Open
+                  <ArrowUpRightIcon className="size-5" />
+                </Link>
+              </TableCell>
+            ) : null}
           </TableRow>
         ))}
       </TableBody>
