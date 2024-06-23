@@ -1,6 +1,7 @@
 "use server";
 
 import { createExpenseVoucher } from "@/lib/sheets";
+import { sendNotification } from "@/lib/slack/receipt-reminder";
 
 import { formServerSchema } from "./form-schema";
 
@@ -36,7 +37,17 @@ export async function onSubmitAction(
     };
   }
 
+  // create voucher
   const res = await createExpenseVoucher(parsed.data);
+
+  // send receipt reminder Slack message to payee
+  await sendNotification({
+    recipientEmail: parsed.data.email,
+    receiptFolderUrl: res.receiptsFolderUrl,
+    requestId: res.requestId,
+  }).catch((err: any) => {
+    console.error(err);
+  });
 
   return {
     success: true,
