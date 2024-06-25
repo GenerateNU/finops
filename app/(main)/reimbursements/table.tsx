@@ -93,7 +93,7 @@ export async function MyReimbursementsTable() {
             >
               {dayjs(request.submitted).format("MMM DD") ?? "--"}
             </TableCell>
-            <TableCell className="text-right">
+            <TableCell className="text-right whitespace-nowrap">
               {request.amount ?? "--"}
             </TableCell>
             <TableCell className="text-right">
