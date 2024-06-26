@@ -21,44 +21,13 @@ const baseSchema = {
   address: z.string().trim().min(10, {
     message: "Address is required",
   }),
-  budget: z.enum(
-    [
-      // Engagement
-      "Content < Engagement",
-      "Events < Engagement",
-      "Experiences < Engagement",
-
-      // Hardware
-      "C-Star < Hardware",
-      "FuFu Pot < Hardware",
-      "Makerspace < Hardware",
-      "Muscle Recovery < Hardware",
-      "WaveWise < Hardware",
-      "Workshops < Hardware",
-
-      // Operations
-      "Finance < Operations",
-      "Information < Operations",
-      "Strategy < Operations",
-
-      // Software
-      "Carbon < Software",
-      "Care-Wallet < Software",
-      "Couplet < Software",
-      "SAC < Software",
-      "Tubender < Software",
-    ],
-    { message: "A valid budget is required" }
-  ),
+  budget: z.string({ message: "A budget is required" }),
   preApproved: z.boolean().default(false).optional(),
   hasReceipt: z.literal<boolean>(true, {
     errorMap: () => ({
       message: "Please acknowledge the itemized receipt requirement",
     }),
   }),
-  // hasReceipt: z.boolean({
-  //   message: "Please acknowledge the itemized receipt requirement",
-  // }),
   transactionDate: z.date({ message: "Transaction date is required" }),
   // expenseTotal: z.preprocess(
   //   (a) => parseFloat(z.string().parse(a)),

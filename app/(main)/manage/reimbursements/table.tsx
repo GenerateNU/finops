@@ -192,35 +192,35 @@ export async function ReimbursementsTable() {
 
                 <ArrowRightIcon className="size-3 text-slate-400" />
 
-                <form className="flex items-center" action={getERVPacket}>
-                  <input
-                    type="hidden"
-                    name="filePrefix"
-                    value={`ERV - ${dayjs(request.submitted).format(
-                      "YYYY-MM-DD"
-                    )} - ${request.requester}`}
-                  />
-                  <input
-                    type="hidden"
-                    name="voucherFileId"
-                    value={request.voucherFileId}
-                  />
-                  <input
-                    type="hidden"
-                    name="receiptFolderId"
-                    value={request.receiptsFolderId}
-                  />
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button type="submit">
-                        <SparklesIcon className="size-5 text-generate-green" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Generate merged packet</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </form>
+                {/* <form className="flex items-center" action={getERVPacket}> */}
+                <input
+                  type="hidden"
+                  name="filePrefix"
+                  value={`ERV - ${dayjs(request.submitted).format(
+                    "YYYY-MM-DD"
+                  )} - ${request.requester}`}
+                />
+                <input
+                  type="hidden"
+                  name="voucherFileId"
+                  value={request.voucherFileId}
+                />
+                <input
+                  type="hidden"
+                  name="receiptFolderId"
+                  value={request.receiptsFolderId}
+                />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button type="submit">
+                      <SparklesIcon className="size-5 text-generate-green" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Generate merged packet</p>
+                  </TooltipContent>
+                </Tooltip>
+                {/* </form> */}
               </div>
             </TableCell>
           </TableRow>

@@ -4,6 +4,7 @@ import { drive_v3, google } from "googleapis";
 
 import { ExpenseVoucher } from "@/types";
 
+import { BUDGETS } from "./globals";
 import { camelize, getDriveUrl, getEnv } from "./utils";
 
 /**
@@ -21,12 +22,14 @@ export async function createExpenseVoucher(
 }> {
   const TODAY = dayjs().format("MM/DD/YYYY");
 
-  const budgetSplit = voucherData.budget.split(" < ");
-  if (budgetSplit.length != 2) {
+  const budgetLineItem = BUDGETS.find(
+    (budget) => budget.code === voucherData.budget
+  );
+  if (!budgetLineItem) {
     throw new Error("Invalid budget");
   }
-  const branch = budgetSplit[1];
-  const team = budgetSplit[0];
+  const branch = budgetLineItem?.team;
+  const team = budgetLineItem?.subTeam;
 
   const indexCode =
     voucherData.expensePurpose === "Client Project Materials" ||

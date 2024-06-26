@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRightIcon,
   CalendarIcon,
+  CheckIcon,
+  ChevronsUpDownIcon,
   LoaderIcon,
   OctagonPauseIcon,
   StretchHorizontalIcon,
@@ -13,18 +15,30 @@ import {
 } from "lucide-react";
 import { Session } from "next-auth";
 import Link from "next/link";
-import { useEffect, useRef, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import dayjs from "@/lib/dayjs";
-import { BRANCH_TEAMS, EXPENSE_PURPOSE_OPTIONS } from "@/lib/globals";
+import {
+  BUDGETS,
+  BUDGETS_BY_TEAM,
+  EXPENSE_PURPOSE_OPTIONS,
+} from "@/lib/globals";
 import { camelize, cn, getEnv } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import {
   Form,
   FormControl,
@@ -38,9 +52,7 @@ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -58,6 +70,7 @@ import { onSubmitAction } from "./form-submit";
 
 export function ExpenseVoucherForm({ session }: { session: Session }) {
   const [loading, setTransitioning] = useTransition();
+  const [selectedPurpose, setSelectedPurpose] = useState("");
   const [state, formAction] = useFormState(onSubmitAction, {
     success: false,
     message: "",
@@ -71,7 +84,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
       email: session.user?.email ?? "",
       nuid: session.user?.nuid ?? "",
       address: "",
-      budget: undefined,
+      budget: "",
       transactionDate: dayjs().toDate(),
       expenseTotal: "",
       expenseDescription: "",
@@ -86,7 +99,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
     //   email: "burton.g@northeastern.edu",
     //   nuid: "002156789",
     //   address: "360 Huntington Ave, Boston, MA 02120",
-    //   budget: "Events < Engagement",
+    //   budget: "OP-IF-02",
     //   transactionDate: dayjs().toDate(),
     //   expenseTotal: "23.45",
     //   expenseDescription: "Pizza and soda",
@@ -147,7 +160,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                 <CardTitle>Purchaser</CardTitle>
               </CardHeader>
 
-              <CardContent className="space-y-8">
+              <CardContent className="space-y-6">
                 <DualColumn>
                   <FormField
                     control={form.control}
@@ -159,6 +172,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                           <Input
                             autoComplete="name"
                             placeholder="Burton Guster"
+                            readOnly
                             {...field}
                           />
                         </FormControl>
@@ -181,6 +195,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                             type="email"
                             autoComplete="email"
                             placeholder="burton.guster@generatenu.com"
+                            readOnly
                             {...field}
                           />
                         </FormControl>
@@ -201,8 +216,11 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                       <FormItem>
                         <FormLabel>NUID</FormLabel>
                         <FormControl>
-                          <Input placeholder="001234567" {...field} />
+                          <Input placeholder="001234567" readOnly {...field} />
                         </FormControl>
+                        <FormDescription>
+                          Your official 9-digit NUID.
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -239,60 +257,13 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
               </CardHeader>
 
               <CardContent className="space-y-8">
-                <FormField
-                  control={form.control}
-                  name="budget"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Budget</FormLabel>
-                      <Select
-                        name={field.name}
-                        value={field.value}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              ref={field.ref}
-                              onBlur={field.onBlur}
-                              placeholder="Select a budget"
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-
-                        <SelectContent>
-                          {BRANCH_TEAMS.map((branch) => (
-                            <SelectGroup key={branch.name.toLowerCase()}>
-                              <SelectLabel>{branch.name}</SelectLabel>
-
-                              {branch.teams.map((team) => (
-                                <SelectItem
-                                  key={team.toLowerCase()}
-                                  value={`${team} < ${branch.name}`}
-                                >
-                                  {`${team} (${branch.name})`}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Which team's budget should this purchase be expensed to?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <DualColumn>
                   <FormField
                     control={form.control}
                     name="transactionDate"
                     render={({ field }) => (
                       <>
-                        <FormItem className="flex flex-col justify-end">
+                        <FormItem className="flex flex-col mt-1.5">
                           <FormLabel className="pb-1">
                             Transaction date
                           </FormLabel>
@@ -333,8 +304,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                             </PopoverContent>
                           </Popover>
                           <FormDescription>
-                            When did this transaction occur? What date is on
-                            your receipt?
+                            The date on your receipt.
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -376,23 +346,6 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                 <DualColumn>
                   <FormField
                     control={form.control}
-                    name="expenseDescription"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Pizza and soda" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          What items were purchased?
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
                     name="expensePurpose"
                     render={({ field }) => (
                       <FormItem>
@@ -401,7 +354,11 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                           name={field.name}
                           value={field.value}
                           defaultValue={field.value}
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            form.setValue("budget", "");
+                            setSelectedPurpose(value);
+                          }}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -425,12 +382,164 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                           </SelectContent>
                         </Select>
                         <FormDescription>
-                          What was this purchase for?
+                          The primary reason for this expense.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
+                  <FormField
+                    control={form.control}
+                    name="budget"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col justify-end">
+                        <FormLabel className="pb-1">Budget</FormLabel>
+                        <input
+                          type="hidden"
+                          name={field.name}
+                          value={field.value}
+                        />
+                        <Popover>
+                          <PopoverTrigger
+                            disabled={selectedPurpose === ""}
+                            asChild
+                          >
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                role="combobox"
+                                className={cn(
+                                  "font-normal justify-between",
+                                  !field.value &&
+                                    "text-slate-500 dark:placeholder:text-slate-400 shadow-sm"
+                                )}
+                              >
+                                {field.value
+                                  ? (() => {
+                                      const selectedBudget = BUDGETS.find(
+                                        (budget) => budget.code === field.value
+                                      );
+                                      return (
+                                        <div className="flex flex-row items-center gap-2">
+                                          <p className="flex flex-row gap-x-1 items-center flex-wrap leading-[1.1]">
+                                            {selectedBudget?.team}{" "}
+                                            <ArrowRightIcon className="size-3 text-slate-400 dark:text-slate-600" />{" "}
+                                            {selectedBudget?.subTeam}{" "}
+                                            <ArrowRightIcon className="size-3 text-slate-400 dark:text-slate-600" />{" "}
+                                            {selectedBudget?.lineItem}
+                                          </p>
+                                        </div>
+                                      );
+                                    })()
+                                  : "Select budget"}
+                                <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="p-0">
+                            <Command loop>
+                              <CommandInput
+                                placeholder="Search budget..."
+                                disabled={selectedPurpose === ""}
+                              />
+                              <CommandList>
+                                <CommandEmpty>No budget found.</CommandEmpty>
+                                {Object.keys(BUDGETS_BY_TEAM).map((team) => {
+                                  const availableBudgets = BUDGETS.filter(
+                                    (budget) =>
+                                      budget.team === team &&
+                                      (budget.purposes.includes("any") ||
+                                        budget.purposes.includes(
+                                          selectedPurpose
+                                        ))
+                                  );
+
+                                  if (availableBudgets.length === 0)
+                                    return null;
+
+                                  return (
+                                    <CommandGroup
+                                      key={team.toLowerCase()}
+                                      heading={
+                                        <span className="font-mono uppercase text-generate-blue">
+                                          {team}
+                                        </span>
+                                      }
+                                    >
+                                      {availableBudgets.map((budget) => (
+                                        <CommandItem
+                                          key={budget.code}
+                                          value={budget.code}
+                                          keywords={[
+                                            budget.team,
+                                            budget.subTeam,
+                                            budget.lineItem,
+                                          ]}
+                                          onSelect={() => {
+                                            form.setValue(
+                                              "budget",
+                                              budget.code
+                                            );
+                                          }}
+                                          className={cn(
+                                            "border border-transparent",
+                                            budget.code === field.value &&
+                                              "border-generate-green bg-generate-green bg-opacity-10"
+                                          )}
+                                        >
+                                          <CheckIcon
+                                            className={cn(
+                                              "mr-2 h-4 w-4",
+                                              budget.code === field.value
+                                                ? "opacity-100 text-generate-green"
+                                                : "opacity-0"
+                                            )}
+                                          />
+                                          <div className="flex flex-row gap-2 w-full justify-between items-center leading-snug">
+                                            <strong>{budget.lineItem}</strong>
+                                            <code className="text-slate-500 whitespace-nowrap uppercase text-xs">
+                                              {budget.subTeam}
+                                            </code>
+                                          </div>
+                                        </CommandItem>
+                                      ))}
+                                    </CommandGroup>
+                                  );
+                                })}
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        <FormDescription>
+                          The budget line item to cover this expense.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </DualColumn>
+
+                <DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="expenseDescription"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Pizza and soda" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          A brief description of the item(s) purchased.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <></>
                 </DualColumn>
 
                 {form.getValues().expensePurpose !== "Morale" &&
@@ -502,7 +611,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                         />
                       </FormControl>
                       <div className="space-y-2 leading-none">
-                        <FormLabel>Yep, I&rsquo;ve got it!</FormLabel>
+                        <FormLabel>Yes, I have it!</FormLabel>
                         <FormDescription className="leading-tight">
                           I acknowledge the itemized receipt requirement, have
                           one on-hand for this transaction which meets the
@@ -559,7 +668,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                   </Button>
                   {loading ? (
                     <span className="text-sm text-slate-600 dark:text-slate-400 animate-pulse animate-in">
-                      Grab your coffee, this may take a minute...
+                      Grab a coffee, this may take a minute...
                     </span>
                   ) : null}
                 </div>

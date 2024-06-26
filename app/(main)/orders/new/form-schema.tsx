@@ -10,34 +10,7 @@ export const formSchema = z.object({
   budgetBranch: z.enum(["Engagement", "Hardware", "Operations", "Software"], {
     message: "A valid branch is required",
   }),
-  budgetTeam: z.enum(
-    [
-      // Engagement
-      "Content",
-      "Events",
-      "Experiences",
-      // Hardware
-      "C-Star",
-      "FuFu Pot",
-      "Makerspace",
-      "Muscle Recovery",
-      "WaveWise",
-      "Workshops",
-      // Operations
-      "Finance",
-      "Information",
-      "Strategy",
-      // Software
-      "Carbon",
-      "Care-Wallet",
-      "Couplet",
-      "SAC",
-      "Tubender",
-    ],
-    {
-      message: "A valid team is required",
-    }
-  ),
+  budgetTeam: z.string({ message: "A valid team is required" }),
   vendor: z.enum(
     [
       "4imprint",
