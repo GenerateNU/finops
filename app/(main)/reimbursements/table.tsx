@@ -78,7 +78,7 @@ export async function MyReimbursementsTable() {
             <TableRow
               className={cn(
                 request.status === "Missing Receipt" && request.receiptsFolderId
-                  ? "border-b-transparent pb-0"
+                  ? "border-b-transparent pb-0 bg-slate-50"
                   : ""
               )}
             >
@@ -130,7 +130,7 @@ export async function MyReimbursementsTable() {
                 ) : (
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <FileWarningIcon className="size-5 text-slate-500" />
+                      <FileWarningIcon className="size-5 text-slate-400 dark:text-slate-600" />
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>No receipt uploaded</p>
@@ -142,24 +142,21 @@ export async function MyReimbursementsTable() {
 
             {request.status === "Missing Receipt" &&
             request.receiptsFolderId ? (
-              <TableRow className="text-center hover:bg-transparent">
-                <TableCell colSpan={8}>
-                  <div className="flex flex-row items-center justify-center gap-2 p-2 mx-4 border rounded border-generate-red bg-slate-50 dark:bg-slate-700 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700">
-                    <p>
-                      <strong className="font-mono uppercase text-generate-red">
-                        Action Required:
-                      </strong>{" "}
-                      <Link
-                        href={getDriveUrl("folder", request.receiptsFolderId)}
-                        target="_blank"
-                        className="inline-flex items-center gap-0.5 text-generate-blue hover:bg-generate-blue hover:text-white px-1 -mx-0.5 rounded-sm transition-colors"
-                      >
-                        Upload
-                        <ArrowUpRightIcon className="size-3" />
-                      </Link>{" "}
-                      your itemized receipt.
-                    </p>
-                  </div>
+              <TableRow className="bg-slate-50 dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-generate-red">
+                <TableCell className="pt-0"></TableCell>
+                <TableCell colSpan={7} className="pt-0">
+                  <p className="font-semibold">
+                    Please{" "}
+                    <Link
+                      href={getDriveUrl("folder", request.receiptsFolderId)}
+                      target="_blank"
+                      className="inline-flex items-center gap-0.5 text-generate-red underline hover:opacity-75"
+                    >
+                      upload
+                      <ArrowUpRightIcon className="size-3" />
+                    </Link>{" "}
+                    your itemized receipt.
+                  </p>
                 </TableCell>
               </TableRow>
             ) : null}
