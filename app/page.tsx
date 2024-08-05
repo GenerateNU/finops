@@ -4,9 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import dayjs from "@/lib/dayjs";
 import { getMember } from "@/lib/sheets";
 import { getEnv, getGreeting } from "@/lib/utils";
+import { log } from "console";
 import {
   ArrowRightIcon,
   CheckCircle2Icon,
+  CircleEllipsisIcon,
   CircleHelpIcon,
   CloudSunIcon,
   CreditCardIcon,
@@ -29,7 +31,7 @@ export default async function Dashboard() {
   }
 
   const member = await getMember(session.user.email).catch(() =>
-    redirect("/access-denied")
+    redirect("/access-denied"),
   );
 
   return (
@@ -65,16 +67,16 @@ export default async function Dashboard() {
             <CardContent>
               <div className="flex flex-col gap-2">
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
+                  <Indicator predicate={member.onboardingFormComplete} />
+                  Submitted Onboarding
+                </div>
+                <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
                   <Indicator predicate={member.orientationComplete} />
                   Attended Orientation
                 </div>
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
-                  <Indicator predicate={member.shermWelcomeComplete} />
-                  Submitted Sherm Welcome Form
-                </div>
-                <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
                   <Indicator predicate={member.makerspaceTrainingComplete} />
-                  Attended Makerspace Training
+                  Makerspace-Trained
                 </div>
               </div>
             </CardContent>
@@ -87,8 +89,12 @@ export default async function Dashboard() {
             <CardContent>
               <div className="flex flex-col gap-2">
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
-                  <Indicator predicate={member.generalShermAccess} />
-                  General Sherm Access
+                  <Indicator predicate={member.shermLobbyAccess} />
+                  Sherm Lobby Access
+                </div>
+                <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
+                  <Indicator predicate={member.studioOneAccess} />
+                  Studio One Access
                 </div>
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
                   <Indicator predicate={member.makerspaceAccess} />
@@ -207,6 +213,10 @@ function GreetingIcon({ className }: { className?: string }) {
 function Indicator({ predicate }: { predicate: string }) {
   if (predicate && predicate.toLowerCase() === "true") {
     return <CheckCircle2Icon className="text-generate-green size-6 shrink-0" />;
+  } else if (predicate && predicate.toLowerCase() === "pending") {
+    return (
+      <CircleEllipsisIcon className="text-generate-purple size-6 shrink-0" />
+    );
   } else if (predicate && predicate.toLowerCase() === "false") {
     return <XCircleIcon className="text-generate-red size-6 shrink-0" />;
   }

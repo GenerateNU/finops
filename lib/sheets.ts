@@ -14,7 +14,7 @@ import { camelize, getDriveUrl, getEnv } from "./utils";
  * @returns the resulting spreadsheet
  */
 export async function createExpenseVoucher(
-  voucherData: ExpenseVoucher
+  voucherData: ExpenseVoucher,
 ): Promise<{
   requestId: string;
   voucherUrl: string;
@@ -23,7 +23,7 @@ export async function createExpenseVoucher(
   const TODAY = dayjs().format("MM/DD/YYYY");
 
   const budgetLineItem = BUDGETS.find(
-    (budget) => budget.code === voucherData.budget
+    (budget) => budget.code === voucherData.budget,
   );
   if (!budgetLineItem) {
     throw new Error("Invalid budget");
@@ -335,7 +335,7 @@ export async function getExpenseVoucherFiles(): Promise<drive_v3.Schema$FileList
   const files = await drive.files
     .list({
       q: `'${getEnv(
-        "EXPENSE_VOUCHERS_FOLDER_ID"
+        "EXPENSE_VOUCHERS_FOLDER_ID",
       )}' in parents and trashed = false`,
     })
     .catch((err) => {
@@ -493,7 +493,7 @@ export async function getMember(email: string) {
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: getEnv("MEMBERS_ROSTER_FILE_ID"),
-      range: "B2:L",
+      range: "B2:M",
     });
 
     const rows = response.data.values;
