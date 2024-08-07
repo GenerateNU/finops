@@ -67,7 +67,7 @@ export const formServerSchema = z.object({
     .string({ message: "Transaction date is required" })
     .regex(
       /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
-      "Transaction date must be a valid ISO date"
+      "Transaction date must be a valid ISO date",
     )
     .transform((x) => dayjs(x).toDate())
     .pipe(z.date()),

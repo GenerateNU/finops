@@ -83,11 +83,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
       name: session.user?.name ?? "",
       email: session.user?.email ?? "",
       nuid: session.user?.nuid ?? "",
-      address: "",
-      budget: "",
-      transactionDate: dayjs().toDate(),
-      expenseTotal: "",
-      expenseDescription: "",
+
       expensePurpose: "",
       preApproved: false,
       hasReceipt: false,
@@ -98,11 +94,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
     //   name: "Burton Guster",
     //   email: "burton.g@northeastern.edu",
     //   nuid: "002156789",
-    //   address: "360 Huntington Ave, Boston, MA 02120",
-    //   budget: "OP-IF-02",
-    //   transactionDate: dayjs().toDate(),
-    //   expenseTotal: "23.45",
-    //   expenseDescription: "Pizza and soda",
+
     //   expensePurpose: "Morale",
     //   preApproved: false,
     //   hasReceipt: true,
@@ -275,7 +267,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                                   className={cn(
                                     "h-9 pl-3 text-left font-normal shadow-sm",
                                     !field.value &&
-                                      "text-slate-700 dark:text-slate-300"
+                                      "text-slate-700 dark:text-slate-300",
                                   )}
                                 >
                                   {field.value ? (
@@ -299,7 +291,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                                   date > new Date() ||
                                   date < new Date("1900-01-01")
                                 }
-                                initialFocus
+                                autoFocus
                               />
                             </PopoverContent>
                           </Popover>
@@ -413,13 +405,13 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                                 className={cn(
                                   "font-normal justify-between",
                                   !field.value &&
-                                    "text-slate-500 dark:placeholder:text-slate-400 shadow-sm"
+                                    "text-slate-500 dark:placeholder:text-slate-400 shadow-sm",
                                 )}
                               >
                                 {field.value
                                   ? (() => {
                                       const selectedBudget = BUDGETS.find(
-                                        (budget) => budget.code === field.value
+                                        (budget) => budget.code === field.value,
                                       );
                                       return (
                                         <div className="flex flex-row items-center gap-2">
@@ -452,8 +444,8 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                                       budget.team === team &&
                                       (budget.purposes.includes("any") ||
                                         budget.purposes.includes(
-                                          selectedPurpose
-                                        ))
+                                          selectedPurpose,
+                                        )),
                                   );
 
                                   if (availableBudgets.length === 0)
@@ -480,13 +472,13 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                                           onSelect={() => {
                                             form.setValue(
                                               "budget",
-                                              budget.code
+                                              budget.code,
                                             );
                                           }}
                                           className={cn(
                                             "border border-transparent",
                                             budget.code === field.value &&
-                                              "border-generate-green bg-generate-green bg-opacity-10"
+                                              "border-generate-green bg-generate-green bg-opacity-10",
                                           )}
                                         >
                                           <CheckIcon
@@ -494,7 +486,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                                               "mr-2 h-4 w-4",
                                               budget.code === field.value
                                                 ? "opacity-100 text-generate-green"
-                                                : "opacity-0"
+                                                : "opacity-0",
                                             )}
                                           />
                                           <div className="flex flex-row gap-2 w-full justify-between items-center leading-snug">
