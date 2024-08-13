@@ -52,7 +52,7 @@ export default async function Dashboard() {
           <Card className="md:col-span-2 lg:col-span-1 flex flex-col bg-black text-white p-6 uppercase justify-end">
             <p className="ml-1 mb-2 font-mono text-sm inline-flex gap-2 items-center">
               <GreetingIcon className="size-4" />
-              Hey {member.fullName.split(" ")[0]},
+              Hey {member.greeting},
             </p>
             <p className="font-mono font-bold text-6xl leading-0">
               {getGreeting()}!
