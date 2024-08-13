@@ -25,7 +25,7 @@ const slackApp = new SlackApp({
 
 export async function POST(request: Request) {
   try {
-    const req = await request.json();
+    const req = await request.formData();
     const parsed = schema.safeParse(req);
 
     if (!parsed.success) {
