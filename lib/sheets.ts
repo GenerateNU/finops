@@ -493,7 +493,7 @@ export async function getMember(email: string) {
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: getEnv("MEMBERS_ROSTER_FILE_ID"),
-      range: "B2:M",
+      range: "'Official Roster'!B2:N",
     });
 
     const rows = response.data.values;
