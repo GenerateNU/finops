@@ -23,10 +23,21 @@ const slackApp = new SlackApp({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
+async function parseFormData(req: Request) {
+  const formData = await req.formData();
+  const data: { [key: string]: string } = {};
+  formData.forEach((value, key) => {
+    data[key] = value.toString();
+  });
+  return data;
+}
+
 export async function POST(request: Request) {
   try {
-    const req = await request.formData();
+    const req = await parseFormData(request);
+    console.log("req", req);
     const parsed = schema.safeParse(req);
+    console.log("parsed", parsed);
 
     if (!parsed.success) {
       return NextResponse.json(
