@@ -1,10 +1,4 @@
-import { LockIcon, Menu } from "lucide-react";
-import Link from "next/link";
-
-import { NavLink } from "@/types";
-
 import OpsLogo from "@/components/ops-logo";
-
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,8 +6,12 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { UserDropdown } from "@/components/user-dropdown";
+import { NavLink } from "@/types";
 
-import { UserDropdown } from "./user-dropdown";
+import { LockIcon, Menu } from "lucide-react";
+import Link from "next/link";
+import { ManageLink } from "./manage-link";
 
 const LINKS: NavLink[] = [
   {
@@ -47,13 +45,8 @@ export const MainNavigation = () => (
           {link.label}
         </Link>
       ))}
-      <Link
-        href="/manage"
-        className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-      >
-        Manage
-        <LockIcon className="size-3 text-slate-400 dark:text-slate-600" />
-      </Link>
+
+      <ManageLink />
     </nav>
 
     <Sheet>

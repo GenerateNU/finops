@@ -3,6 +3,7 @@ import EntraIDProvider from "next-auth/providers/microsoft-entra-id";
 
 import { getUserProfile } from "@/lib/profile";
 import { getEnv } from "./lib/utils";
+import { PostPermissionsResponse } from "./app/api/permissions/route";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -18,7 +19,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    // check if user is on official roster and authorized to access
+    // Check if user is on official roster and authorized to access
     async signIn({ profile }) {
       if (!profile?.email) {
         console.error("Email does not exist in profile");
@@ -37,7 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         .then((response) => response.json())
         .then((response) => response.isAuthorized);
 
-      console.log(isAuthorized ? "User authorized" : "User not authorized");
+      console.debug(isAuthorized ? "User authorized" : "User not authorized");
 
       return isAuthorized;
     },
@@ -49,13 +50,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           account?.access_token as string,
         );
 
+        // Get user role
+        const role = await fetch(`${process.env.APP_URL}/api/permissions`, {
+          method: "POST",
+          body: JSON.stringify({
+            email: user.email,
+          }),
+        })
+          .then((response) => response.json())
+          .then((response: PostPermissionsResponse) => response?.data?.role);
+
         // Enrich token with user details
         token.user = {
           name: user.name,
           email: user.email,
           image: user.image,
           nuid: graphProfile.nuid,
-          isAdmin: true,
+          role: role || "member",
         };
       }
       return token;

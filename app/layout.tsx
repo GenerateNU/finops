@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Space_Mono } from "next/font/google";
 
-import { MainNavigation } from "@/components/main-navigation";
+import { MainNavigation } from "@/components/header/main-navigation";
 import { Toaster } from "@/components/ui/sonner";
 
 import { auth } from "@/auth";
@@ -42,7 +42,7 @@ export default async function RootLayout({
         className={cn(
           "min-h-screen bg-white dark:bg-black font-sans antialiased",
           outfit.variable,
-          spaceMono.variable
+          spaceMono.variable,
         )}
       >
         <TooltipProvider>

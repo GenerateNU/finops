@@ -1,8 +1,8 @@
 import { User } from "@/types";
 
 export async function getUserProfile(
-  accessToken: string
-): Promise<Omit<User, "isAdmin">> {
+  accessToken: string,
+): Promise<Omit<User, "role">> {
   try {
     const response = await fetch(
       "https://graph.microsoft.com/v1.0/me?$select=employeeId",
@@ -10,7 +10,7 @@ export async function getUserProfile(
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     const data = await response.json();

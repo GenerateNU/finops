@@ -4,12 +4,17 @@ import { formSchema as reimbursementRequestSchema } from "@/app/(main)/reimburse
 
 export type ExpenseVoucher = z.infer<typeof reimbursementRequestSchema>;
 
+export enum UserRole {
+  ADMIN = "admin",
+  MEMBER = "member",
+}
+
 export type User = {
   name?: string | null;
   email?: string | null;
   image?: string | null;
   nuid?: string;
-  isAdmin: boolean;
+  role: "member" | "admin";
 };
 
 export enum Branch {

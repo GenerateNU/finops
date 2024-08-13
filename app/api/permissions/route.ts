@@ -7,15 +7,17 @@ import { getMember } from "@/lib/sheets";
 
 const schema = z.object({ email: z.string().email() });
 
-type PermissionsResponse = {
+export type PostPermissionsResponse = {
   isAuthorized: boolean;
   message: string;
-  data?: object;
+  data?: {
+    role: string;
+  };
 };
 
 export async function POST(
   request: Request,
-): Promise<NextResponse<PermissionsResponse>> {
+): Promise<NextResponse<PostPermissionsResponse>> {
   const req = await request.json();
   const parsed = schema.safeParse(req);
 
@@ -35,7 +37,9 @@ export async function POST(
     return NextResponse.json({
       isAuthorized: true,
       message: "User authenticated",
-      data: member,
+      data: {
+        role: member?.finOpsAccess.toLowerCase() || "member",
+      },
     });
   } catch (err) {
     return NextResponse.json(
