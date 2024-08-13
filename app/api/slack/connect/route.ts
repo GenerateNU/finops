@@ -4,12 +4,14 @@ import { App as SlackApp } from "@slack/bolt";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+// Define Zod schema for request validation
+const schema = z.object({ email: z.string().email() });
+
+// Initialize Slack Bolt app
 const slackApp = new SlackApp({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
-
-const schema = z.object({ email: z.string().email() });
 
 export async function POST(request: Request) {
   const req = await request.json();
@@ -20,7 +22,7 @@ export async function POST(request: Request) {
       {
         message: "Invalid request",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -35,7 +37,7 @@ export async function POST(request: Request) {
           message:
             "The specified email address is not associated with any Slack profiles",
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
         {
           message: "Conversation not created",
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -64,7 +66,7 @@ export async function POST(request: Request) {
       {
         message: "Unable to connect profile",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
