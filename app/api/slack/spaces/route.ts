@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { App as SlackApp } from "@slack/bolt";
 import { z } from "zod";
+import { getMember } from "@/lib/sheets";
 
 // Define Zod schema for request validation
 const schema = z.object({
@@ -54,16 +55,35 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" },
     });
 
-    // respond to message
-    await fetch(parsed.data?.response_url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: "Success" }),
-    });
+    const params = parsed.data.text.split(" ");
+    if (params.length !== 1) {
+      // send error message
+      return NextResponse.json(
+        { text: "Invalid request: please provide an email address." },
+        { status: 200 },
+      );
+    }
 
-    return NextResponse.json({ message: "Command received!" }, { status: 200 });
+    const email = params[0];
+    const member = await getMember(email).then((response) => response.json());
+    const spaces = {
+      shermLobby: member.shermLobbyAccess,
+      studioOne: member.studioOneAccess,
+      makerspace: member.makerspaceAccess,
+    };
+
+    // respond to message
+    return NextResponse.json(
+      {
+        text: `${email} currently has the following access:\n${JSON.stringify(spaces, null, 2)}`,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    return NextResponse.json(
+      { text: "Error: unable to get information." },
+      { status: 200 },
+    );
   }
 }
