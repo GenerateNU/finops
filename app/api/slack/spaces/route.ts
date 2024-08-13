@@ -36,9 +36,7 @@ async function parseFormData(req: Request) {
 export async function POST(request: Request) {
   try {
     const req = await parseFormData(request);
-    console.log("req", req);
     const parsed = schema.safeParse(req);
-    console.log("parsed", parsed);
 
     if (!parsed.success) {
       return NextResponse.json(
@@ -56,7 +54,7 @@ export async function POST(request: Request) {
     });
 
     const params = parsed.data.text.split(" ");
-    if (params.length !== 1) {
+    if (params.length !== 1 || params[0] === "") {
       // send error message
       return NextResponse.json(
         { text: "Invalid request: please provide an email address." },
@@ -65,7 +63,7 @@ export async function POST(request: Request) {
     }
 
     const email = params[0];
-    const member = await getMember(email).then((response) => response.json());
+    const member = await getMember(email);
     const spaces = {
       shermLobby: member.shermLobbyAccess,
       studioOne: member.studioOneAccess,
