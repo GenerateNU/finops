@@ -18,16 +18,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    // check if user is on official roster and authorized to access
+    async signIn({ profile }) {
+      if (!profile?.email) {
+        console.error("Email does not exist in profile");
+        return false;
+      }
+
+      const isAuthorized = await fetch(
+        `${process.env.APP_URL}/api/permissions`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            email: profile.email,
+          }),
+        },
+      )
+        .then((response) => response.json())
+        .then((response) => response.isAuthorized);
+
+      console.log(isAuthorized ? "User authorized" : "User not authorized");
+
+      return isAuthorized;
+    },
     // Add extra properties to the JWT token
     async jwt({ token, user, account, profile }) {
       if (user) {
         // Fetch additional user data from Microsoft Graph
         const graphProfile = await getUserProfile(
-          account?.access_token as string
+          account?.access_token as string,
         );
-
-        // Fetch additional user data from Microsoft Graph
-        // const isAdmin = await fetchIsAdmin(user.email as string);
 
         // Enrich token with user details
         token.user = {
