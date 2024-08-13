@@ -98,7 +98,7 @@ export async function POST(request: Request) {
           elements: [
             {
               type: "plain_text",
-              text: `Email: ${email}`,
+              text: `Email: ${email}\nNUID: ${member.nuid}`,
               emoji: false,
             },
           ],
@@ -110,7 +110,7 @@ export async function POST(request: Request) {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `The following access has been granted to ${member.fullName}:`,
+            text: `${member.fullName} has the following space access:`,
           },
         },
         {
@@ -127,7 +127,7 @@ export async function POST(request: Request) {
               type: "button",
               text: {
                 type: "plain_text",
-                text: "Request Access or Report an Issue",
+                text: "Request Access / Report Issue",
               },
               url: process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL,
             },
