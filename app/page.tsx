@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import { Billboards } from "@/components/billboards";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import dayjs from "@/lib/dayjs";

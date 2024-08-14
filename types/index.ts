@@ -27,5 +27,5 @@ export enum Branch {
 export type NavLink = {
   href: string;
   label: string;
-  icon?: any;
+  icon?: React.ReactElement<HTMLElement>;
 };
