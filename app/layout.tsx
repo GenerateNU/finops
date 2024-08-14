@@ -4,10 +4,9 @@ import { Outfit, Space_Mono } from "next/font/google";
 import { MainNavigation } from "@/components/header/main-navigation";
 import { Toaster } from "@/components/ui/sonner";
 
-import { auth } from "@/auth";
 import { cn } from "@/lib/utils";
 
-import { SlackConnectionBanner } from "@/components/slack-connection-banner.tsx";
+// import { SlackConnectionBanner } from "@/components/slack-connection-banner.tsx";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 import "./globals.css";
@@ -29,13 +28,11 @@ export const metadata: Metadata = {
   description: "Making FinOps easier for everyone connected to Generate",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="en">
       <body
@@ -48,10 +45,9 @@ export default async function RootLayout({
         <TooltipProvider>
           <div className="flex flex-col w-full min-h-screen">
             <MainNavigation />
-            {session ? <SlackConnectionBanner session={session} /> : null}
+            {/* <SlackConnectionBanner /> */}
 
             {children}
-
             <Toaster />
           </div>
         </TooltipProvider>
