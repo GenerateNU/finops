@@ -11,7 +11,9 @@ import { NavLink } from "@/types";
 
 import { LockIcon, Menu } from "lucide-react";
 import Link from "next/link";
-import { ManageLink } from "./manage-link";
+
+import { ManageLink } from "./manage-link.server";
+import { Suspense } from "react";
 
 const LINKS: NavLink[] = [
   {
@@ -46,7 +48,9 @@ export const MainNavigation = () => (
         </Link>
       ))}
 
-      <ManageLink />
+      <Suspense>
+        <ManageLink />
+      </Suspense>
     </nav>
 
     <Sheet>

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Outfit, Space_Mono } from "next/font/google";
 
 import { MainNavigation } from "@/components/header/main-navigation";
-import { Toaster } from "@/components/ui/sonner";
 
 import { cn } from "@/lib/utils";
 
@@ -48,7 +47,6 @@ export default function RootLayout({
             {/* <SlackConnectionBanner /> */}
 
             {children}
-            <Toaster />
           </div>
         </TooltipProvider>
       </body>
