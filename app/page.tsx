@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { Billboards } from "@/components/billboards";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import dayjs from "@/lib/dayjs";
@@ -49,6 +50,7 @@ export default async function Dashboard() {
       </div> */}
 
       <div className="lg:mt-12 mx-auto w-full max-w-screen-lg p-4 flex flex-col gap-4">
+        {/* <Billboards /> */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[45%_1fr_1fr] gap-4">
           <Card className="md:col-span-2 lg:col-span-1 flex flex-col bg-black text-white p-6 uppercase justify-end">
             <p className="ml-1 mb-2 font-mono text-sm inline-flex gap-2 items-center">
@@ -108,7 +110,6 @@ export default async function Dashboard() {
             </CardContent>
           </Card>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_45%_1fr] gap-4">
           <Card>
             <CardHeader>
