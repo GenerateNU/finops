@@ -31,7 +31,7 @@ export default async function Dashboard() {
   }
 
   const member = await getMember(session.user.email).catch(() =>
-    redirect("/access-denied"),
+    redirect("/auth/error?error=AccessDenied"),
   );
 
   return (

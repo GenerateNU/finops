@@ -2,10 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import groupPhoto from "@/images/group-photo.jpg";
 import { getEnv } from "@/lib/utils";
 import { ArrowRightIcon, SlackIcon } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
