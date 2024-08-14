@@ -11,7 +11,9 @@ export type PostPermissionsResponse = {
   isAuthorized: boolean;
   message: string;
   data?: {
-    role: string;
+    role?: string;
+    branch?: string;
+    team?: string;
   };
 };
 
@@ -39,6 +41,8 @@ export async function POST(
       message: "User authenticated",
       data: {
         role: member?.finOpsAccess.toLowerCase() || "member",
+        branch: member?.branch,
+        team: member?.team,
       },
     });
   } catch (err) {

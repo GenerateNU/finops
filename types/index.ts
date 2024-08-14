@@ -15,6 +15,8 @@ export type User = {
   image?: string | null;
   nuid?: string;
   role: "member" | "admin";
+  branch?: string;
+  team?: string;
 };
 
 export enum Branch {

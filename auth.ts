@@ -51,14 +51,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         );
 
         // Get user role
-        const role = await fetch(`${process.env.APP_URL}/api/permissions`, {
-          method: "POST",
-          body: JSON.stringify({
-            email: user.email,
-          }),
-        })
+        const rosterData = await fetch(
+          `${process.env.APP_URL}/api/permissions`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              email: user.email,
+            }),
+          },
+        )
           .then((response) => response.json())
-          .then((response: PostPermissionsResponse) => response?.data?.role);
+          .then((response: PostPermissionsResponse) => {
+            return {
+              role: response?.data?.role,
+              branch: response?.data?.branch,
+              team: response?.data?.team,
+            };
+          });
 
         // Enrich token with user details
         token.user = {
@@ -66,7 +75,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           image: user.image,
           nuid: graphProfile.nuid,
-          role: role || "member",
+          role: rosterData?.role || "member",
+          branch: rosterData?.branch,
+          team: rosterData?.team,
         };
       }
       return token;

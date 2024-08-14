@@ -65,14 +65,29 @@ export function OrderForm({ session }: { session: Session }) {
   // override form visibility to allow multiple submissions
   const [showForm, setShowForm] = useState(false);
 
+  let userBranch: z.output<typeof formSchema.shape.budgetBranch> | undefined;
+  try {
+    userBranch = formSchema.shape.budgetBranch.parse(session.user?.branch);
+  } catch (err) {
+    // do nothing
+  }
+
+  let userTeam: string | undefined;
+  if (userBranch) {
+    const team = BRANCH_TEAMS.filter(
+      (branch) => branch.name === userBranch,
+    )[0].teams.find((team) => team === session.user?.team);
+    userTeam = team;
+  }
+
   // define form
   const form = useForm<z.output<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: session.user?.name ?? "",
       email: session.user?.email ?? "",
-      budgetBranch: undefined,
-      budgetTeam: undefined,
+      budgetBranch: userBranch,
+      budgetTeam: userTeam,
       vendor: undefined,
       productLink: "",
       productDescription: "",
