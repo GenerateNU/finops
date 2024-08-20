@@ -12,11 +12,11 @@ export const BRANCH_TEAMS = [
   {
     name: "Hardware",
     teams: [
-      "C-Star",
-      "FuFu Pot",
+      "BaselineTech",
+      "Fitolux",
       "Makerspace",
-      "Muscle Recovery",
-      "WaveWise",
+      "Sensify",
+      "Tubender",
       "Workshops",
     ],
   },
@@ -26,7 +26,7 @@ export const BRANCH_TEAMS = [
   },
   {
     name: "Software",
-    teams: ["Carbon", "Care-Wallet", "Couplet", "SAC", "Tubender"],
+    teams: ["3 Stones", "Apprenta", "Nightlife", "Platnm", "Snapper"],
   },
 ];
 
@@ -132,56 +132,56 @@ export const BUDGETS = [
   },
   {
     team: "Hardware",
-    subTeam: "Project 1",
+    subTeam: "BaselineTech",
     lineItem: "Materials",
     code: "HW-P1-01",
     purposes: ["Client Project Materials"],
   },
   {
     team: "Hardware",
-    subTeam: "Project 2",
+    subTeam: "Fitolux",
     lineItem: "Materials",
-    code: "HW-P2-02",
+    code: "HW-P2-01",
     purposes: ["Client Project Materials"],
   },
   {
     team: "Hardware",
-    subTeam: "Project 3",
+    subTeam: "Sensify",
     lineItem: "Materials",
-    code: "HW-P3-03",
+    code: "HW-P3-01",
     purposes: ["Client Project Materials"],
   },
   {
     team: "Hardware",
-    subTeam: "Project 4",
+    subTeam: "Tubender",
     lineItem: "Materials",
-    code: "HW-P4-04",
+    code: "HW-P4-01",
     purposes: ["Client Project Materials"],
   },
   {
     team: "Hardware",
-    subTeam: "Project 1",
+    subTeam: "BaselineTech",
     lineItem: "Morale",
     code: "HW-P1-02",
     purposes: ["Morale"],
   },
   {
     team: "Hardware",
-    subTeam: "Project 2",
+    subTeam: "Fitolux",
     lineItem: "Morale",
     code: "HW-P2-02",
     purposes: ["Morale"],
   },
   {
     team: "Hardware",
-    subTeam: "Project 3",
+    subTeam: "Sensify",
     lineItem: "Morale",
     code: "HW-P3-02",
     purposes: ["Morale"],
   },
   {
     team: "Hardware",
-    subTeam: "Project 4",
+    subTeam: "Tubender",
     lineItem: "Morale",
     code: "HW-P4-02",
     purposes: ["Morale"],
@@ -251,35 +251,35 @@ export const BUDGETS = [
   },
   {
     team: "Software",
-    subTeam: "Project 1",
+    subTeam: "3 Stones",
     lineItem: "Morale",
     code: "SW-P1-02",
     purposes: ["Morale"],
   },
   {
     team: "Software",
-    subTeam: "Project 2",
+    subTeam: "Apprenta",
     lineItem: "Morale",
     code: "SW-P2-02",
     purposes: ["Morale"],
   },
   {
     team: "Software",
-    subTeam: "Project 3",
+    subTeam: "Nightlife",
     lineItem: "Morale",
     code: "SW-P3-02",
     purposes: ["Morale"],
   },
   {
     team: "Software",
-    subTeam: "Project 4",
+    subTeam: "Platnm",
     lineItem: "Morale",
     code: "SW-P4-02",
     purposes: ["Morale"],
   },
   {
     team: "Software",
-    subTeam: "Project 5",
+    subTeam: "Snapper",
     lineItem: "Morale",
     code: "SW-P5-02",
     purposes: ["Morale"],
@@ -294,7 +294,7 @@ export const BUDGETS_BY_TEAM = BUDGETS.reduce(
     groups[budget.team].push(budget);
     return groups;
   },
-  {} as Record<string, Budget[]>
+  {} as Record<string, Budget[]>,
 );
 
 export const EXPENSE_PURPOSE_OPTIONS = [

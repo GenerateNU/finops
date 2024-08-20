@@ -42,7 +42,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { AutoFilledInput, Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -173,7 +173,7 @@ export function OrderForm({ session }: { session: Session }) {
                         <FormLabel htmlFor="name">Name</FormLabel>
                         <FormControl>
                           <div className="relative">
-                            <Input
+                            <AutoFilledInput
                               id="name"
                               autoComplete="name"
                               placeholder="Burton Guster"
@@ -181,9 +181,6 @@ export function OrderForm({ session }: { session: Session }) {
                               readOnly
                               {...field}
                             />
-                            <div className="absolute inset-y-0 flex items-center justify-center start-0 aspect-square shrink-0 bg-slate-200 dark:bg-slate-800 rounded-l-md text-slate-400 dark:text-slate-600">
-                              <LockIcon className="size-4" />
-                            </div>
                           </div>
                         </FormControl>
                         <FormDescription>
@@ -202,18 +199,14 @@ export function OrderForm({ session }: { session: Session }) {
                         <FormLabel htmlFor="email">Email</FormLabel>
                         <FormControl>
                           <div className="relative">
-                            <Input
+                            <AutoFilledInput
                               id="email"
                               type="email"
                               autoComplete="email"
                               placeholder="burton.guster@generatenu.com"
-                              className="pl-11"
                               readOnly
                               {...field}
                             />
-                            <div className="absolute inset-y-0 flex items-center justify-center start-0 aspect-square shrink-0 bg-slate-200 dark:bg-slate-800 rounded-l-md text-slate-400 dark:text-slate-600">
-                              <LockIcon className="size-4" />
-                            </div>
                           </div>
                         </FormControl>
                         <FormDescription>
