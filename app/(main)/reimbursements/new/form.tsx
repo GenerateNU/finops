@@ -83,9 +83,15 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
       name: session.user?.name ?? "",
       email: session.user?.email ?? "",
       nuid: session.user?.nuid ?? "",
+      address: "",
 
+      transactionDate: new Date(),
+      expenseTotal: "",
       expensePurpose: "",
+      budget: "",
+      expenseDescription: "",
       preApproved: false,
+
       hasReceipt: false,
       ...(state?.fields ?? {}),
     },

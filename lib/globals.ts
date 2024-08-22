@@ -128,7 +128,14 @@ export const BUDGETS = [
     subTeam: "Director",
     lineItem: "Discretionary",
     code: "HW-DR-03",
-    purposes: ["Morale", "Other"],
+    purposes: ["Client Project Materials", "Morale", "Other"],
+  },
+  {
+    team: "Hardware",
+    subTeam: "Chiefs",
+    lineItem: "Morale",
+    code: "HW-CF-02",
+    purposes: ["Morale"],
   },
   {
     team: "Hardware",
@@ -230,23 +237,9 @@ export const BUDGETS = [
   },
   {
     team: "Software",
-    subTeam: "Design Leads/Chiefs",
+    subTeam: "Chiefs",
     lineItem: "Morale",
-    code: "SW-DS-02",
-    purposes: ["Morale"],
-  },
-  {
-    team: "Software",
-    subTeam: "Engineering Leads/Chiefs",
-    lineItem: "Morale",
-    code: "SW-EG-02",
-    purposes: ["Morale"],
-  },
-  {
-    team: "Software",
-    subTeam: "Product Leads/Chiefs",
-    lineItem: "Morale",
-    code: "SW-PD-02",
+    code: "SW-CF-02",
     purposes: ["Morale"],
   },
   {

@@ -21,28 +21,26 @@ const baseSchema = {
   address: z.string().trim().min(10, {
     message: "Address is required",
   }),
-  budget: z.string({ message: "A budget is required" }),
-  preApproved: z.boolean().default(false).optional(),
-  hasReceipt: z.literal<boolean>(true, {
-    errorMap: () => ({
-      message: "Please acknowledge the itemized receipt requirement",
-    }),
-  }),
+
   transactionDate: z.date({ message: "Transaction date is required" }),
-  // expenseTotal: z.preprocess(
-  //   (a) => parseFloat(z.string().parse(a)),
-  //   z.number().gte(1, "Must be at least $1")
-  // ),
   expenseTotal: z
     .string({
       message: "Expense total is required",
     })
     .trim(),
+  expensePurpose: z.string().trim().min(5, {
+    message: "Expense purpose is required",
+  }),
+  budget: z.string({ message: "A budget is required" }),
   expenseDescription: z.string().trim().min(3, {
     message: "Expense description is required",
   }),
-  expensePurpose: z.string().trim().min(5, {
-    message: "Expense purpose is required",
+  preApproved: z.boolean().default(false).optional(),
+
+  hasReceipt: z.literal<boolean>(true, {
+    errorMap: () => ({
+      message: "Please acknowledge the itemized receipt requirement",
+    }),
   }),
 };
 
