@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRightIcon,
   LoaderIcon,
-  LockIcon,
   OctagonPauseIcon,
   StretchHorizontalIcon,
   XIcon,
@@ -17,14 +16,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import {
-  BRANCH_TEAMS,
-  BRANCHES,
-  EXPENSE_PURPOSE_OPTIONS,
-  VENDORS,
-} from "@/lib/globals";
+import { EXPENSE_PURPOSE_OPTIONS, VENDORS } from "@/lib/globals";
 import { camelize, getEnv } from "@/lib/utils";
 
+import { BudgetPicker } from "@/components/BudgetPicker";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -46,7 +41,6 @@ import { AutoFilledInput, Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -57,6 +51,7 @@ import { onSubmitAction } from "./form-submit";
 
 export function OrderForm({ session }: { session: Session }) {
   const [loading, setTransitioning] = useTransition();
+  const [selectedPurpose, setSelectedPurpose] = useState("");
   const [state, formAction] = useFormState(onSubmitAction, {
     success: false,
     message: "",
@@ -65,20 +60,13 @@ export function OrderForm({ session }: { session: Session }) {
   // override form visibility to allow multiple submissions
   const [showForm, setShowForm] = useState(false);
 
-  let userBranch: z.output<typeof formSchema.shape.budgetBranch> | undefined;
-  try {
-    userBranch = formSchema.shape.budgetBranch.parse(session.user?.branch);
-  } catch (err) {
-    // do nothing
-  }
-
-  let userTeam: string | undefined;
-  if (userBranch) {
-    const team = BRANCH_TEAMS.filter(
-      (branch) => branch.name === userBranch,
-    )[0].teams.find((team) => team === session.user?.team);
-    userTeam = team;
-  }
+  // let userTeam: string | undefined;
+  // if (userBranch) {
+  //   const team = BRANCH_TEAMS.filter(
+  //     (branch) => branch.name === userBranch,
+  //   )[0].teams.find((team) => team === session.user?.team);
+  //   userTeam = team;
+  // }
 
   // define form
   const form = useForm<z.output<typeof formSchema>>({
@@ -86,14 +74,15 @@ export function OrderForm({ session }: { session: Session }) {
     defaultValues: {
       name: session.user?.name ?? "",
       email: session.user?.email ?? "",
-      budgetBranch: userBranch,
-      budgetTeam: userTeam,
+
+      purpose: "",
+      budget: "",
+
+      productDescription: "",
       vendor: undefined,
       productLink: "",
-      productDescription: "",
-      productQuantity: "1",
       productCost: "",
-      purpose: "",
+      productQuantity: "1",
       ...(state?.fields ?? {}),
     },
     // TEST DATA:
@@ -229,105 +218,53 @@ export function OrderForm({ session }: { session: Session }) {
                 <DualColumn>
                   <FormField
                     control={form.control}
-                    name="budgetBranch"
+                    name="purpose"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Branch</FormLabel>
+                        <FormLabel>Purpose</FormLabel>
                         <Select
                           name={field.name}
                           value={field.value}
                           defaultValue={field.value}
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            form.setValue("budget", "");
+                            setSelectedPurpose(value);
+                          }}
                         >
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue
                                 ref={field.ref}
                                 onBlur={field.onBlur}
-                                placeholder="Select a branch"
+                                placeholder="Select a purpose"
                               />
                             </SelectTrigger>
                           </FormControl>
+
                           <SelectContent>
-                            {BRANCHES.map((branch) => (
+                            {EXPENSE_PURPOSE_OPTIONS.map((purpose) => (
                               <SelectItem
-                                key={branch.toLowerCase()}
-                                value={branch}
+                                key={camelize(purpose)}
+                                value={purpose}
                               >
-                                {branch}
+                                {purpose}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                         <FormDescription>
-                          Which branch's budget should this purchase be expensed
-                          to?
+                          The primary reason for this expense.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="budgetTeam"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Team</FormLabel>
-                        <Select
-                          name={field.name}
-                          value={field.value}
-                          defaultValue={field.value}
-                          onValueChange={field.onChange}
-                          disabled={
-                            typeof form.getValues("budgetBranch") ===
-                            "undefined"
-                          }
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue
-                                ref={field.ref}
-                                onBlur={field.onBlur}
-                                placeholder="Select a team"
-                              />
-                            </SelectTrigger>
-                          </FormControl>
-
-                          <SelectContent>
-                            {BRANCH_TEAMS.filter((branch) => {
-                              const selectedBranch =
-                                form.getValues("budgetBranch");
-                              if (selectedBranch) {
-                                return (
-                                  branch.name.toLowerCase() ===
-                                  selectedBranch.toLowerCase()
-                                );
-                              }
-                              return true;
-                            }).map((branch) => (
-                              <SelectGroup key={branch.name.toLowerCase()}>
-                                {/* <SelectLabel>{branch.name}</SelectLabel> */}
-
-                                {branch.teams.map((team) => (
-                                  <SelectItem
-                                    key={team.toLowerCase()}
-                                    value={team}
-                                  >
-                                    {team}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>
-                          Which team's budget should this purchase be expensed
-                          to?
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                  <BudgetPicker<z.output<typeof formSchema>>
+                    name="budget"
+                    form={form}
+                    purpose={selectedPurpose}
                   />
                 </DualColumn>
               </CardContent>
@@ -339,6 +276,30 @@ export function OrderForm({ session }: { session: Session }) {
               </CardHeader>
 
               <CardContent className="space-y-8">
+                <FormField
+                  control={form.control}
+                  name="productDescription"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Product description</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder={
+                            "3.2 ft x 9.8 ft Metallic Tinsel Foil Fringe Curtains (Green)"
+                          }
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        A detailed description of the desired product. Include
+                        any necessary product configurations, such as size,
+                        bundle quantity, or color.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <DualColumn>
                   <FormField
                     control={form.control}
@@ -402,55 +363,7 @@ export function OrderForm({ session }: { session: Session }) {
                   />
                 </DualColumn>
 
-                <FormField
-                  control={form.control}
-                  name="productDescription"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Product description</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder={
-                            "3.2 ft x 9.8 ft Metallic Tinsel Foil Fringe Curtains (Green)"
-                          }
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        A detailed description of the desired product. Include
-                        any necessary product configurations, such as size,
-                        bundle quantity, or color.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <TripleColumn>
-                  <FormField
-                    control={form.control}
-                    name="productQuantity"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Quantity</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="1"
-                            type="number"
-                            min="0"
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          How many of this product to buy. A requested quantity
-                          of 2 for a product sold as a 3-pack would result in 6
-                          total items.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
+                <DualColumn>
                   <FormField
                     control={form.control}
                     name="productCost"
@@ -476,45 +389,28 @@ export function OrderForm({ session }: { session: Session }) {
 
                   <FormField
                     control={form.control}
-                    name="purpose"
+                    name="productQuantity"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Purpose</FormLabel>
-                        <Select
-                          name={field.name}
-                          value={field.value}
-                          defaultValue={field.value}
-                          onValueChange={field.onChange}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue
-                                ref={field.ref}
-                                onBlur={field.onBlur}
-                                placeholder="Select a purpose"
-                              />
-                            </SelectTrigger>
-                          </FormControl>
-
-                          <SelectContent>
-                            {EXPENSE_PURPOSE_OPTIONS.map((purpose) => (
-                              <SelectItem
-                                key={camelize(purpose)}
-                                value={purpose}
-                              >
-                                {purpose}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <FormLabel>Quantity</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="1"
+                            type="number"
+                            min="0"
+                          />
+                        </FormControl>
                         <FormDescription>
-                          What is this purchase for?
+                          How many of this product to buy. A requested quantity
+                          of 2 for a product sold as a 3-pack would result in 6
+                          total items.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                </TripleColumn>
+                </DualColumn>
               </CardContent>
             </Card>
 

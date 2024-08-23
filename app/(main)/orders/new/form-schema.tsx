@@ -7,10 +7,12 @@ export const formSchema = z.object({
   email: z.string().trim().email({
     message: "Email is required",
   }),
-  budgetBranch: z.enum(["Engagement", "Hardware", "Operations", "Software"], {
-    message: "A valid branch is required",
+
+  purpose: z.string().trim().min(5, {
+    message: "Purpose is required",
   }),
-  budgetTeam: z.string({ message: "A valid team is required" }),
+  budget: z.string({ message: "A budget is required" }), // TODO: remove
+
   vendor: z.enum(
     [
       "4imprint",
@@ -39,7 +41,7 @@ export const formSchema = z.object({
     ],
     {
       message: "A valid vendor is required",
-    }
+    },
   ),
   productLink: z.string().trim().url({ message: "Invalid product link" }),
   productDescription: z.string().trim().min(3, {

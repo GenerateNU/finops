@@ -4,8 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRightIcon,
   CalendarIcon,
-  CheckIcon,
-  ChevronsUpDownIcon,
   LoaderIcon,
   OctagonPauseIcon,
   StretchHorizontalIcon,
@@ -22,23 +20,11 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import dayjs from "@/lib/dayjs";
-import {
-  BUDGETS,
-  BUDGETS_BY_TEAM,
-  EXPENSE_PURPOSE_OPTIONS,
-} from "@/lib/globals";
+import { EXPENSE_PURPOSE_OPTIONS } from "@/lib/globals";
 import { camelize, cn, getEnv } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import {
   Form,
   FormControl,
@@ -57,6 +43,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { BudgetPicker } from "@/components/BudgetPicker";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -65,6 +52,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+
 import { formSchema } from "./form-schema";
 import { onSubmitAction } from "./form-submit";
 
@@ -387,135 +375,10 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
+                  <BudgetPicker<z.output<typeof formSchema>>
                     name="budget"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col justify-end">
-                        <FormLabel className="pb-1">Budget</FormLabel>
-                        <input
-                          type="hidden"
-                          name={field.name}
-                          value={field.value}
-                        />
-                        <Popover>
-                          <PopoverTrigger
-                            disabled={selectedPurpose === ""}
-                            asChild
-                          >
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                role="combobox"
-                                className={cn(
-                                  "font-normal justify-between",
-                                  !field.value &&
-                                    "text-slate-500 dark:placeholder:text-slate-400 shadow-sm",
-                                )}
-                              >
-                                {field.value
-                                  ? (() => {
-                                      const selectedBudget = BUDGETS.find(
-                                        (budget) => budget.code === field.value,
-                                      );
-                                      return (
-                                        <div className="flex flex-row items-center gap-2">
-                                          <p className="flex flex-row gap-x-1 items-center flex-wrap leading-[1.1]">
-                                            {selectedBudget?.team}{" "}
-                                            <ArrowRightIcon className="size-3 text-slate-400 dark:text-slate-600" />{" "}
-                                            {selectedBudget?.subTeam}{" "}
-                                            <ArrowRightIcon className="size-3 text-slate-400 dark:text-slate-600" />{" "}
-                                            {selectedBudget?.lineItem}
-                                          </p>
-                                        </div>
-                                      );
-                                    })()
-                                  : "Select budget"}
-                                <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="p-0">
-                            <Command loop>
-                              <CommandInput
-                                placeholder="Search budget..."
-                                disabled={selectedPurpose === ""}
-                              />
-                              <CommandList>
-                                <CommandEmpty>No budget found.</CommandEmpty>
-                                {Object.keys(BUDGETS_BY_TEAM).map((team) => {
-                                  const availableBudgets = BUDGETS.filter(
-                                    (budget) =>
-                                      budget.team === team &&
-                                      (budget.purposes.includes("any") ||
-                                        budget.purposes.includes(
-                                          selectedPurpose,
-                                        )),
-                                  );
-
-                                  if (availableBudgets.length === 0)
-                                    return null;
-
-                                  return (
-                                    <CommandGroup
-                                      key={team.toLowerCase()}
-                                      heading={
-                                        <span className="font-mono uppercase text-generate-blue">
-                                          {team}
-                                        </span>
-                                      }
-                                    >
-                                      {availableBudgets.map((budget) => (
-                                        <CommandItem
-                                          key={budget.code}
-                                          value={budget.code}
-                                          keywords={[
-                                            budget.team,
-                                            budget.subTeam,
-                                            budget.lineItem,
-                                          ]}
-                                          onSelect={() => {
-                                            form.setValue(
-                                              "budget",
-                                              budget.code,
-                                            );
-                                          }}
-                                          className={cn(
-                                            "border border-transparent",
-                                            budget.code === field.value &&
-                                              "border-generate-green bg-generate-green bg-opacity-10",
-                                          )}
-                                        >
-                                          <CheckIcon
-                                            className={cn(
-                                              "mr-2 h-4 w-4",
-                                              budget.code === field.value
-                                                ? "opacity-100 text-generate-green"
-                                                : "opacity-0",
-                                            )}
-                                          />
-                                          <div className="flex flex-row gap-2 w-full justify-between items-center leading-snug">
-                                            <strong>{budget.lineItem}</strong>
-                                            <code className="text-slate-500 whitespace-nowrap uppercase text-xs">
-                                              {budget.subTeam}
-                                            </code>
-                                          </div>
-                                        </CommandItem>
-                                      ))}
-                                    </CommandGroup>
-                                  );
-                                })}
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                        <FormDescription>
-                          The budget line item to cover this expense.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    form={form}
+                    purpose={selectedPurpose}
                   />
                 </DualColumn>
 
