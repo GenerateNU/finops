@@ -28,7 +28,7 @@ export async function createExpenseVoucher(
   if (!budgetLineItem) {
     throw new Error("Invalid budget");
   }
-  const branch = budgetLineItem?.team;
+  const branch = budgetLineItem?.branch;
   const team = budgetLineItem?.subTeam;
 
   const indexCode =

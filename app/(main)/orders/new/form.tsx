@@ -16,7 +16,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { EXPENSE_PURPOSE_OPTIONS, VENDORS } from "@/lib/globals";
+import {
+  Budget,
+  BUDGETS,
+  EXPENSE_PURPOSE_OPTIONS,
+  VENDORS,
+} from "@/lib/globals";
 import { camelize, getEnv } from "@/lib/utils";
 
 import { BudgetPicker } from "@/components/BudgetPicker";
@@ -60,13 +65,17 @@ export function OrderForm({ session }: { session: Session }) {
   // override form visibility to allow multiple submissions
   const [showForm, setShowForm] = useState(false);
 
-  // let userTeam: string | undefined;
-  // if (userBranch) {
-  //   const team = BRANCH_TEAMS.filter(
-  //     (branch) => branch.name === userBranch,
-  //   )[0].teams.find((team) => team === session.user?.team);
-  //   userTeam = team;
-  // }
+  useEffect(() => {
+    let usableBudgetLineItems: Budget[] = [];
+    if (session.user.role === "admin") {
+      console.info("[DEBUG] User is an admin; showing all budget line items.");
+      usableBudgetLineItems = BUDGETS;
+    } else {
+      usableBudgetLineItems = BUDGETS.filter(
+        (budgetItem) => budgetItem.branch === session.user.branch
+      );
+    }
+  }, []);
 
   // define form
   const form = useForm<z.output<typeof formSchema>>({
@@ -89,14 +98,15 @@ export function OrderForm({ session }: { session: Session }) {
     // defaultValues: {
     //   name: "Burton Guster",
     //   email: "burton.g@northeastern.edu",
-    //   budgetBranch: "Engagement",
-    //   budgetTeam: "Events",
+    //
+    //   purpose: "Morale",
+    //   budget: "",
+    //
+    //   productDescription: "Lorem ipsum delor",
     //   vendor: "Amazon",
     //   productLink: "https://example.com",
-    //   productDescription: "Lorem ipsum delor",
-    //   productQuantity: "1",
     //   productCost: "23.45",
-    //   purpose: "Morale",
+    //   productQuantity: "1",
     //   ...(state?.fields ?? {}),
     // },
   });

@@ -70,7 +70,7 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
                         return (
                           <div className="flex flex-row items-center gap-2">
                             <p className="flex flex-row gap-x-1 items-center flex-wrap leading-[1.1]">
-                              {selectedBudget?.team}{" "}
+                              {selectedBudget?.branch}{" "}
                               <ArrowRightIcon className="size-3 text-slate-400 dark:text-slate-600" />{" "}
                               {selectedBudget?.subTeam}{" "}
                               <ArrowRightIcon className="size-3 text-slate-400 dark:text-slate-600" />{" "}
@@ -100,7 +100,7 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
                     }
                     const availableBudgets = BUDGETS.filter(
                       (budget) =>
-                        budget.team === team &&
+                        budget.branch === team &&
                         (budget.purposes.includes("any") ||
                           budget.purposes.includes(purpose)),
                     );
@@ -121,7 +121,7 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
                             key={budget.code}
                             value={budget.code}
                             keywords={[
-                              budget.team,
+                              budget.branch,
                               budget.subTeam,
                               budget.lineItem,
                             ]}
