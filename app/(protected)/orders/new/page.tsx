@@ -1,15 +1,10 @@
 import { ConstructionIcon } from "lucide-react";
-import { redirect } from "next/navigation";
-
-import { auth } from "@/auth";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 import { OrderForm } from "./form";
 
 export default async function NewOrderPage() {
-  const session = await auth();
-  if (!session) return redirect("/auth/login");
-
   return (
     <div className="space-y-8">
       <div>
@@ -31,7 +26,7 @@ export default async function NewOrderPage() {
         </AlertDescription>
       </Alert>
 
-      <OrderForm session={session} />
+      <OrderForm />
     </div>
   );
 }

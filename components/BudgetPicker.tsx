@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowRightIcon, ChevronsUpDownIcon } from "lucide-react";
-import { FieldValues, Path, UseFormReturn } from "react-hook-form";
+import { ArrowRightIcon, ChevronsUpDownIcon, FilterIcon } from "lucide-react";
+import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,8 +26,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { BUDGETS, BUDGETS_BY_TEAM } from "@/lib/globals";
+import { Budget, BUDGETS, BUDGETS_BY_TEAM } from "@/lib/globals";
 import { cn } from "@/lib/utils";
+import { useSession } from "@/providers/AuthContext";
+import { useEffect, useState } from "react";
+import { Badge } from "./ui/badge";
 
 export function BudgetPicker<TFieldValues extends FieldValues>({
   name,
@@ -38,6 +41,25 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
   form: UseFormReturn<TFieldValues>;
   purpose?: string;
 }) {
+  const session = useSession();
+
+  const [availableItems, setAvailableItems] = useState<Budget[]>([]);
+
+  useEffect(() => {
+    if (session.user.role === "admin") {
+      console.info("[DEBUG] User is an admin; showing all budget line items.");
+      setAvailableItems(BUDGETS);
+    } else {
+      setAvailableItems(
+        BUDGETS.filter(
+          (budgetItem) => budgetItem.branch === session.user.branch
+        )
+      );
+    }
+
+    console.log(availableItems);
+  }, []);
+
   return (
     <FormField
       control={form.control}
@@ -59,13 +81,13 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
                   className={cn(
                     "font-normal justify-between",
                     !field.value &&
-                      "text-slate-500 dark:placeholder:text-slate-400 shadow-sm",
+                      "text-slate-500 dark:placeholder:text-slate-400 shadow-sm"
                   )}
                 >
                   {field.value
                     ? (() => {
                         const selectedBudget = BUDGETS.find(
-                          (budget) => budget.code === field.value,
+                          (budget) => budget.code === field.value
                         );
                         return (
                           <div className="flex flex-row items-center gap-2">
@@ -93,16 +115,35 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
                   }
                 />
                 <CommandList>
-                  <CommandEmpty>No budget found.</CommandEmpty>
+                  <CommandEmpty>
+                    <p className="font-semibold">No budget found.</p>
+
+                    <div className="mt-2 flex flex-row justify-center items-center gap-2">
+                      <Badge
+                        variant="secondary"
+                        className="flex justify-start gap-2 text-left"
+                      >
+                        <FilterIcon className="size-3" />
+                        {session.user.role}
+                      </Badge>
+                      <Badge
+                        variant="secondary"
+                        className="flex justify-start gap-2 text-left"
+                      >
+                        <FilterIcon className="size-3" />
+                        {purpose}
+                      </Badge>
+                    </div>
+                  </CommandEmpty>
                   {Object.keys(BUDGETS_BY_TEAM).map((team) => {
                     if (typeof purpose === "undefined") {
                       return true;
                     }
-                    const availableBudgets = BUDGETS.filter(
+                    const availableBudgets = availableItems.filter(
                       (budget) =>
                         budget.branch === team &&
                         (budget.purposes.includes("any") ||
-                          budget.purposes.includes(purpose)),
+                          budget.purposes.includes(purpose))
                     );
 
                     if (availableBudgets.length === 0) return null;
@@ -126,12 +167,18 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
                               budget.lineItem,
                             ]}
                             onSelect={() => {
-                              form.setValue("budget", budget.code);
+                              form.setValue(
+                                name,
+                                budget.code as PathValue<
+                                  TFieldValues,
+                                  Path<TFieldValues>
+                                >
+                              );
                             }}
                             className={cn(
                               "border border-transparent",
                               budget.code === field.value &&
-                                "border-generate-green bg-generate-green bg-opacity-10",
+                                "border-generate-green bg-generate-green bg-opacity-10"
                             )}
                           >
                             <ArrowRightIcon
@@ -139,7 +186,7 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
                                 "mr-2 h-4 w-4",
                                 budget.code === field.value
                                   ? "opacity-100 text-generate-green"
-                                  : "opacity-0",
+                                  : "opacity-0"
                               )}
                             />
                             <div className="flex flex-row gap-2 w-full justify-between items-center leading-snug">

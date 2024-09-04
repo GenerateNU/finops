@@ -8,7 +8,6 @@ import {
   StretchHorizontalIcon,
   XIcon,
 } from "lucide-react";
-import { Session } from "next-auth";
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useFormState } from "react-dom";
@@ -16,12 +15,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import {
-  Budget,
-  BUDGETS,
-  EXPENSE_PURPOSE_OPTIONS,
-  VENDORS,
-} from "@/lib/globals";
+import { EXPENSE_PURPOSE_OPTIONS, VENDORS } from "@/lib/globals";
 import { camelize, getEnv } from "@/lib/utils";
 
 import { BudgetPicker } from "@/components/BudgetPicker";
@@ -51,10 +45,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { useSession } from "@/providers/AuthContext";
 import { formSchema } from "./form-schema";
 import { onSubmitAction } from "./form-submit";
 
-export function OrderForm({ session }: { session: Session }) {
+export function OrderForm() {
+  const session = useSession();
   const [loading, setTransitioning] = useTransition();
   const [selectedPurpose, setSelectedPurpose] = useState("");
   const [state, formAction] = useFormState(onSubmitAction, {
@@ -64,18 +60,6 @@ export function OrderForm({ session }: { session: Session }) {
 
   // override form visibility to allow multiple submissions
   const [showForm, setShowForm] = useState(false);
-
-  useEffect(() => {
-    let usableBudgetLineItems: Budget[] = [];
-    if (session.user.role === "admin") {
-      console.info("[DEBUG] User is an admin; showing all budget line items.");
-      usableBudgetLineItems = BUDGETS;
-    } else {
-      usableBudgetLineItems = BUDGETS.filter(
-        (budgetItem) => budgetItem.branch === session.user.branch
-      );
-    }
-  }, []);
 
   // define form
   const form = useForm<z.output<typeof formSchema>>({

@@ -47,15 +47,12 @@ export const formSchema = z.object({
   productDescription: z.string().trim().min(3, {
     message: "Product description is required",
   }),
+  productCost: z.string().trim().min(1, {
+    message: "Product cost is required",
+  }),
   productQuantity: z
     .string({
       message: "Product quantity is required",
     })
     .trim(),
-  productCost: z.string().trim().min(1, {
-    message: "Product cost is required",
-  }),
-  purpose: z.string().trim().min(5, {
-    message: "Purpose is required",
-  }),
 });
