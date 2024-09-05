@@ -72,10 +72,6 @@ export default async function Dashboard() {
                   Submitted Onboarding
                 </div>
                 <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
-                  <Indicator predicate={member.orientationComplete} />
-                  Attended Orientation
-                </div>
-                <div className="inline-flex items-center gap-2 font-mono font-semibold uppercase text-sm leading-tight">
                   <Indicator predicate={member.makerspaceTrainingComplete} />
                   Makerspace-Trained
                 </div>
