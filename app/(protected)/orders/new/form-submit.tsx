@@ -1,6 +1,5 @@
 "use server";
 
-import { sendOrderConfirmation } from "@/lib/slack/order-confirmation";
 import { formSchema } from "./form-schema";
 
 export type FormState = {
@@ -34,7 +33,7 @@ export async function onSubmitAction(
     };
   }
 
-  if (!parsed.data.productCost.match(/^\d+(\.\d+)?$/)) {
+  if (!parsed.data.unitCost.match(/^\d+(\.\d+)?$/)) {
     return {
       success: false,
       message: "Invalid product cost",
@@ -47,11 +46,11 @@ export async function onSubmitAction(
   // const order = await createOrderRequest(parsed.data);
 
   // send receipt reminder Slack message to payee
-  await sendOrderConfirmation({
-    recipientEmail: parsed.data.email,
-  }).catch((err: any) => {
-    console.error(err);
-  });
+  // await sendOrderConfirmation({
+  //   recipientEmail: parsed.data.email,
+  // }).catch((err: any) => {
+  //   console.error(err);
+  // });
 
   return {
     success: false,

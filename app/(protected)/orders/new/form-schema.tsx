@@ -48,7 +48,7 @@ export const formSchema = z.object({
   productDescription: z.string().trim().min(3, {
     message: "Product description is required",
   }),
-  productCost: z.coerce
+  unitCost: z.coerce
     .string({
       message: "Product cost is required",
     })
@@ -60,7 +60,7 @@ export const formSchema = z.object({
         message: "Product cost must have at most two decimal places",
       }
     ),
-  productQuantity: z
+  quantity: z
     .string({
       message: "Product quantity is required",
     })

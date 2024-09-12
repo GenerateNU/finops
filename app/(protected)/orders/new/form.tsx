@@ -68,8 +68,8 @@ export function OrderForm() {
       productDescription: "",
       vendor: "",
       productLink: "",
-      productCost: "",
-      productQuantity: "1",
+      unitCost: "",
+      quantity: "1",
       ...(state?.fields ?? {}),
     },
     // TEST DATA:
@@ -83,8 +83,8 @@ export function OrderForm() {
     //   productDescription: "Lorem ipsum delor",
     //   vendor: "Amazon",
     //   productLink: "https://example.com",
-    //   productCost: "23.45",
-    //   productQuantity: "1",
+    //   unitCost: "12.34",
+    //   quantity: "1",
     //   ...(state?.fields ?? {}),
     // },
   });
@@ -354,10 +354,10 @@ export function OrderForm() {
                 <DualColumn>
                   <FormField
                     control={form.control}
-                    name="productCost"
+                    name="unitCost"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Cost ($)</FormLabel>
+                        <FormLabel>Unit Cost ($)</FormLabel>
                         <FormControl>
                           <Input
                             {...field}
@@ -368,7 +368,7 @@ export function OrderForm() {
                           />
                         </FormControl>
                         <FormDescription>
-                          This product's expected list price.
+                          This product's expected unit price.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -377,7 +377,7 @@ export function OrderForm() {
 
                   <FormField
                     control={form.control}
-                    name="productQuantity"
+                    name="quantity"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Quantity</FormLabel>
