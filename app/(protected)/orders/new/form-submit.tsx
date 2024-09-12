@@ -1,5 +1,7 @@
 "use server";
 
+import { createOrderRequest } from "@/lib/drive/orders";
+import { sendOrderConfirmation } from "@/lib/slack/order-confirmation";
 import { formSchema } from "./form-schema";
 
 export type FormState = {
@@ -41,28 +43,21 @@ export async function onSubmitAction(
     };
   }
 
-  console.log(parsed);
-
-  // const order = await createOrderRequest(parsed.data);
+  // log request
+  const order = await createOrderRequest(parsed.data);
 
   // send receipt reminder Slack message to payee
-  // await sendOrderConfirmation({
-  //   recipientEmail: parsed.data.email,
-  // }).catch((err: any) => {
-  //   console.error(err);
-  // });
+  await sendOrderConfirmation({
+    recipientEmail: parsed.data.email,
+    requestId: order.requestId,
+  }).catch((err: any) => {
+    console.error(err);
+  });
 
   return {
-    success: false,
-    message: "Order could not be submitted",
-    fields: parsed.data,
+    success: true,
+    message: "Order request submitted!",
+    requestId: order.requestId,
+    resetKey: Date.now().toString(),
   };
-
-  // return {
-  //   success: true,
-  //   message: "Order request submitted!",
-  //   // requestNo: order.requestNo || undefined,
-  //   requestId: "AB234",
-  //   resetKey: Date.now().toString(),
-  // };
 }

@@ -1,8 +1,10 @@
 import { z } from "zod";
 
+import { formSchema as orderRequestSchema } from "@/app/(protected)/orders/new/form-schema";
 import { formSchema as reimbursementRequestSchema } from "@/app/(protected)/reimbursements/new/form-schema";
 
 export type ExpenseVoucher = z.infer<typeof reimbursementRequestSchema>;
+export type OrderRequest = z.infer<typeof orderRequestSchema>;
 
 export enum UserRole {
   ADMIN = "admin",

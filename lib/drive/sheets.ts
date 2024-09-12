@@ -4,8 +4,8 @@ import { drive_v3, google } from "googleapis";
 
 import { ExpenseVoucher } from "@/types";
 
-import { BUDGETS } from "./globals";
-import { camelize, getDriveUrl, getEnv } from "./utils";
+import { BUDGETS } from "../globals";
+import { camelize, getDriveUrl, getEnv } from "../utils";
 
 /**
  * Create and autofill an expense voucher based on the spreadsheet template and the given expense data.

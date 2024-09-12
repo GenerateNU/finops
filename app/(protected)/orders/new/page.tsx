@@ -1,7 +1,4 @@
-import { ConstructionIcon } from "lucide-react";
-
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-
+import { getEnv } from "@/lib/utils";
 import { OrderForm } from "./form";
 
 export default async function NewOrderPage() {
@@ -13,18 +10,10 @@ export default async function NewOrderPage() {
         </h2>
         <p className="max-w-xl mt-4 leading-snug text-slate-600 dark:text-slate-400">
           Request a product be ordered for your team.
+          <br />
+          Orders are placed {getEnv("NEXT_PUBLIC_ORDER_PLACEMENT_SCHEDULE")}.
         </p>
       </div>
-
-      <Alert variant="destructive">
-        <ConstructionIcon className="size-4" />
-        <AlertTitle className="font-semibold">Work in Progress</AlertTitle>
-
-        <AlertDescription>
-          This form is a work-in-progress and is subject to change. Submissions
-          will not be saved and will not be processed.
-        </AlertDescription>
-      </Alert>
 
       <OrderForm />
     </div>
