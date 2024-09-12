@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { getMember } from "@/lib/sheets";
+import { getMember } from "@/lib/drive/sheets";
 
 const schema = z.object({ email: z.string().email() });
 

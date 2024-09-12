@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
-import { getExpenseVoucherFiles } from "@/lib/sheets";
+import { getExpenseVoucherFiles } from "@/lib/drive/sheets";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";

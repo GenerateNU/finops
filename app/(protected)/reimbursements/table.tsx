@@ -10,7 +10,7 @@ import { Fragment } from "react";
 
 import { auth } from "@/auth";
 import dayjs from "@/lib/dayjs";
-import { getReimbursementRequests } from "@/lib/sheets";
+import { getReimbursementRequests } from "@/lib/drive/sheets";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteFile } from "@/lib/sheets";
+import { deleteFile } from "@/lib/drive/sheets";
 import { formSchema } from "./form-schema";
 
 export type FormState = {

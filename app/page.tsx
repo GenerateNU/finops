@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import dayjs from "@/lib/dayjs";
-import { getMember } from "@/lib/sheets";
+import { getMember } from "@/lib/drive/sheets";
 import { getEnv, getGreeting } from "@/lib/utils";
 
 import {
