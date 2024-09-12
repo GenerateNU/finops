@@ -4,7 +4,7 @@ import { google } from "googleapis";
 import { OrderRequest } from "@/types";
 
 import { BUDGETS } from "../globals";
-import { getEnv } from "../utils";
+import { camelize, getEnv } from "../utils";
 
 /**
  * Create an order request with the given request data.
@@ -109,4 +109,66 @@ export async function createOrderRequest(
     success: true,
     requestId: requestId,
   };
+}
+
+/**
+ * Get all recorded order requests for the given email. If not provided, returns all requests.
+ *
+ * @param email the email to filter results by
+ * @returns the resulting rows
+ */
+export async function getOrderRequests(email?: string) {
+  try {
+    const auth = await google.auth.getClient({
+      projectId: getEnv("GOOGLE_PROJECT_ID"),
+      credentials: {
+        type: "service_account",
+        private_key: getEnv("GOOGLE_PRIVATE_KEY")
+          .split(String.raw`\n`)
+          .join("\n"),
+        client_email: getEnv("GOOGLE_CLIENT_EMAIL"),
+        client_id: getEnv("GOOGLE_CLIENT_ID"),
+        token_url: "https://oauth2.googleapis.com/token",
+        universe_domain: "googleapis.com",
+      },
+      scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+    });
+
+    const sheets = google.sheets({ version: "v4", auth });
+
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: getEnv("ORDER_REQUESTS_DB_FILE_ID"),
+      range: "B2:R",
+    });
+
+    const rows = response.data.values;
+    if (!rows || rows.length === 0) {
+      console.log("No data found.");
+      return;
+    }
+
+    const columnIndex = rows[0].indexOf("Email");
+    if (columnIndex === -1) {
+      console.log(`Column "Email" not found.`);
+      return [];
+    }
+
+    const objects = [];
+    for (let i = 1; i < rows.length; i++) {
+      const row = rows[i];
+      if (!email || (email && row[columnIndex] === email)) {
+        const obj: any = {};
+        rows[0].forEach((header, columnIndex) => {
+          obj[camelize(header)] = row[columnIndex];
+        });
+        obj["id"] = i + 2; // add 2 to account for header rows
+        objects.push(obj);
+      }
+    }
+
+    return objects;
+  } catch (err) {
+    console.error("The API returned an error:", err);
+    throw err;
+  }
 }
