@@ -11,10 +11,11 @@ export const formSchema = z.object({
   purpose: z.string().trim().min(5, {
     message: "Purpose is required",
   }),
-  budget: z.string({ message: "A budget is required" }), // TODO: remove
+  budget: z.string().min(1, { message: "A budget is required" }),
 
   vendor: z.enum(
     [
+      "",
       "4imprint",
       "Adafruit",
       "Amazon",
@@ -41,15 +42,24 @@ export const formSchema = z.object({
     ],
     {
       message: "A valid vendor is required",
-    },
+    }
   ),
   productLink: z.string().trim().url({ message: "Invalid product link" }),
   productDescription: z.string().trim().min(3, {
     message: "Product description is required",
   }),
-  productCost: z.string().trim().min(1, {
-    message: "Product cost is required",
-  }),
+  productCost: z.coerce
+    .string({
+      message: "Expense total is required",
+    })
+    .refine(
+      (value) => {
+        return Number.isInteger(parseFloat(value) * 100);
+      },
+      {
+        message: "Expense total must have at most two decimal places",
+      }
+    ),
   productQuantity: z
     .string({
       message: "Product quantity is required",

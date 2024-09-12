@@ -72,7 +72,7 @@ export function OrderForm() {
       budget: "",
 
       productDescription: "",
-      vendor: undefined,
+      vendor: "",
       productLink: "",
       productCost: "",
       productQuantity: "1",

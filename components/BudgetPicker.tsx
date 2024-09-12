@@ -56,8 +56,6 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
         )
       );
     }
-
-    console.log(availableItems);
   }, []);
 
   return (

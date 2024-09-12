@@ -88,9 +88,15 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
     //   name: "Burton Guster",
     //   email: "burton.g@northeastern.edu",
     //   nuid: "002156789",
+    //   address: "123 Somewhere St, Boston, MA 12345"
 
+    //   transactionDate: new Date(),
+    //   expenseTotal: "5.00",
     //   expensePurpose: "Morale",
+    //   budget: ""
+    //   expenseDescription: "Testing",
     //   preApproved: false,
+    //
     //   hasReceipt: true,
     //   ...(state?.fields ?? {}),
     // },
