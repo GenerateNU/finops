@@ -9,7 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { MyOrdersTableSkeleton } from "./table";
+import { Suspense } from "react";
+import { MyOrdersTable, MyOrdersTableSkeleton } from "./table";
 
 export default function MyOrdersPage() {
   return (
@@ -20,10 +21,9 @@ export default function MyOrdersPage() {
       </CardHeader>
 
       <CardContent>
-        <MyOrdersTableSkeleton />
-        {/* <Suspense fallback={<MyOrdersTableSkeleton />}>
+        <Suspense fallback={<MyOrdersTableSkeleton />}>
           <MyOrdersTable />
-        </Suspense> */}
+        </Suspense>
       </CardContent>
 
       <CardFooter className="flex flex-col items-start gap-4 px-6 py-4 border-t border-t-slate-200 dark:border-t-slate-800">
