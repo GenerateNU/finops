@@ -1,6 +1,6 @@
 "use server";
 
-import { createExpenseVoucher } from "@/lib/sheets";
+import { createExpenseVoucher } from "@/lib/drive/sheets";
 import { sendNotification } from "@/lib/slack/receipt-reminder";
 
 import { formServerSchema } from "./form-schema";
