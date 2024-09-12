@@ -20,13 +20,7 @@ import { camelize, getEnv } from "@/lib/utils";
 
 import { BudgetPicker } from "@/components/BudgetPicker";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -457,27 +451,30 @@ export function OrderForm() {
             <Card>
               <CardHeader>
                 <CardTitle>Request Submitted!</CardTitle>
-                <CardDescription className="mt-8">
-                  <p>
-                    Your request has been successfully submitted. If approved,
-                    orders are typically placed on{" "}
-                    {getEnv("NEXT_PUBLIC_ORDER_PLACEMENT_SCHEDULE")}.
-                  </p>
-
-                  <p className="mt-2">
-                    Please reach out in{" "}
-                    <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
-                      <code>
-                        #{getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME")}
-                      </code>
-                    </Link>{" "}
-                    if you have any questions or concerns.
-                  </p>
-                </CardDescription>
               </CardHeader>
 
               <CardContent>
-                <Button before={<StretchHorizontalIcon />} asChild>
+                <p>
+                  Your request has been successfully submitted. If approved,
+                  orders are typically placed on{" "}
+                  {getEnv("NEXT_PUBLIC_ORDER_PLACEMENT_SCHEDULE")}.
+                </p>
+
+                <p className="mt-2">
+                  Please reach out in{" "}
+                  <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
+                    <code>
+                      #{getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME")}
+                    </code>
+                  </Link>{" "}
+                  if you have any questions or concerns.
+                </p>
+
+                <Button
+                  className="mt-8"
+                  before={<StretchHorizontalIcon />}
+                  asChild
+                >
                   <Link href="/orders">View Order Requests</Link>
                 </Button>
               </CardContent>

@@ -50,14 +50,14 @@ export const formSchema = z.object({
   }),
   productCost: z.coerce
     .string({
-      message: "Expense total is required",
+      message: "Product cost is required",
     })
     .refine(
       (value) => {
         return Number.isInteger(parseFloat(value) * 100);
       },
       {
-        message: "Expense total must have at most two decimal places",
+        message: "Product cost must have at most two decimal places",
       }
     ),
   productQuantity: z
