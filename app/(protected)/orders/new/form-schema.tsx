@@ -48,18 +48,9 @@ export const formSchema = z.object({
   productDescription: z.string().trim().min(3, {
     message: "Product description is required",
   }),
-  unitCost: z.coerce
-    .string({
-      message: "Product cost is required",
-    })
-    .refine(
-      (value) => {
-        return Number.isInteger(parseFloat(value) * 100);
-      },
-      {
-        message: "Product cost must have at most two decimal places",
-      }
-    ),
+  unitCost: z.coerce.string({
+    message: "Product cost is required",
+  }),
   quantity: z
     .string({
       message: "Product quantity is required",

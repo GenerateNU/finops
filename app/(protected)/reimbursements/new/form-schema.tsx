@@ -23,18 +23,9 @@ const baseSchema = {
   }),
 
   transactionDate: z.date({ message: "Transaction date is required" }),
-  expenseTotal: z.coerce
-    .string({
-      message: "Expense total is required",
-    })
-    .refine(
-      (value) => {
-        return Number.isInteger(parseFloat(value) * 100);
-      },
-      {
-        message: "Expense total must have at most two decimal places",
-      }
-    ),
+  expenseTotal: z.coerce.string({
+    message: "Expense total is required",
+  }),
   expensePurpose: z.string().trim().min(5, {
     message: "Expense purpose is required",
   }),
