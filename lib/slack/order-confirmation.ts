@@ -141,6 +141,6 @@ export async function sendOrderConfirmationError(data: NotificationData) {
       ],
     });
   } catch (err) {
-    throw new Error("Unable to connect profile");
+    throw new Error("Unable to send Slack message");
   }
 }

@@ -4,6 +4,7 @@ import { google } from "googleapis";
 import { OrderRequest } from "@/types";
 
 import { BUDGETS } from "../globals";
+import { sendNewOrderNotification } from "../slack/team-notification";
 import { camelize, getEnv } from "../utils";
 
 /**
@@ -104,6 +105,21 @@ export async function createOrderRequest(
   requestId += team.charAt(1);
   requestId += newDbRowId;
   requestId = requestId.toUpperCase();
+
+  // send new order request notification in configured Slack channel
+  await sendNewOrderNotification({
+    requestorName: requestData.name,
+    requestorEmail: requestData.email,
+    teamName: team,
+    purpose: requestData.purpose,
+    budget: requestData.budget,
+    vendorName: requestData.vendor,
+    productDescription: requestData.productDescription,
+    productLink: requestData.productLink,
+    requestId: requestId,
+  }).catch((err: any) => {
+    console.error(err);
+  });
 
   return {
     success: true,

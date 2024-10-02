@@ -98,6 +98,6 @@ export async function sendNotification(data: NotificationData) {
       ],
     });
   } catch (err) {
-    throw new Error("Unable to connect profile");
+    throw new Error("Unable to send Slack message");
   }
 }
