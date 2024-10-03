@@ -34,7 +34,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { AutoFilledInput, Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -161,7 +161,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input
+                          <AutoFilledInput
                             autoComplete="name"
                             placeholder="Burton Guster"
                             readOnly
@@ -183,7 +183,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input
+                          <AutoFilledInput
                             type="email"
                             autoComplete="email"
                             placeholder="burton.guster@generatenu.com"
@@ -208,7 +208,11 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                       <FormItem>
                         <FormLabel>NUID</FormLabel>
                         <FormControl>
-                          <Input placeholder="001234567" readOnly {...field} />
+                          <AutoFilledInput
+                            placeholder="001234567"
+                            readOnly
+                            {...field}
+                          />
                         </FormControl>
                         <FormDescription>
                           Your official 9-digit NUID.
@@ -267,7 +271,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                                   className={cn(
                                     "h-9 pl-3 text-left font-normal shadow-sm",
                                     !field.value &&
-                                      "text-slate-700 dark:text-slate-300",
+                                      "text-slate-700 dark:text-slate-300"
                                   )}
                                 >
                                   {field.value ? (
