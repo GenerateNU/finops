@@ -15,7 +15,7 @@ import { MyOrdersTable, MyOrdersTableSkeleton } from "./table";
 export default function MyOrdersPage() {
   return (
     <Card>
-      <CardHeader className="px-7">
+      <CardHeader>
         <CardTitle>My Submissions</CardTitle>
         <CardDescription>Your current and past order requests.</CardDescription>
       </CardHeader>

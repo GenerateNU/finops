@@ -58,7 +58,7 @@ export async function MyOrdersTable() {
           <TableHead className="hidden sm:table-cell">Budget</TableHead>
           <TableHead>Purpose</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead className="hidden md:table-cell">Purchased</TableHead>
+          {/* <TableHead className="hidden md:table-cell">Purchased</TableHead> */}
           <TableHead>Submitted</TableHead>
           <TableHead className="text-right">Cost</TableHead>
         </TableRow>
@@ -77,10 +77,10 @@ export async function MyOrdersTable() {
             <TableCell>{request.purpose ?? "--"}</TableCell>
             <TableCell>
               <Badge className="text-xs" variant="outline">
-                Pending
+                {request.status}
               </Badge>
             </TableCell>
-            <TableCell
+            {/* <TableCell
               className="hidden md:table-cell"
               title={
                 request.purchased
@@ -91,7 +91,7 @@ export async function MyOrdersTable() {
               {request.purchased
                 ? dayjs(request.purchased).format("MMM DD")
                 : "N/A"}
-            </TableCell>
+            </TableCell> */}
             <TableCell
               title={dayjs(request.submitted).format("ddd, MMM DD, YYYY")}
             >
@@ -110,7 +110,7 @@ export async function MyOrdersTable() {
                       </Badge>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Expected unit cost. Final total not yet available.</p>
+                      <p>Expected unit cost. Shipping/handling not included.</p>
                     </TooltipContent>
                   </Tooltip>
                 </>
