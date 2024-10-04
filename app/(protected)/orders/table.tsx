@@ -36,14 +36,14 @@ export async function MyOrdersTable() {
       <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm border-slate-200 dark:border-slate-800">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
-            You have no reimbursements
+            You have no orders
           </h3>
           <p className="text-sm text-slate">
-            We don&rsquo;t have any records of reimbursement requests associated
-            with your email address.
+            We don&rsquo;t have any records of order requests associated with
+            your email address.
           </p>
           <Button className="mt-4" before={<PlusCircleIcon />} asChild>
-            <Link href="/reimbursements/new">Submit Request</Link>
+            <Link href="/orders/new">Submit Request</Link>
           </Button>
         </div>
       </div>
