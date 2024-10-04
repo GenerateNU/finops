@@ -62,7 +62,7 @@ export async function createOrderRequest(
   const newDbRowId = await sheets.spreadsheets.values
     .append({
       spreadsheetId: getEnv("ORDER_REQUESTS_DB_FILE_ID"),
-      range: rangePrefix + "B3:R",
+      range: rangePrefix + "B3:P",
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [
@@ -73,13 +73,12 @@ export async function createOrderRequest(
             "Pending Review",
             branch,
             team,
-            budgetLineItem,
+            requestData.budget,
             requestData.purpose,
             requestData.productDescription,
             requestData.vendor,
             requestData.productLink,
             requestData.unitCost,
-            "",
             requestData.quantity,
           ],
         ],
