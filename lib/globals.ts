@@ -310,6 +310,7 @@ export const VENDORS = [
   "Protolabs",
   "ServoCity",
   "Sparkfun",
+  "Stepper Online",
   "Sticker Mule",
   "ULINE",
   "US Plastics",

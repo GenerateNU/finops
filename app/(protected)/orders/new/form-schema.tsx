@@ -35,6 +35,7 @@ export const formSchema = z.object({
       "Protolabs",
       "ServoCity",
       "Sparkfun",
+      "Stepper Online",
       "Sticker Mule",
       "ULINE",
       "US Plastics",
