@@ -5,6 +5,7 @@ import { drive_v3, google } from "googleapis";
 import { ExpenseVoucher } from "@/types";
 
 import { BUDGETS } from "../globals";
+import { sendNewReimbursementReqNotification } from "../slack/team-notification";
 import { camelize, getDriveUrl, getEnv } from "../utils";
 
 /**
@@ -238,6 +239,18 @@ export async function createExpenseVoucher(
   requestId += team.charAt(1);
   requestId += newDbRowId;
   requestId = requestId.toUpperCase();
+
+  // send new order request notification in configured Slack channel
+  await sendNewReimbursementReqNotification({
+    requestorName: voucherData.name,
+    requestorEmail: voucherData.email,
+    teamName: team,
+    purpose: voucherData.expensePurpose,
+    budget: voucherData.budget,
+    requestId: requestId,
+  }).catch((err: any) => {
+    console.error(err);
+  });
 
   return {
     requestId: requestId,

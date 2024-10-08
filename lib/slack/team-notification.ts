@@ -6,7 +6,7 @@ const slackApp = new SlackApp({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
-const schema = z.object({
+const orderReqData = z.object({
   requestorName: z.string(),
   requestorEmail: z.string().email(),
   teamName: z.string(),
@@ -17,10 +17,10 @@ const schema = z.object({
   productLink: z.string().url(),
   requestId: z.string(),
 });
-type NotificationData = z.infer<typeof schema>;
+type OrderReqNotificationData = z.infer<typeof orderReqData>;
 
-export async function sendNewOrderNotification(data: NotificationData) {
-  const parsed = schema.safeParse(data);
+export async function sendNewOrderReqNotification(data: OrderReqNotificationData) {
+  const parsed = orderReqData.safeParse(data);
 
   if (!parsed.success) {
     throw new Error("Invalid data provided");
@@ -80,6 +80,79 @@ export async function sendNewOrderNotification(data: NotificationData) {
               "type": "mrkdwn",
               "text": `*Product:*\n<${parsed.data.productLink}|${parsed.data.productDescription}>`
             }
+          ]
+        }
+      ],
+      unfurl_links: false,
+    });
+  } catch (err) {
+    throw new Error("Unable to send Slack message");
+  }
+}
+
+const reimbursementReqData = z.object({
+  requestorName: z.string(),
+  requestorEmail: z.string().email(),
+  teamName: z.string(),
+  purpose: z.string(),
+  budget: z.string(),
+  requestId: z.string(),
+});
+type ReimbursementReqNotificationData = z.infer<typeof reimbursementReqData>;
+
+export async function sendNewReimbursementReqNotification(data: ReimbursementReqNotificationData) {
+  const parsed = reimbursementReqData.safeParse(data);
+
+  if (!parsed.success) {
+    throw new Error("Invalid data provided");
+  }
+
+  try {
+    const destSlackChannelId = process.env.NEXT_PUBLIC_SLACK_FINANCE_INTERNAL_CHANNEL_ID
+    if (!destSlackChannelId) throw new Error("NEXT_PUBLIC_SLACK_FINANCE_INTERNAL_CHANNEL_ID environment variable not specified");
+
+    const requestorId = await slackApp.client.users
+      .lookupByEmail({
+        email: parsed.data.requestorEmail,
+      })
+      .then((res) => res.user?.id);
+    if (!requestorId) {
+      throw new Error(
+        "The specified email address is not associated with any Slack profiles"
+      );
+    }
+
+    slackApp.client.chat.postMessage({
+      channel: destSlackChannelId,
+      text: `New Reimbursement Requested: #${parsed.data.teamName}`,
+      blocks: [
+        {
+          type: "header",
+          text: {
+            type: "plain_text",
+            text: `:new: Reimbursement #${parsed.data.requestId} Requested for ${parsed.data.requestorName}`,
+            emoji: true,
+          },
+        },
+        {
+          "type": "section",
+          "fields": [
+            {
+              "type": "mrkdwn",
+              "text": `*Submitter:*\n<@${requestorId}>`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `*Team:*\n${parsed.data.teamName}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `*Purpose:*\n${parsed.data.purpose}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `*Budget:*\n${parsed.data.budget}`
+            },
           ]
         }
       ],
