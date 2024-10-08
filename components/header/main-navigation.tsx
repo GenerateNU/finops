@@ -17,11 +17,11 @@ import { ManageLink } from "./manage-link.server";
 
 const LINKS: NavLink[] = [
   {
-    href: "/orders/new",
+    href: "/orders",
     label: "Orders",
   },
   {
-    href: "/reimbursements/new",
+    href: "/reimbursements",
     label: "Reimbursements",
   },
 ];
