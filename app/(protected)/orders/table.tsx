@@ -13,11 +13,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import dayjs from "@/lib/dayjs";
 import { getOrderRequests } from "@/lib/drive/orders";
 import { PlusCircleIcon } from "lucide-react";
@@ -56,11 +51,11 @@ export async function MyOrdersTable() {
         <TableRow>
           <TableHead>ID</TableHead>
           <TableHead className="hidden sm:table-cell">Budget</TableHead>
-          <TableHead>Purpose</TableHead>
+          <TableHead>Item &amp; Vendor</TableHead>
           <TableHead>Status</TableHead>
           {/* <TableHead className="hidden md:table-cell">Purchased</TableHead> */}
           <TableHead>Submitted</TableHead>
-          <TableHead className="text-right">Cost</TableHead>
+          <TableHead className="text-right">Unit Cost</TableHead>
         </TableRow>
       </TableHeader>
 
@@ -69,12 +64,24 @@ export async function MyOrdersTable() {
           <TableRow key={request.id} className="bg-accent">
             <TableCell>{request.id}</TableCell>
             <TableCell className="hidden sm:table-cell">
-              <div className="inline font-medium">{request.branch ?? "--"}</div>
+              <div className="inline font-medium">
+                {request.branch ?? "--"} &middot; {request.team ?? "--"}
+              </div>
               <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
-                {request.team ?? "--"}
+                {request.purpose ?? "--"}
               </div>
             </TableCell>
-            <TableCell>{request.purpose ?? "--"}</TableCell>
+            <TableCell>
+              <div className="inline font-medium">
+                <span className="inline-block text-xs bg-slate-200 rounded-md px-2 py-0.5 mr-0.5">
+                  {request.quantity ?? "0"}
+                </span>{" "}
+                {request.description ?? "--"}
+              </div>
+              <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
+                from {request.vendor ?? "Unknown Vendor"}
+              </div>
+            </TableCell>
             <TableCell>
               <Badge className="text-xs" variant="outline">
                 {request.status}
@@ -97,24 +104,8 @@ export async function MyOrdersTable() {
             >
               {dayjs(request.submitted).format("MMM DD") ?? "--"}
             </TableCell>
-            <TableCell className="text-right">
-              {request.totalCost ? (
-                request.totalCost
-              ) : (
-                <>
-                  {request.expectedUnitCost}{" "}
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Badge className="ml-2" variant="outline">
-                        E
-                      </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Expected unit cost. Shipping/handling not included.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </>
-              )}
+            <TableCell className="text-right whitespace-nowrap">
+              {request.totalCost ? request.totalCost : request.expectedUnitCost}
             </TableCell>
           </TableRow>
         ))}
@@ -129,11 +120,11 @@ export const MyOrdersTableSkeleton = () => (
       <TableRow>
         <TableHead>ID</TableHead>
         <TableHead className="hidden sm:table-cell">Budget</TableHead>
-        <TableHead>Vendor</TableHead>
+        <TableHead>Item &amp; Vendor</TableHead>
         <TableHead>Status</TableHead>
         {/* <TableHead className="hidden md:table-cell">Purchased</TableHead> */}
         <TableHead>Submitted</TableHead>
-        <TableHead className="text-right">Cost</TableHead>
+        <TableHead className="text-right">Unit Cost</TableHead>
       </TableRow>
     </TableHeader>
 
@@ -151,7 +142,12 @@ export const MyOrdersTableSkeleton = () => (
           </div>
         </TableCell>
         <TableCell>
-          <Skeleton className="w-full h-5" />
+          <div>
+            <Skeleton className="w-full h-5" />
+          </div>
+          <div>
+            <Skeleton className="w-full h-3 mt-2" />
+          </div>
         </TableCell>
         <TableCell>
           <Skeleton className="w-full h-5" />
