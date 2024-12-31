@@ -38,10 +38,10 @@ export type Budget = {
 
 export const BUDGETS: Budget[] = [
   {
-    branch: "Management",
-    subTeam: "Executive Director",
-    lineItem: "Discretionary",
-    code: "MG-ED-50",
+    branch: "Shared",
+    subTeam: "Zero-Based Pool",
+    lineItem: "Pre-Approved",
+    code: "MG-ZB-50",
     purposes: ["Client Project Materials", "Morale", "Promotional Materials", "Other"],
   },
   {
