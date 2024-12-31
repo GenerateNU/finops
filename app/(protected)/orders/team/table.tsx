@@ -18,20 +18,20 @@ import { getOrderRequests } from "@/lib/drive/orders";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
 
-export async function MyOrdersTable() {
+export async function TeamOrdersTable() {
   const session = await auth();
   if (!session || !session.user || !session.user.email) {
     return redirect("/auth/login");
   }
 
-  const requests = await getOrderRequests({ email: session.user.email });
+  const requests = await getOrderRequests({ team: session.user.team });
 
   if (!requests || requests.length === 0) {
     return (
       <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm border-slate-200 dark:border-slate-800">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
-            You have no orders
+            Your team has no orders
           </h3>
           <p className="text-sm text-slate">
             We don&rsquo;t have any records of order requests associated with
@@ -99,10 +99,21 @@ export async function MyOrdersTable() {
                 ? dayjs(request.purchased).format("MMM DD")
                 : "N/A"}
             </TableCell> */}
-            <TableCell
+            {/* <TableCell
               title={dayjs(request.submitted).format("ddd, MMM DD, YYYY")}
             >
               {dayjs(request.submitted).format("MMM DD") ?? "--"}
+            </TableCell> */}
+            <TableCell className="hidden sm:table-cell">
+              <div
+                className="inline font-medium"
+                title={dayjs(request.submitted).format("ddd, MMM DD, YYYY")}
+              >
+                {dayjs(request.submitted).format("MMM DD") ?? "--"}
+              </div>
+              <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
+                {request.requester ?? "Unknown Requester"}
+              </div>
             </TableCell>
             <TableCell className="text-right whitespace-nowrap">
               {request.totalCost ? request.totalCost : request.expectedUnitCost}
@@ -114,7 +125,7 @@ export async function MyOrdersTable() {
   );
 }
 
-export const MyOrdersTableSkeleton = () => (
+export const TeamOrdersTableSkeleton = () => (
   <Table>
     <TableHeader>
       <TableRow>

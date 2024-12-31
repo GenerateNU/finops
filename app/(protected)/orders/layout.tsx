@@ -1,12 +1,17 @@
 import { SidebarLinks } from "@/components/sidebar-links";
 import { NavLink } from "@/types";
-import { PlusIcon, StretchHorizontalIcon } from "lucide-react";
+import { LibraryIcon, PlusIcon, StretchHorizontalIcon } from "lucide-react";
 
 const NAV_LINKS: NavLink[] = [
   {
     href: "/orders",
     label: "My Orders",
     icon: <StretchHorizontalIcon />,
+  },
+  {
+    href: "/orders/team",
+    label: "Team Orders",
+    icon: <LibraryIcon />,
   },
   {
     href: "/orders/new",

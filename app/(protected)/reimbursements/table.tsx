@@ -112,8 +112,7 @@ export async function MyReimbursementsTable() {
                 {request.amount ?? "--"}
               </TableCell>
               <TableCell className="text-right">
-                {request.status !== "Missing Receipt" &&
-                request.receiptsFolderId ? (
+                {request.status !== "Missing Receipt" ? (
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Link

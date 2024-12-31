@@ -10,19 +10,21 @@ import {
 } from "@/components/ui/card";
 
 import { Suspense } from "react";
-import { MyOrdersTable, MyOrdersTableSkeleton } from "./table";
+import { TeamOrdersTable, TeamOrdersTableSkeleton } from "./table";
 
-export default function MyOrdersPage() {
+export default function TeamOrdersPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>My Orders</CardTitle>
-        <CardDescription>Your current and past order requests.</CardDescription>
+        <CardTitle>My Team's Orders</CardTitle>
+        <CardDescription>
+          Your team's current and past order requests.
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
-        <Suspense fallback={<MyOrdersTableSkeleton />}>
-          <MyOrdersTable />
+        <Suspense fallback={<TeamOrdersTableSkeleton />}>
+          <TeamOrdersTable />
         </Suspense>
       </CardContent>
 

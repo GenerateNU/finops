@@ -124,12 +124,18 @@ export async function createOrderRequest(
 }
 
 /**
- * Get all recorded order requests for the given email. If not provided, returns all requests.
+ * Get all recorded order requests for the given email or team. If not provided, returns all requests.
  *
  * @param email the email to filter results by
+ * @param team the team to filter results by
  * @returns the resulting rows
  */
-export async function getOrderRequests(email?: string) {
+export async function getOrderRequests({ email, team }: { email?: string; team?: string }) {
+  if (!email && !team) {
+    console.log("`email` and `team` filters applied. Please use only one.")
+    return [];
+  }
+
   try {
     const auth = await google.auth.getClient({
       projectId: getEnv("GOOGLE_PROJECT_ID"),
@@ -159,16 +165,40 @@ export async function getOrderRequests(email?: string) {
       return;
     }
 
-    const columnIndex = rows[0].indexOf("Email");
-    if (columnIndex === -1) {
+    const emailColumnIndex = rows[0].indexOf("Email");
+    if (emailColumnIndex === -1) {
       console.log(`Column "Email" not found.`);
+      return [];
+    }
+
+    const teamColumnIndex = rows[0].indexOf("Team");
+    if (teamColumnIndex === -1) {
+      console.log(`Column "Team" not found.`);
       return [];
     }
 
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (!email || (email && row[columnIndex] === email)) {
+      if (!email && !team) {
+        const obj: any = {};
+        rows[0].forEach((header, columnIndex) => {
+          obj[camelize(header)] = row[columnIndex];
+        });
+        obj["id"] = i + 2; // add 2 to account for header rows
+        objects.push(obj);
+      }
+
+      else if ((email && row[emailColumnIndex] === email)) {
+        const obj: any = {};
+        rows[0].forEach((header, columnIndex) => {
+          obj[camelize(header)] = row[columnIndex];
+        });
+        obj["id"] = i + 2; // add 2 to account for header rows
+        objects.push(obj);
+      }
+
+      else if ((team && row[teamColumnIndex] === team)) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {
           obj[camelize(header)] = row[columnIndex];
