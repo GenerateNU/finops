@@ -91,10 +91,7 @@ export default async function RootLayout({
             children
           )}
           {/* <div className="flex flex-col w-full min-h-screen"> */}
-          {/* <MainNavigation /> */}
           {/* <SlackConnectionBanner /> */}
-
-          {/* {children} */}
           {/* </div> */}
         </TooltipProvider>
       </body>

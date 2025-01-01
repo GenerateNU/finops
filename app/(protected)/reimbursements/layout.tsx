@@ -1,19 +1,3 @@
-import { NavLink } from "@/types";
-import { PlusIcon, StretchHorizontalIcon } from "lucide-react";
-
-const NAV_LINKS: NavLink[] = [
-  {
-    href: "/reimbursements",
-    label: "My Reimbursements",
-    icon: <StretchHorizontalIcon />,
-  },
-  {
-    href: "/reimbursements/new",
-    label: "Submit Request",
-    icon: <PlusIcon />,
-  },
-];
-
 export default function Layout({
   children,
 }: Readonly<{
