@@ -1,25 +1,3 @@
-import { SidebarLinks } from "@/components/sidebar-links";
-import { NavLink } from "@/types";
-import { LibraryIcon, PlusIcon, StretchHorizontalIcon } from "lucide-react";
-
-const NAV_LINKS: NavLink[] = [
-  {
-    href: "/orders",
-    label: "My Orders",
-    icon: <StretchHorizontalIcon />,
-  },
-  {
-    href: "/orders/team",
-    label: "Team Orders",
-    icon: <LibraryIcon />,
-  },
-  {
-    href: "/orders/new",
-    label: "Submit Request",
-    icon: <PlusIcon />,
-  },
-];
-
 export default function Layout({
   children,
 }: Readonly<{
@@ -33,13 +11,7 @@ export default function Layout({
         </h1>
       </div>
 
-      <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
-        <nav className="grid gap-4 text-sm text-slate-600 dark:text-slate-400">
-          <SidebarLinks links={NAV_LINKS} />
-        </nav>
-
-        <div className="grid gap-6">{children}</div>
-      </div>
+      <div className="grid gap-6">{children}</div>
     </>
   );
 }
