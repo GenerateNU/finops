@@ -14,16 +14,17 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function NavMain({
   items,
+  adminOnly = false,
 }: {
   items: {
     title: string;
     url: string;
     icon: LucideIcon;
+    adminOnly?: boolean;
     addNew?: {
       url: string;
       title: string;
@@ -33,15 +34,18 @@ export function NavMain({
       url: string;
     }[];
   }[];
+  adminOnly: boolean;
 }) {
   const pathname = usePathname();
 
   return (
     <SidebarGroup>
       <SidebarMenu>
-        {items.map((item) => (
-          <React.Fragment key={item.title}>
-            <SidebarMenuItem>
+        {items.map((item) => {
+          if (item.adminOnly && !adminOnly) return null;
+
+          return (
+            <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <Link href={item.url}>
                   <item.icon />
@@ -84,8 +88,8 @@ export function NavMain({
                 </SidebarMenuSub>
               ) : null}
             </SidebarMenuItem>
-          </React.Fragment>
-        ))}
+          );
+        })}
       </SidebarMenu>
     </SidebarGroup>
   );

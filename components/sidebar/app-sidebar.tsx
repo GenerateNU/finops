@@ -13,12 +13,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { UserRole } from "@/types";
 import { Session } from "next-auth";
 import Link from "next/link";
 import OpsLogo from "../ops-logo";
 import { NavUser } from "./nav-user";
 
-const data = {
+let data = {
   navMain: [
     {
       title: "Orders",
@@ -52,6 +53,7 @@ const data = {
       title: "Manage",
       url: "/manage",
       icon: LockIcon,
+      adminOnly: true,
     },
   ],
 };
@@ -81,7 +83,10 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain
+          items={data.navMain}
+          adminOnly={session?.user.role === UserRole.ADMIN}
+        />
       </SidebarContent>
       <SidebarFooter>
         <NavUser session={session} />
