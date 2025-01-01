@@ -11,19 +11,32 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 
-type Props = {};
+type Props = {
+  rootTitle: string;
+};
 
 function capitalizeLink(link: string) {
   return link[0].toUpperCase() + link.slice(1, link.length);
 }
 
-export const Breadcrumbs = ({}: Props) => {
+export const Breadcrumbs = ({ rootTitle }: Props) => {
   const pathname = usePathname();
   const paths = pathname.split("/").filter((path) => path);
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
+        {paths.length > 0 ? (
+          <>
+            <BreadcrumbItem className="hidden md:block">
+              <BreadcrumbLink asChild>
+                <Link href="/">{rootTitle}</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator className="hidden md:block" />
+          </>
+        ) : null}
+
         {paths.slice(0, paths.length - 1).map((path, i) => (
           <>
             <BreadcrumbItem key={`${path}-${i}`} className="hidden md:block">
@@ -34,11 +47,12 @@ export const Breadcrumbs = ({}: Props) => {
             <BreadcrumbSeparator className="hidden md:block" />
           </>
         ))}
+
         <BreadcrumbItem>
           <BreadcrumbPage>
             {paths.length > 0
               ? capitalizeLink(paths[paths.length - 1])
-              : "Dashboard"}
+              : rootTitle}
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
