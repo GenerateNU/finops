@@ -84,7 +84,10 @@ export function NavUser({ session }: { session: Session | null }) {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                  <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
+                  <Link
+                    href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}
+                    target="_blank"
+                  >
                     <Slack className="size-4 mr-2" />
                     Help (Slack)
                   </Link>

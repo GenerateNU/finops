@@ -40,7 +40,10 @@ export default function AuthErrorPage() {
 
       <div>
         <Button type="submit" before={<SlackIcon />} asChild>
-          <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
+          <Link
+            href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}
+            target="_blank"
+          >
             Contact Us <ArrowRightIcon className="size-3" /> #
             {getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME")}
           </Link>

@@ -597,7 +597,10 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                   Once you upload your receipt, your request is submitted for
                   review. If approved, reimbursements are typically processed by
                   Northeastern within 3-4 weeks. Please reach out in{" "}
-                  <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
+                  <Link
+                    href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}
+                    target="_blank"
+                  >
                     <code>
                       #{getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME")}
                     </code>

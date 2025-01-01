@@ -33,7 +33,10 @@ export async function UserDropdown() {
         ) : null}
 
         <DropdownMenuItem asChild>
-          <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
+          <Link
+            href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}
+            target="_blank"
+          >
             Help (Slack)
           </Link>
         </DropdownMenuItem>

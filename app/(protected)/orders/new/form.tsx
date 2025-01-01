@@ -462,7 +462,10 @@ export function OrderForm({ session }: { session: Session }) {
 
                 <p className="mt-2">
                   Please reach out in{" "}
-                  <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
+                  <Link
+                    href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}
+                    target="_blank"
+                  >
                     <code>
                       #{getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME")}
                     </code>
