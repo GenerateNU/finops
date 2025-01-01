@@ -36,7 +36,9 @@ export const Breadcrumbs = ({}: Props) => {
         ))}
         <BreadcrumbItem>
           <BreadcrumbPage>
-            {capitalizeLink(paths[paths.length - 1])}
+            {paths.length > 0
+              ? capitalizeLink(paths[paths.length - 1])
+              : "Dashboard"}
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>

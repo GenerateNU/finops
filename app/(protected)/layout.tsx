@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { Breadcrumbs } from "@/components/breadcrumb";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
@@ -23,7 +23,7 @@ export default async function Layout({
         </div>
       </header>
 
-      <main className="flex flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+      <main className="flex flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-7">
         {children}
       </main>
 
