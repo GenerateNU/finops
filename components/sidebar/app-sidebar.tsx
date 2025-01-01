@@ -1,6 +1,14 @@
 "use client";
 
-import { BoxesIcon, CoinsIcon, LockIcon } from "lucide-react";
+import {
+  BookTextIcon,
+  BoxesIcon,
+  ChartColumnBig,
+  CoinsIcon,
+  LockIcon,
+  MessageSquare,
+  Send,
+} from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/sidebar/nav-main";
@@ -13,13 +21,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { getEnv } from "@/lib/utils";
 import { UserRole } from "@/types";
 import { Session } from "next-auth";
 import Link from "next/link";
 import OpsLogo from "../ops-logo";
+import { NavQuicklinks } from "./nav-quicklinks";
 import { NavUser } from "./nav-user";
 
-let data = {
+const data = {
   navMain: [
     {
       title: "Orders",
@@ -56,6 +66,29 @@ let data = {
       adminOnly: true,
     },
   ],
+  quicklinks: [
+    {
+      title: "Wiki",
+      url: getEnv("NEXT_PUBLIC_WIKI_PROCUREMENT_URL"),
+      icon: BookTextIcon,
+    },
+    {
+      title: "Propose Expense",
+      url: getEnv("NEXT_PUBLIC_BUDGET_BALANCES_SHEET_URL"),
+      icon: Send,
+    },
+    {
+      title: "Budget Balances",
+      url: getEnv("NEXT_PUBLIC_BUDGET_BALANCES_SHEET_URL"),
+      icon: ChartColumnBig,
+      role: "PL",
+    },
+    {
+      title: "Ask a Question",
+      url: getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL"),
+      icon: MessageSquare,
+    },
+  ],
 };
 
 export function AppSidebar({
@@ -87,6 +120,7 @@ export function AppSidebar({
           items={data.navMain}
           adminOnly={session?.user.role === UserRole.ADMIN}
         />
+        <NavQuicklinks items={data.quicklinks} session={session} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser session={session} />

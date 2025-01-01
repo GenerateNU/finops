@@ -19,6 +19,7 @@ export type User = {
   role: "member" | "admin";
   branch?: string;
   team?: string;
+  position?: string;
 };
 
 export enum Branch {

@@ -183,19 +183,19 @@ export default async function Dashboard() {
           </div>
         </div>
 
-        <div className="p-4 mx-auto w-full bg-slate-100">
+        {/* <div className="p-4 mx-auto w-full bg-slate-100">
           <code>session</code>
           <pre className="text-xs break-all whitespace-pre-wrap">
             {JSON.stringify(session, null, 2)}
           </pre>
-        </div>
+        </div> */}
 
-        <div className="p-4 mx-auto w-full bg-slate-100">
+        {/* <div className="p-4 mx-auto w-full bg-slate-100">
           <code>member</code>
           <pre className="text-xs break-all whitespace-pre-wrap">
             {JSON.stringify(member, null, 2)}
           </pre>
-        </div>
+        </div> */}
       </div>
     </>
   );
