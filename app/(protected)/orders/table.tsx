@@ -46,48 +46,49 @@ export async function MyOrdersTable() {
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead className="hidden sm:table-cell">Budget</TableHead>
-          <TableHead>Item &amp; Vendor</TableHead>
-          <TableHead>Status</TableHead>
-          {/* <TableHead className="hidden md:table-cell">Purchased</TableHead> */}
-          <TableHead>Submitted</TableHead>
-          <TableHead className="text-right">Unit Cost</TableHead>
-        </TableRow>
-      </TableHeader>
+    <div className="border border-slate-200 dark:border-slate-800 shadow-sm rounded-lg overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-slate-100">
+            <TableHead>ID</TableHead>
+            <TableHead className="hidden sm:table-cell">Budget</TableHead>
+            <TableHead>Item &amp; Vendor</TableHead>
+            <TableHead>Status</TableHead>
+            {/* <TableHead className="hidden md:table-cell">Purchased</TableHead> */}
+            <TableHead>Submitted</TableHead>
+            <TableHead className="text-right">Unit Cost</TableHead>
+          </TableRow>
+        </TableHeader>
 
-      <TableBody>
-        {requests.map((request) => (
-          <TableRow key={request.id} className="bg-accent">
-            <TableCell>{request.id}</TableCell>
-            <TableCell className="hidden sm:table-cell">
-              <div className="inline font-medium">
-                {request.branch ?? "--"} &middot; {request.team ?? "--"}
-              </div>
-              <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
-                {request.purpose ?? "--"}
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="inline font-medium">
-                <span className="inline-block text-xs bg-slate-200 rounded-md px-2 py-0.5 mr-0.5">
-                  {request.quantity ?? "0"}
-                </span>{" "}
-                {request.description ?? "--"}
-              </div>
-              <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
-                from {request.vendor ?? "Unknown Vendor"}
-              </div>
-            </TableCell>
-            <TableCell>
-              <Badge className="text-xs" variant="outline">
-                {request.status}
-              </Badge>
-            </TableCell>
-            {/* <TableCell
+        <TableBody>
+          {requests.map((request) => (
+            <TableRow key={request.id} className="bg-accent">
+              <TableCell>{request.id}</TableCell>
+              <TableCell className="hidden sm:table-cell">
+                <div className="inline font-medium">
+                  {request.branch ?? "--"} &middot; {request.team ?? "--"}
+                </div>
+                <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
+                  {request.purpose ?? "--"}
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="inline font-medium">
+                  <span className="inline-block text-xs bg-slate-200 rounded-md px-2 py-0.5 mr-0.5">
+                    {request.quantity ?? "0"}
+                  </span>{" "}
+                  {request.description ?? "--"}
+                </div>
+                <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
+                  from {request.vendor ?? "Unknown Vendor"}
+                </div>
+              </TableCell>
+              <TableCell>
+                <Badge className="text-xs" variant="outline">
+                  {request.status ?? "Unknown"}
+                </Badge>
+              </TableCell>
+              {/* <TableCell
               className="hidden md:table-cell"
               title={
                 request.purchased
@@ -99,18 +100,21 @@ export async function MyOrdersTable() {
                 ? dayjs(request.purchased).format("MMM DD")
                 : "N/A"}
             </TableCell> */}
-            <TableCell
-              title={dayjs(request.submitted).format("ddd, MMM DD, YYYY")}
-            >
-              {dayjs(request.submitted).format("MMM DD") ?? "--"}
-            </TableCell>
-            <TableCell className="text-right whitespace-nowrap">
-              {request.totalCost ? request.totalCost : request.expectedUnitCost}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+              <TableCell
+                title={dayjs(request.submitted).format("ddd, MMM DD, YYYY")}
+              >
+                {dayjs(request.submitted).format("MMM DD") ?? "--"}
+              </TableCell>
+              <TableCell className="text-right whitespace-nowrap">
+                {request.totalCost
+                  ? request.totalCost
+                  : request.expectedUnitCost}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 
