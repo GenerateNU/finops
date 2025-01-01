@@ -31,11 +31,11 @@ export default async function Dashboard() {
   }
 
   const member = await getMember(session.user.email).catch(() =>
-    redirect("/auth/error?error=AccessDenied"),
+    redirect("/auth/error?error=AccessDenied")
   );
 
   return (
-    <div className="p-4">
+    <>
       {/* <div className="p-4 mx-auto w-screen-md bg-slate-100">
         <pre className="text-xs break-all whitespace-pre-wrap">
           {JSON.stringify(session, null, 2)}
@@ -48,7 +48,7 @@ export default async function Dashboard() {
         </pre>
       </div> */}
 
-      <div className="mx-auto w-full max-w-screen-lg p-4 flex flex-col gap-4">
+      <div className="mx-auto w-full max-w-screen-lg flex flex-col gap-4">
         {/* <Billboards /> */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[45%_1fr_1fr] gap-4">
           <Card className="md:col-span-2 lg:col-span-1 flex flex-col bg-black text-white p-6 uppercase justify-end">
@@ -163,7 +163,10 @@ export default async function Dashboard() {
                   className="justify-start"
                   asChild
                 >
-                  <Link href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}>
+                  <Link
+                    href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}
+                    target="_blank"
+                  >
                     Get Help
                   </Link>
                 </Button>
@@ -191,7 +194,7 @@ export default async function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
