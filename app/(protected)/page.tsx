@@ -7,12 +7,7 @@ export default async function DashboardPage() {
     <>
       <React.Suspense fallback={<DashboardSkeleton />}>
         <Dashboard />
-        {/* <NeverResolvingComponent /> */}
       </React.Suspense>
     </>
   );
 }
-
-const NeverResolvingComponent = () => {
-  throw new Promise(() => {}); // Never resolves
-};
