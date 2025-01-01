@@ -35,7 +35,7 @@ export default async function Dashboard() {
   );
 
   return (
-    <>
+    <div className="p-4">
       {/* <div className="p-4 mx-auto w-screen-md bg-slate-100">
         <pre className="text-xs break-all whitespace-pre-wrap">
           {JSON.stringify(session, null, 2)}
@@ -191,7 +191,7 @@ export default async function Dashboard() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
