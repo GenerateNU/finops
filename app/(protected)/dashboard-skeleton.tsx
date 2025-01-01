@@ -1,16 +1,9 @@
+import { GreetingIcon } from "@/components/greeting-icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import dayjs from "@/lib/dayjs";
 import { getEnv, getGreeting } from "@/lib/utils";
-import {
-  ArrowRightIcon,
-  CloudSunIcon,
-  MessageCircleIcon,
-  MoonStarIcon,
-  PlusIcon,
-  SunIcon,
-} from "lucide-react";
+import { ArrowRightIcon, MessageCircleIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
 
 export function DashboardSkeleton() {
@@ -162,15 +155,4 @@ export function DashboardSkeleton() {
       </div>
     </div>
   );
-}
-
-function GreetingIcon({ className }: { className?: string }) {
-  const currentHour = dayjs().hour();
-
-  if (currentHour < 12) {
-    return <SunIcon className={className} />;
-  } else if (currentHour < 18) {
-    return <CloudSunIcon className={className} />;
-  }
-  return <MoonStarIcon className={className} />;
 }

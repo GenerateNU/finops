@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
+import { GreetingIcon } from "@/components/greeting-icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import dayjs from "@/lib/dayjs";
 import { getMember } from "@/lib/drive/sheets";
 import { getEnv, getGreeting } from "@/lib/utils";
 
@@ -10,14 +10,11 @@ import {
   CheckCircle2Icon,
   CircleEllipsisIcon,
   CircleHelpIcon,
-  CloudSunIcon,
   CreditCardIcon,
   GitBranchIcon,
   MailboxIcon,
   MessageCircleIcon,
-  MoonStarIcon,
   PlusIcon,
-  SunIcon,
   UsersIcon,
   XCircleIcon,
 } from "lucide-react";
@@ -195,17 +192,6 @@ export default async function Dashboard() {
       </div>
     </>
   );
-}
-
-function GreetingIcon({ className }: { className?: string }) {
-  const currentHour = dayjs().hour();
-
-  if (currentHour < 12) {
-    return <SunIcon className={className} />;
-  } else if (currentHour < 18) {
-    return <CloudSunIcon className={className} />;
-  }
-  return <MoonStarIcon className={className} />;
 }
 
 function Indicator({ predicate }: { predicate: string }) {
