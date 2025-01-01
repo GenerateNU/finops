@@ -8,10 +8,10 @@ export default function TeamOrdersPage() {
     <>
       <div className="grid w-full max-w-5xl gap-2">
         <h1 className="text-3xl font-semibold text-black dark:text-white">
-          Team Reimbursements
+          Team Orders
         </h1>
         <p className="text-slate-500 dark:text-slate-400">
-          Your team's current and past reimbursement requests.
+          Your team's current and past orders.
         </p>
       </div>
 

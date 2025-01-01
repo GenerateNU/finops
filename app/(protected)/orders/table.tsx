@@ -2,8 +2,8 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 
+import { EmptyTable } from "@/components/empty-table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -15,8 +15,15 @@ import {
 } from "@/components/ui/table";
 import dayjs from "@/lib/dayjs";
 import { getOrderRequests } from "@/lib/drive/orders";
-import { PlusCircleIcon } from "lucide-react";
-import Link from "next/link";
+
+const emptyTableData = {
+  title: "You have no orders",
+  explanation: "There are no requests associated with your email address.",
+  addAction: {
+    title: "Submit Request",
+    url: "/orders/new",
+  },
+};
 
 export async function MyOrdersTable() {
   const session = await auth();
@@ -27,22 +34,7 @@ export async function MyOrdersTable() {
   const requests = await getOrderRequests({ email: session.user.email });
 
   if (!requests || requests.length === 0) {
-    return (
-      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm border-slate-200 dark:border-slate-800">
-        <div className="flex flex-col items-center gap-1 text-center">
-          <h3 className="text-2xl font-bold tracking-tight">
-            You have no orders
-          </h3>
-          <p className="text-sm text-slate">
-            We don&rsquo;t have any records of order requests associated with
-            your email address.
-          </p>
-          <Button className="mt-4" before={<PlusCircleIcon />} asChild>
-            <Link href="/orders/new">Submit Request</Link>
-          </Button>
-        </div>
-      </div>
-    );
+    return <EmptyTable content={emptyTableData} />;
   }
 
   return (

@@ -1,7 +1,6 @@
 import {
   ArrowUpRightIcon,
   FileWarningIcon,
-  PlusCircleIcon,
   ReceiptTextIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -12,8 +11,8 @@ import { auth } from "@/auth";
 import dayjs from "@/lib/dayjs";
 import { getReimbursementRequests } from "@/lib/drive/sheets";
 
+import { EmptyTable } from "@/components/empty-table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -30,6 +29,15 @@ import {
 } from "@/components/ui/tooltip";
 import { cn, getDriveUrl } from "@/lib/utils";
 
+const emptyTableData = {
+  title: "You have no reimbursements",
+  explanation: "There are no requests associated with your email address.",
+  addAction: {
+    title: "Submit Request",
+    url: "/reimbursements/new",
+  },
+};
+
 export async function MyReimbursementsTable() {
   const session = await auth();
   if (!session || !session.user || !session.user.email) {
@@ -39,22 +47,7 @@ export async function MyReimbursementsTable() {
   const requests = await getReimbursementRequests(session.user.email);
 
   if (!requests || requests.length === 0) {
-    return (
-      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm border-slate-200 dark:border-slate-800">
-        <div className="flex flex-col items-center gap-1 text-center">
-          <h3 className="text-2xl font-bold tracking-tight">
-            You have no reimbursements
-          </h3>
-          <p className="text-sm text-slate">
-            We don&rsquo;t have any records of reimbursement requests associated
-            with your email address.
-          </p>
-          <Button className="mt-4" before={<PlusCircleIcon />} asChild>
-            <Link href="/reimbursements/new">Submit Request</Link>
-          </Button>
-        </div>
-      </div>
-    );
+    return <EmptyTable content={emptyTableData} />;
   }
 
   return (
