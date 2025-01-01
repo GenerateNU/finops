@@ -3,7 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getEnv, getGreeting } from "@/lib/utils";
-import { ArrowRightIcon, MessageCircleIcon, PlusIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  CreditCardIcon,
+  GitBranchIcon,
+  MailboxIcon,
+  MessageCircleIcon,
+  PlusIcon,
+  TagIcon,
+  UsersIcon,
+} from "lucide-react";
 import Link from "next/link";
 
 export function DashboardSkeleton() {
@@ -73,20 +82,24 @@ export function DashboardSkeleton() {
           <CardContent>
             <div className="flex flex-col gap-2">
               <div className="inline-flex items-center gap-3 text-sm leading-tight">
-                <Skeleton className="size-5 shrink-0" />
+                <CreditCardIcon className="size-5 shrink-0" />
                 <Skeleton className="w-[80px] h-[12px]" />
               </div>
               <div className="inline-flex items-center gap-3 text-sm leading-tight">
-                <Skeleton className="size-5 shrink-0" />
+                <MailboxIcon className="size-5 shrink-0" />
                 <Skeleton className="w-full h-[12px]" />
               </div>
               <div className="inline-flex items-center gap-3 text-sm leading-tight">
-                <Skeleton className="size-5 shrink-0" />
-                <Skeleton className="w-[70px] h-[12px]" />
+                <TagIcon className="size-5 shrink-0" />
+                <Skeleton className="w-[160px] h-[12px]" />
               </div>
               <div className="inline-flex items-center gap-3 text-sm leading-tight">
-                <Skeleton className="size-5 shrink-0" />
+                <UsersIcon className="size-5 shrink-0" />
                 <Skeleton className="w-[100px] h-[12px]" />
+              </div>
+              <div className="inline-flex items-center gap-3 text-sm leading-tight">
+                <GitBranchIcon className="size-5 shrink-0" />
+                <Skeleton className="w-[70px] h-[12px]" />
               </div>
             </div>
           </CardContent>

@@ -2,8 +2,8 @@ import NextAuth from "next-auth";
 import EntraIDProvider from "next-auth/providers/microsoft-entra-id";
 
 import { getUserProfile } from "@/lib/profile";
-import { getEnv } from "./lib/utils";
 import { PostPermissionsResponse } from "./app/api/permissions/route";
+import { getEnv } from "./lib/utils";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -66,6 +66,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               role: response?.data?.role,
               branch: response?.data?.branch,
               team: response?.data?.team,
+              position: response?.data?.position,
             };
           });
 
@@ -78,6 +79,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           role: rosterData?.role || "member",
           branch: rosterData?.branch,
           team: rosterData?.team,
+          position: rosterData?.position
         };
       }
       return token;

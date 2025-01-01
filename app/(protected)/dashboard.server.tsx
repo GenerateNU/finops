@@ -15,6 +15,7 @@ import {
   MailboxIcon,
   MessageCircleIcon,
   PlusIcon,
+  TagIcon,
   UsersIcon,
   XCircleIcon,
 } from "lucide-react";
@@ -33,18 +34,6 @@ export default async function Dashboard() {
 
   return (
     <>
-      {/* <div className="p-4 mx-auto w-screen-md bg-slate-100">
-        <pre className="text-xs break-all whitespace-pre-wrap">
-          {JSON.stringify(session, null, 2)}
-        </pre>
-      </div> */}
-
-      {/* <div className="p-4 mx-auto w-screen-md bg-slate-100">
-        <pre className="text-xs break-all whitespace-pre-wrap">
-          {JSON.stringify(member, null, 2)}
-        </pre>
-      </div> */}
-
       <div className="mx-auto w-full max-w-screen-lg flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[45%_1fr_1fr] gap-4">
           <Card className="md:col-span-2 lg:col-span-1 flex flex-col bg-black text-white p-6 uppercase justify-end">
@@ -117,12 +106,16 @@ export default async function Dashboard() {
                   {member.email}
                 </div>
                 <div className="inline-flex items-center gap-3 text-sm leading-tight">
-                  <GitBranchIcon className="size-5 shrink-0" />
-                  {member.branch}
+                  <TagIcon className="size-5 shrink-0" />
+                  {member.position}
                 </div>
                 <div className="inline-flex items-center gap-3 text-sm leading-tight">
                   <UsersIcon className="size-5 shrink-0" />
                   {member.team}
+                </div>
+                <div className="inline-flex items-center gap-3 text-sm leading-tight">
+                  <GitBranchIcon className="size-5 shrink-0" />
+                  {member.branch}
                 </div>
               </div>
             </CardContent>
@@ -188,6 +181,20 @@ export default async function Dashboard() {
               <Link href="/reimbursements">View Reimbursements</Link>
             </Button>
           </div>
+        </div>
+
+        <div className="p-4 mx-auto w-full bg-slate-100">
+          <code>session</code>
+          <pre className="text-xs break-all whitespace-pre-wrap">
+            {JSON.stringify(session, null, 2)}
+          </pre>
+        </div>
+
+        <div className="p-4 mx-auto w-full bg-slate-100">
+          <code>member</code>
+          <pre className="text-xs break-all whitespace-pre-wrap">
+            {JSON.stringify(member, null, 2)}
+          </pre>
         </div>
       </div>
     </>

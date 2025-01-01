@@ -14,6 +14,7 @@ export type PostPermissionsResponse = {
     role?: string;
     branch?: string;
     team?: string;
+    position?: string;
   };
 };
 
@@ -53,6 +54,7 @@ export async function POST(
         role: member?.finOpsAccess.toLowerCase() || "member",
         branch: member?.branch,
         team: member?.team,
+        position: member?.position
       },
     });
   } catch (err) {
