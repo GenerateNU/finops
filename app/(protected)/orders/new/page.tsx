@@ -1,7 +1,11 @@
+import { auth } from "@/auth";
 import { getEnv } from "@/lib/utils";
 import { OrderForm } from "./form";
 
 export default async function NewOrderPage() {
+  const session = await auth();
+  if (!session?.user) return null;
+
   return (
     <div className="space-y-8">
       <div>
@@ -15,7 +19,7 @@ export default async function NewOrderPage() {
         </p>
       </div>
 
-      <OrderForm />
+      <OrderForm session={session} />
     </div>
   );
 }

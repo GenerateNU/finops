@@ -39,12 +39,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useSession } from "@/providers/AuthContext";
+import { Session } from "next-auth";
 import { formSchema } from "./form-schema";
 import { onSubmitAction } from "./form-submit";
 
-export function OrderForm() {
-  const session = useSession();
+export function OrderForm({ session }: { session: Session }) {
   const [loading, setTransitioning] = useTransition();
   const [selectedPurpose, setSelectedPurpose] = useState("");
   const [state, formAction] = useFormState(onSubmitAction, {
@@ -251,6 +250,7 @@ export function OrderForm() {
 
                   <BudgetPicker<z.output<typeof formSchema>>
                     name="budget"
+                    session={session}
                     form={form}
                     purpose={selectedPurpose}
                   />

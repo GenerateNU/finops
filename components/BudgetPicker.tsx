@@ -28,21 +28,21 @@ import {
 
 import { Budget, BUDGETS, BUDGETS_BY_TEAM } from "@/lib/globals";
 import { cn } from "@/lib/utils";
-import { useSession } from "@/providers/AuthContext";
+import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 
 export function BudgetPicker<TFieldValues extends FieldValues>({
   name,
+  session,
   form,
   purpose,
 }: {
   name: Path<TFieldValues>;
+  session: Session;
   form: UseFormReturn<TFieldValues>;
   purpose?: string;
 }) {
-  const session = useSession();
-
   const [availableItems, setAvailableItems] = useState<Budget[]>([]);
 
   useEffect(() => {

@@ -387,6 +387,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
 
                   <BudgetPicker<z.output<typeof formSchema>>
                     name="budget"
+                    session={session}
                     form={form}
                     purpose={selectedPurpose}
                   />
