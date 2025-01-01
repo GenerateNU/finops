@@ -48,7 +48,7 @@ export default async function Dashboard() {
         </pre>
       </div> */}
 
-      <div className="lg:mt-12 mx-auto w-full max-w-screen-lg p-4 flex flex-col gap-4">
+      <div className="mx-auto w-full max-w-screen-lg p-4 flex flex-col gap-4">
         {/* <Billboards /> */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[45%_1fr_1fr] gap-4">
           <Card className="md:col-span-2 lg:col-span-1 flex flex-col bg-black text-white p-6 uppercase justify-end">
