@@ -14,35 +14,31 @@ export function SidebarLinks({ links }: { links: NavLink[] }) {
 
   return (
     <>
-      {links.map((link) => {
-        const Icon = link.icon;
-
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="flex flex-row gap-2.5 items-center group"
+      {links.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          className="flex flex-row gap-2.5 items-center group"
+        >
+          <Slot
+            className={cn(
+              LINK_ICON_CLASSES,
+              pathname === link.href &&
+                "border-generate-green bg-generate-green bg-opacity-30"
+            )}
           >
-            <Slot
-              className={cn(
-                LINK_ICON_CLASSES,
-                pathname === link.href &&
-                  "border-generate-green bg-generate-green bg-opacity-30",
-              )}
-            >
-              {link.icon}
-            </Slot>
-            <span
-              className={cn(
-                "inline-flex items-center gap-2 font-semibold text-primary flex-nowrap",
-                pathname === link.href && "border-b border-b-generate-green",
-              )}
-            >
-              {link.label}
-            </span>
-          </Link>
-        );
-      })}
+            {link.icon}
+          </Slot>
+          <span
+            className={cn(
+              "inline-flex items-center gap-2 font-semibold text-primary flex-nowrap",
+              pathname === link.href && "border-b border-b-generate-green"
+            )}
+          >
+            {link.label}
+          </span>
+        </Link>
+      ))}
     </>
   );
 }
