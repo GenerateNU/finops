@@ -58,111 +58,116 @@ export async function MyReimbursementsTable() {
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead className="hidden sm:table-cell">Budget</TableHead>
-          <TableHead>Purpose</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead className="hidden md:table-cell">Purchased</TableHead>
-          <TableHead>Submitted</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
-          <TableHead className="text-right"></TableHead>
-        </TableRow>
-      </TableHeader>
+    <div className="border border-slate-200 dark:border-slate-800 shadow-sm rounded-lg overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-slate-100">
+            <TableHead>ID</TableHead>
+            <TableHead className="hidden sm:table-cell">Budget</TableHead>
+            <TableHead>Purpose</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className="hidden md:table-cell">Purchased</TableHead>
+            <TableHead>Submitted</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="text-right"></TableHead>
+          </TableRow>
+        </TableHeader>
 
-      <TableBody>
-        {requests.map((request) => (
-          <Fragment key={request.id}>
-            <TableRow
-              className={cn(
-                request.status === "Missing Receipt" && request.receiptsFolderId
-                  ? "border-b-transparent pb-0 bg-slate-50"
-                  : ""
-              )}
-            >
-              <TableCell>{request.id}</TableCell>
-              <TableCell className="hidden sm:table-cell">
-                <div className="inline font-medium">
-                  {request.branch ?? "--"}
-                </div>
-                <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
-                  {request.team ?? "--"}
-                </div>
-              </TableCell>
-              <TableCell>{request.purpose ?? "--"}</TableCell>
-              <TableCell>
-                <Badge className="text-xs" variant="outline">
-                  {request.status ?? "Unknown"}
-                </Badge>
-              </TableCell>
-              <TableCell
-                className="hidden md:table-cell"
-                title={dayjs(request.purchased).format("ddd, MMM DD, YYYY")}
+        <TableBody>
+          {requests.map((request) => (
+            <Fragment key={request.id}>
+              <TableRow
+                className={cn(
+                  request.status === "Missing Receipt" &&
+                    request.receiptsFolderId
+                    ? "border-b-transparent pb-0 bg-slate-50"
+                    : ""
+                )}
               >
-                {dayjs(request.purchased).format("MMM DD") ?? "--"}
-              </TableCell>
-              <TableCell
-                title={dayjs(request.submitted).format("ddd, MMM DD, YYYY")}
-              >
-                {dayjs(request.submitted).format("MMM DD") ?? "--"}
-              </TableCell>
-              <TableCell className="text-right whitespace-nowrap">
-                {request.amount ?? "--"}
-              </TableCell>
-              <TableCell className="text-right">
-                {request.status !== "Missing Receipt" ? (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                <TableCell className="font-mono text-base">
+                  {request.id}
+                </TableCell>
+                <TableCell className="hidden sm:table-cell">
+                  <div className="inline font-medium">
+                    {request.branch ?? "--"}
+                  </div>
+                  <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
+                    {request.team ?? "--"}
+                  </div>
+                </TableCell>
+                <TableCell>{request.purpose ?? "--"}</TableCell>
+                <TableCell>
+                  <Badge className="text-xs" variant="outline">
+                    {request.status ?? "Unknown"}
+                  </Badge>
+                </TableCell>
+                <TableCell
+                  className="hidden md:table-cell"
+                  title={dayjs(request.purchased).format("ddd, MMM DD, YYYY")}
+                >
+                  {dayjs(request.purchased).format("MMM DD") ?? "--"}
+                </TableCell>
+                <TableCell
+                  title={dayjs(request.submitted).format("ddd, MMM DD, YYYY")}
+                >
+                  {dayjs(request.submitted).format("MMM DD") ?? "--"}
+                </TableCell>
+                <TableCell className="text-right whitespace-nowrap">
+                  {request.amount ?? "--"}
+                </TableCell>
+                <TableCell className="text-right">
+                  {request.status !== "Missing Receipt" ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link
+                          href={getDriveUrl("folder", request.receiptsFolderId)}
+                          target="_blank"
+                        >
+                          <ReceiptTextIcon className="size-5 text-generate-green" />
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>View receipt</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <FileWarningIcon className="size-5 text-slate-400 dark:text-slate-600" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>No receipt uploaded</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                </TableCell>
+              </TableRow>
+
+              {request.status === "Missing Receipt" &&
+              request.receiptsFolderId ? (
+                <TableRow className="bg-slate-50 dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-generate-red">
+                  <TableCell className="pt-0"></TableCell>
+                  <TableCell colSpan={7} className="pt-0">
+                    <p className="font-semibold">
+                      Please{" "}
                       <Link
                         href={getDriveUrl("folder", request.receiptsFolderId)}
                         target="_blank"
+                        className="inline-flex items-center gap-0.5 text-generate-red underline hover:opacity-75"
                       >
-                        <ReceiptTextIcon className="size-5 text-generate-green" />
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>View receipt</p>
-                    </TooltipContent>
-                  </Tooltip>
-                ) : (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <FileWarningIcon className="size-5 text-slate-400 dark:text-slate-600" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>No receipt uploaded</p>
-                    </TooltipContent>
-                  </Tooltip>
-                )}
-              </TableCell>
-            </TableRow>
-
-            {request.status === "Missing Receipt" &&
-            request.receiptsFolderId ? (
-              <TableRow className="bg-slate-50 dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-generate-red">
-                <TableCell className="pt-0"></TableCell>
-                <TableCell colSpan={7} className="pt-0">
-                  <p className="font-semibold">
-                    Please{" "}
-                    <Link
-                      href={getDriveUrl("folder", request.receiptsFolderId)}
-                      target="_blank"
-                      className="inline-flex items-center gap-0.5 text-generate-red underline hover:opacity-75"
-                    >
-                      upload
-                      <ArrowUpRightIcon className="size-3" />
-                    </Link>{" "}
-                    your itemized receipt.
-                  </p>
-                </TableCell>
-              </TableRow>
-            ) : null}
-          </Fragment>
-        ))}
-      </TableBody>
-    </Table>
+                        upload
+                        <ArrowUpRightIcon className="size-3" />
+                      </Link>{" "}
+                      your itemized receipt.
+                    </p>
+                  </TableCell>
+                </TableRow>
+              ) : null}
+            </Fragment>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 
