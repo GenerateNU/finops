@@ -36,6 +36,16 @@ export async function POST(
   try {
     const member = await getMember(parsed.data.email);
 
+    if (member?.finOpsAccess.toLowerCase() === "false") {
+      return NextResponse.json(
+        {
+          isAuthorized: false,
+          message: "User is not permitted",
+        },
+        { status: 403 },
+      );
+    }
+
     return NextResponse.json({
       isAuthorized: true,
       message: "User authenticated",
