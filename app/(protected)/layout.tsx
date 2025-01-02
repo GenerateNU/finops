@@ -3,6 +3,11 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { redirect } from "next/navigation";
 
 export default async function Layout({
@@ -17,7 +22,12 @@ export default async function Layout({
     <>
       <header className="flex h-16 shrink-0 items-center gap-2 border-b">
         <div className="flex items-center gap-2 px-4">
-          <SidebarTrigger className="-ml-1" />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SidebarTrigger className="-ml-1" />
+            </TooltipTrigger>
+            <TooltipContent>Toggle sidebar</TooltipContent>
+          </Tooltip>
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumbs rootTitle="Dashboard" />
         </div>
