@@ -84,10 +84,14 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
     return (
       <Card className={cn("w-full bg-transparent", className)}>
         <CardContent className="p-4 flex items-center space-x-4">
-          <Skeleton className="h-16 w-16 flex-shrink-0" />
+          <Skeleton className="h-20 w-20 flex-shrink-0 rounded-md" />
           <div className="flex-grow">
-            <Skeleton className="h-4 w-3/4 mb-2" />
-            <Skeleton className="h-4 w-full" />
+            <div className="flex items-center mb-2 gap-2">
+              <Skeleton className="h-4 w-4 flex-shrink-0 rounded-md" />
+              <Skeleton className="h-4 w-[100px] rounded-md" />
+            </div>
+            <Skeleton className="h-4 w-3/4 mb-2 rounded-md" />
+            <Skeleton className="h-4 w-full rounded-md" />
           </div>
         </CardContent>
       </Card>
@@ -98,7 +102,7 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
     return (
       <Card className={cn("w-full bg-transparent", className)}>
         <CardContent className="px-4 py-3 text-red-500 text-sm">
-          {error}
+          {error ?? "Unable to generate link preview"}
         </CardContent>
       </Card>
     );
@@ -111,7 +115,7 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
   return (
     <Card
       className={cn(
-        "w-0 min-w-full max-w-screen-lg bg-transparent overflow-hidden shadow-none rounded-md",
+        "w-0 min-w-full max-w-xs bg-transparent overflow-hidden shadow-none rounded-md",
         className
       )}
     >
@@ -127,21 +131,19 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
       </CardHeader>
       <CardContent className="p-4 flex items-start space-x-4">
         {imageUrl && (
-          <div className="flex-shrink-0">
-            <Avatar className="w-20 h-20 rounded-md">
-              <AvatarImage
-                src={imageUrl}
-                alt="Product image"
-                className="w-20 h-20 object-cover rounded-md"
-              ></AvatarImage>
-              <AvatarFallback className="text-xs"></AvatarFallback>
-            </Avatar>
-          </div>
+          <Avatar className="w-20 h-20 rounded-md flex-shrink-0">
+            <AvatarImage
+              src={imageUrl}
+              alt="Product image"
+              className="w-20 h-20 object-cover rounded-md"
+            ></AvatarImage>
+            <AvatarFallback></AvatarFallback>
+          </Avatar>
         )}
         <div className="flex-grow min-w-0">
-          <div className="flex items-center mb-1">
+          <div className="flex items-center mb-1 gap-2">
             {data?.favicon ? (
-              <Avatar className="w-4 h-4 mr-2">
+              <Avatar className="w-4 h-4">
                 <AvatarImage
                   src={data.favicon}
                   alt="Favicon"
