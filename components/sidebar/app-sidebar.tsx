@@ -7,7 +7,7 @@ import {
   Coins,
   Lock,
   MessageSquare,
-  Send,
+  TicketPlus,
 } from "lucide-react";
 import * as React from "react";
 
@@ -74,16 +74,16 @@ const data = {
       openNewTab: true,
     },
     {
-      title: "Propose Expense",
-      url: getEnv("NEXT_PUBLIC_BUDGET_BALANCES_SHEET_URL"),
-      icon: Send,
-      openNewTab: true,
-    },
-    {
       title: "Budget Balances",
       url: getEnv("NEXT_PUBLIC_BUDGET_BALANCES_SHEET_URL"),
       icon: ChartColumnBig,
       role: "PL",
+      openNewTab: true,
+    },
+    {
+      title: "Propose Expense",
+      url: getEnv("NEXT_PUBLIC_BUDGET_BALANCES_SHEET_URL"),
+      icon: TicketPlus,
       openNewTab: true,
     },
     {
