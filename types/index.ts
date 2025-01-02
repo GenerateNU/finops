@@ -29,7 +29,13 @@ export enum Branch {
   Software = "Software",
 }
 
+export interface Vendor {
+  name: string;
+  url?: string;
+}
+
 export interface UrlUnfurl {
+  hostname?: string;
   title?: string;
   author?: string;
   description?: string;

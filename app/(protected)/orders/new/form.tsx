@@ -39,7 +39,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { LinkPreview, UnfurledData } from "@/components/link-preview";
+import { LinkPreview } from "@/components/link-preview";
+import { UrlUnfurl } from "@/types";
 import { Session } from "next-auth";
 import { formSchema } from "./form-schema";
 import { onSubmitAction } from "./form-submit";
@@ -74,11 +75,29 @@ export function OrderForm({ session }: { session: Session }) {
     },
   });
 
-  const setLinkUnfurl = (unfurl: UnfurledData) => {
-    console.log(unfurl);
+  const setLinkUnfurl = (unfurl: UrlUnfurl) => {
     if (unfurl.title) form.setValue("productDescription", unfurl.title);
-    if (unfurl.author && VENDORS.includes(unfurl.author.replace(".com", ""))) {
-      form.setValue("vendor", unfurl.author.replace(".com", ""));
+
+    if (unfurl.hostname) {
+      try {
+        const vendorMatch = VENDORS.find((vendor) => {
+          if (!vendor.url) return false;
+          const vendorHostname = new URL(vendor.url).hostname.replace(
+            "www.",
+            ""
+          );
+          return unfurl.hostname === vendorHostname;
+        });
+
+        if (vendorMatch) {
+          form.setValue("vendor", vendorMatch.name);
+        } else {
+          form.setValue("vendor", "")
+        }
+      } catch (e) {
+        // Handle invalid URLs silently
+        console.error("Invalid URL:", unfurl.hostname);
+      }
     }
   };
 
@@ -335,8 +354,11 @@ export function OrderForm({ session }: { session: Session }) {
 
                           <SelectContent>
                             {VENDORS.map((vendor) => (
-                              <SelectItem key={camelize(vendor)} value={vendor}>
-                                {vendor}
+                              <SelectItem
+                                key={camelize(vendor.name)}
+                                value={vendor.name}
+                              >
+                                {vendor.name}
                               </SelectItem>
                             ))}
                           </SelectContent>

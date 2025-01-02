@@ -63,7 +63,8 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
         setData(result);
         const unfurlData = result as UnfurledData;
         setUnfurl({
-          title: unfurlData.title ?? unfurlData.open_graph?.title,
+          hostname: new URL(url).hostname.replace("www.", "") ?? "",
+          title: unfurlData.open_graph?.title ?? unfurlData.title,
           author:
             unfurlData.twitter_card?.site ??
             unfurlData.open_graph?.site_name ??

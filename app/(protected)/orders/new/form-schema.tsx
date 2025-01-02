@@ -1,3 +1,4 @@
+import { VENDORS } from "@/lib/globals";
 import { z } from "zod";
 
 export const formSchema = z.object({
@@ -13,42 +14,9 @@ export const formSchema = z.object({
   }),
   budget: z.string().min(1, { message: "A budget is required" }),
 
-  vendor: z.enum(
-    [
-      "",
-      "4imprint",
-      "Adafruit",
-      "Amazon",
-      "AndyMark",
-      "Arduino",
-      "Custom Ink",
-      "DigiKey",
-      "EasyEDA",
-      "Edmund Optics",
-      "Formlabs",
-      "Harbor Freight",
-      "JLCPCB",
-      "McMaster-Carr",
-      "Misumi",
-      "Mouser Electronics",
-      "Prolabs",
-      "Protolabs",
-      "ServoCity",
-      "Sparkfun",
-      "Stepper Online",
-      "Sticker Mule",
-      "ULINE",
-      "US Plastics",
-      "Vevor",
-      "Vex Robotics",
-      "Vistaprint",
-      "WaveShare",
-      "Other",
-    ],
-    {
-      message: "A valid vendor is required",
-    }
-  ),
+  vendor: z.enum(["", ...VENDORS.map((v) => v.name)] as const, {
+    message: "A valid vendor is required",
+  }),
   productLink: z.string().trim().url({ message: "Invalid product link" }),
   productDescription: z.string().trim().min(3, {
     message: "Product description is required",
