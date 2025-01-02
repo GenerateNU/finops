@@ -46,7 +46,7 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
   const [availableItems, setAvailableItems] = useState<Budget[]>([]);
 
   useEffect(() => {
-    if (session.user.role === "admin") {
+    if (session.user.role.split("|").includes("admin")) {
       console.info("[DEBUG] User is an admin; showing all budget line items.");
       setAvailableItems(BUDGETS);
     } else {
