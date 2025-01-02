@@ -4,6 +4,7 @@ import EntraIDProvider from "next-auth/providers/microsoft-entra-id";
 import { getUserProfile } from "@/lib/profile";
 import { PostPermissionsResponse } from "./app/api/permissions/route";
 import { getEnv } from "./lib/utils";
+import { UserRole } from "./types";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -76,7 +77,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           image: user.image,
           nuid: graphProfile.nuid,
-          role: rosterData?.role || "member",
+          role: rosterData?.role || UserRole.MEMBER,
           branch: rosterData?.branch,
           team: rosterData?.team,
           position: rosterData?.position

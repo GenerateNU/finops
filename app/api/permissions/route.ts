@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getMember } from "@/lib/drive/sheets";
+import { UserRole } from "@/types";
 
 const schema = z.object({ email: z.string().email() });
 
@@ -51,7 +52,7 @@ export async function POST(
       isAuthorized: true,
       message: "User authenticated",
       data: {
-        role: member?.finOpsAccess.toLowerCase() || "member",
+        role: member?.finOpsAccess.toLowerCase() || UserRole.MEMBER,
         branch: member?.branch,
         team: member?.team,
         position: member?.position

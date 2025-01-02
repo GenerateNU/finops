@@ -8,6 +8,7 @@ export type OrderRequest = z.infer<typeof orderRequestSchema>;
 
 export enum UserRole {
   ADMIN = "admin",
+  PL = "pl",
   MEMBER = "member",
 }
 

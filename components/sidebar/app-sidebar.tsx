@@ -22,7 +22,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { getEnv } from "@/lib/utils";
-import { UserRole } from "@/types";
 import { Session } from "next-auth";
 import Link from "next/link";
 import OpsLogo from "../ops-logo";
@@ -120,10 +119,7 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain
-          items={data.navMain}
-          adminOnly={session?.user.role === UserRole.ADMIN}
-        />
+        <NavMain items={data.navMain} session={session} />
         <NavQuicklinks items={data.quicklinks} session={session} />
       </SidebarContent>
       <SidebarFooter>

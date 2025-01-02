@@ -12,13 +12,15 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { UserRole } from "@/types";
+import { Session } from "next-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function NavMain({
   items,
-  adminOnly = false,
+  session,
 }: {
   items: {
     title: string;
@@ -34,7 +36,7 @@ export function NavMain({
       url: string;
     }[];
   }[];
-  adminOnly: boolean;
+  session: Session | null;
 }) {
   const pathname = usePathname();
 
@@ -42,7 +44,14 @@ export function NavMain({
     <SidebarGroup>
       <SidebarMenu>
         {items.map((item) => {
-          if (item.adminOnly && !adminOnly) return null;
+          if (
+            item.adminOnly &&
+            !session?.user.role
+              .split("|")
+              .map((r) => r.toLowerCase())
+              .includes(UserRole.ADMIN)
+          )
+            return null;
 
           return (
             <SidebarMenuItem key={item.title}>

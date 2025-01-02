@@ -28,6 +28,7 @@ import {
 
 import { Budget, BUDGETS, BUDGETS_BY_TEAM } from "@/lib/globals";
 import { cn } from "@/lib/utils";
+import { UserRole } from "@/types";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
@@ -50,7 +51,7 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
       session.user.role
         .split("|")
         .map((r) => r.toLowerCase())
-        .includes("admin")
+        .includes(UserRole.ADMIN)
     ) {
       console.info("[DEBUG] User is an admin; showing all budget line items.");
       setAvailableItems(BUDGETS);
