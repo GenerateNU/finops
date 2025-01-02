@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Fragment } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -38,14 +39,14 @@ export const Breadcrumbs = ({ rootTitle }: Props) => {
         ) : null}
 
         {paths.slice(0, paths.length - 1).map((path, i) => (
-          <>
-            <BreadcrumbItem key={`${path}-${i}`} className="hidden md:block">
+          <Fragment key={`${path}-${i}`}>
+            <BreadcrumbItem className="hidden md:block">
               <BreadcrumbLink asChild>
                 <Link href={`/${path}`}>{capitalizeLink(path)}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator className="hidden md:block" />
-          </>
+          </Fragment>
         ))}
 
         <BreadcrumbItem>
