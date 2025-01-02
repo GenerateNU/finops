@@ -414,8 +414,8 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                   <></>
                 </DualColumn>
 
-                {form.getValues().expensePurpose !== "Morale" &&
-                  Number(form.getValues().expenseTotal) > 75 && (
+                {form.watch("expensePurpose") !== "Morale" &&
+                  Number(form.watch("expenseTotal")) > 75 && (
                     <FormField
                       control={form.control}
                       name="preApproved"
