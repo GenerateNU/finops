@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, LogOut, Slack, User2Icon } from "lucide-react";
+import { Bug, ChevronsUpDown, LogOut, Slack, User2Icon } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -84,6 +84,12 @@ export function NavUser({ session }: { session: Session | null }) {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
+                  <Link href="/debug">
+                    <Bug className="size-4 mr-2" />
+                    Debug
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link
                     href={getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL")}
                     target="_blank"
@@ -93,6 +99,7 @@ export function NavUser({ session }: { session: Session | null }) {
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
+              <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <Link href="/api/auth/signout">
                   <LogOut className="size-4 mr-2" />
@@ -110,7 +117,7 @@ export function NavUser({ session }: { session: Session | null }) {
               <User2Icon className="size-4" />
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">Nog Logged In</span>
+              <span className="truncate font-semibold">Not Logged In</span>
             </div>
           </SidebarMenuButton>
         )}
