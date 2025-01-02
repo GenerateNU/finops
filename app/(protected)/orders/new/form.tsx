@@ -76,7 +76,11 @@ export function OrderForm({ session }: { session: Session }) {
   });
 
   const setLinkUnfurl = (unfurl: UrlUnfurl) => {
-    if (unfurl.title) form.setValue("productDescription", unfurl.title);
+    if (unfurl.title) {
+      form.setValue("productDescription", unfurl.title);
+    } else {
+      form.setValue("productDescription", "");
+    }
 
     if (unfurl.hostname) {
       try {
@@ -92,7 +96,7 @@ export function OrderForm({ session }: { session: Session }) {
         if (vendorMatch) {
           form.setValue("vendor", vendorMatch.name);
         } else {
-          form.setValue("vendor", "")
+          form.setValue("vendor", "");
         }
       } catch (e) {
         // Handle invalid URLs silently

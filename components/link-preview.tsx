@@ -6,7 +6,6 @@ import { cn, isValidUrl } from "@/lib/utils";
 import { UrlUnfurl } from "@/types";
 import { ImageOffIcon, SparklesIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { Metadata } from "unfurl.js/dist/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 interface LinkPreviewProps {
@@ -36,27 +35,14 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
           throw new Error(result.error || "Failed to fetch unfurled data");
         }
 
-        const unfurledData = result as Metadata;
-        const unfurledDataObj = {
-          hostname: new URL(url).hostname.replace("www.", "") ?? "",
-          title: unfurledData.open_graph?.title ?? unfurledData.title,
-          author:
-            unfurledData.twitter_card?.site ??
-            unfurledData.open_graph?.site_name ??
-            unfurledData.author,
-          description:
-            unfurledData.open_graph?.description ?? unfurledData.description,
-          favicon: unfurledData.favicon,
-          imageUrl:
-            unfurledData.open_graph?.images?.[0]?.url ??
-            unfurledData.twitter_card?.images?.[0]?.url,
-        };
-        setData(unfurledDataObj);
-        setUnfurl(unfurledDataObj);
+        const metadata = result as UrlUnfurl;
+        setData(metadata);
+        setUnfurl(metadata);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Error fetching link preview"
         );
+        setUnfurl({});
         console.error(err);
       } finally {
         setLoading(false);
