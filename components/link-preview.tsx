@@ -1,15 +1,20 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import { UrlUnfurl } from "@/types";
+import { SparklesIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 interface LinkPreviewProps {
   url: string;
+  setUnfurl: (data: UrlUnfurl) => void;
+  className?: string;
 }
 
-interface UnfurledData {
+export interface UnfurledData {
   title?: string;
   description?: string;
   favicon?: string;
@@ -34,7 +39,7 @@ const isValidUrl = (text: string) => {
   }
 };
 
-export function LinkPreview({ url }: LinkPreviewProps) {
+export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
   const [data, setData] = useState<UnfurledData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +59,20 @@ export function LinkPreview({ url }: LinkPreviewProps) {
         if (!response.ok) {
           throw new Error(result.error || "Failed to fetch unfurled data");
         }
+
         setData(result);
+        const unfurlData = result as UnfurledData;
+        setUnfurl({
+          title: unfurlData.title ?? unfurlData.open_graph?.title,
+          author:
+            unfurlData.twitter_card?.site ??
+            unfurlData.open_graph?.site_name ??
+            unfurlData.author,
+          description:
+            unfurlData.open_graph?.description ?? unfurlData.description,
+          favicon: unfurlData.favicon,
+          imageUrl: unfurlData.open_graph?.images?.[0]?.url,
+        });
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Error fetching link preview"
@@ -72,7 +90,7 @@ export function LinkPreview({ url }: LinkPreviewProps) {
 
   if (loading) {
     return (
-      <Card className="w-full max-w-md">
+      <Card className={cn("w-full bg-transparent", className)}>
         <CardContent className="p-4 flex items-center space-x-4">
           <Skeleton className="h-16 w-16 flex-shrink-0" />
           <div className="flex-grow">
@@ -86,9 +104,9 @@ export function LinkPreview({ url }: LinkPreviewProps) {
 
   if (error) {
     return (
-      <Card className="w-full max-w-md">
-        <CardContent className="p-4">
-          <p className="text-red-500">{error}</p>
+      <Card className={cn("w-full bg-transparent", className)}>
+        <CardContent className="px-4 py-3 text-red-500 text-sm">
+          {error}
         </CardContent>
       </Card>
     );
@@ -99,15 +117,33 @@ export function LinkPreview({ url }: LinkPreviewProps) {
   const imageUrl = data?.open_graph?.images?.[0]?.url;
 
   return (
-    <Card className="w-full overflow-hidden">
+    <Card
+      className={cn(
+        "w-0 min-w-full max-w-screen-lg bg-transparent overflow-hidden shadow-none rounded-md",
+        className
+      )}
+    >
+      <CardHeader className="bg-generate-green text-white py-1.5 px-4">
+        <h3 className="flex flex-row gap-2 items-center font-mono uppercase">
+          <SparklesIcon className="size-4" />
+          Link Preview
+        </h3>
+        <p className="text-sm">
+          We pre-filled some fields for you from this product link.{" "}
+          <strong>Please verify the fields below and correct errors.</strong>
+        </p>
+      </CardHeader>
       <CardContent className="p-4 flex items-start space-x-4">
         {imageUrl && (
           <div className="flex-shrink-0">
-            <img
-              src={imageUrl}
-              alt={data?.title || "Link preview"}
-              className="w-20 h-20 object-cover rounded"
-            />
+            <Avatar className="w-20 h-20 rounded-md">
+              <AvatarImage
+                src={imageUrl}
+                alt="Product image"
+                className="w-20 h-20 object-cover rounded-md"
+              ></AvatarImage>
+              <AvatarFallback className="text-xs"></AvatarFallback>
+            </Avatar>
           </div>
         )}
         <div className="flex-grow min-w-0">
@@ -122,14 +158,14 @@ export function LinkPreview({ url }: LinkPreviewProps) {
                 <AvatarFallback className="text-xs">?</AvatarFallback>
               </Avatar>
             ) : null}
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-slate-600 truncate">
               {siteName ?? new URL(url).host.replace("www.", "")}
             </span>
           </div>
           <h3 className="text-sm font-semibold mb-1 truncate">
             {data?.open_graph?.title ?? data?.title}
           </h3>
-          <p className="text-xs text-gray-600 line-clamp-2">
+          <p className="text-xs text-slate-600 line-clamp-2">
             {data?.open_graph?.description ?? data?.description}
           </p>
           <a

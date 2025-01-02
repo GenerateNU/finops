@@ -29,8 +29,10 @@ export enum Branch {
   Software = "Software",
 }
 
-export type NavLink = {
-  href: string;
-  label: string;
-  icon?: React.ReactElement<HTMLElement>;
-};
+export interface UrlUnfurl {
+  title?: string;
+  author?: string;
+  description?: string;
+  favicon?: string;
+  imageUrl?: string;
+}

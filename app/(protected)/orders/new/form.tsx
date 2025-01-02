@@ -39,7 +39,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { LinkPreview } from "@/components/link-preview";
+import { LinkPreview, UnfurledData } from "@/components/link-preview";
 import { Session } from "next-auth";
 import { formSchema } from "./form-schema";
 import { onSubmitAction } from "./form-submit";
@@ -72,22 +72,15 @@ export function OrderForm({ session }: { session: Session }) {
       quantity: "1",
       ...(state?.fields ?? {}),
     },
-    // TEST DATA:
-    // defaultValues: {
-    //   name: "Burton Guster",
-    //   email: "burton.g@northeastern.edu",
-    //
-    //   purpose: "Morale",
-    //   budget: "",
-    //
-    //   productDescription: "Lorem ipsum delor",
-    //   vendor: "Amazon",
-    //   productLink: "https://example.com",
-    //   unitCost: "12.34",
-    //   quantity: "1",
-    //   ...(state?.fields ?? {}),
-    // },
   });
+
+  const setLinkUnfurl = (unfurl: UnfurledData) => {
+    console.log(unfurl);
+    if (unfurl.title) form.setValue("productDescription", unfurl.title);
+    if (unfurl.author && VENDORS.includes(unfurl.author.replace(".com", ""))) {
+      form.setValue("vendor", unfurl.author.replace(".com", ""));
+    }
+  };
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -267,29 +260,57 @@ export function OrderForm({ session }: { session: Session }) {
               <CardContent className="space-y-8">
                 <FormField
                   control={form.control}
-                  name="productDescription"
+                  name="productLink"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Product description</FormLabel>
+                      <FormLabel>Product link</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder={
-                            "3.2 ft x 9.8 ft Metallic Tinsel Foil Fringe Curtains (Green)"
-                          }
+                          placeholder="https://example.com/product-page"
+                          type="url"
                         />
                       </FormControl>
                       <FormDescription>
-                        A detailed description of the desired product. Include
-                        any necessary product configurations, such as size,
-                        bundle quantity, or color.
+                        A direct link to the desired item's product page, with
+                        all configuration options applied, if applicable and
+                        possible.
                       </FormDescription>
                       <FormMessage />
+                      <LinkPreview
+                        url={form.watch("productLink")}
+                        setUnfurl={setLinkUnfurl}
+                        className="border-generate-green w-full"
+                      />
                     </FormItem>
                   )}
                 />
 
                 <DualColumn>
+                  <FormField
+                    control={form.control}
+                    name="productDescription"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Product description</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder={
+                              "3.2 ft x 9.8 ft Metallic Tinsel Foil Fringe Curtains (Green)"
+                            }
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          A detailed description of the desired product. Include
+                          any necessary product configurations, such as size,
+                          bundle quantity, or color.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="vendor"
@@ -324,30 +345,6 @@ export function OrderForm({ session }: { session: Session }) {
                           Where is this item sold?
                         </FormDescription>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="productLink"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Product link</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="https://example.com/product-page"
-                            type="url"
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          A direct link to the desired item's product page, with
-                          all configuration options applied, if applicable and
-                          possible.
-                        </FormDescription>
-                        <FormMessage />
-                        <LinkPreview url={form.watch("productLink")} />
                       </FormItem>
                     )}
                   />
