@@ -94,3 +94,18 @@ export function getDriveUrl(
       return "https://docs.google.com/spreadsheets/d/" + fileId;
   }
 }
+
+/**
+ * Checks the validity of the given URL,
+ *
+ * @param str potential URL to validate
+ * @returns if the given text is a valid URL
+ */
+export function isValidUrl(str: string) {
+  try {
+    new URL(str);
+    return true;
+  } catch {
+    return false;
+  }
+};

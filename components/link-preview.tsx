@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
+import { cn, isValidUrl } from "@/lib/utils";
 import { UrlUnfurl } from "@/types";
 import { SparklesIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -29,15 +29,6 @@ export interface UnfurledData {
     title?: string;
   };
 }
-
-const isValidUrl = (text: string) => {
-  try {
-    new URL(text);
-    return true;
-  } catch {
-    return false;
-  }
-};
 
 export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
   const [data, setData] = useState<UnfurledData | null>(null);
