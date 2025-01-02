@@ -30,7 +30,14 @@ export function NavQuicklinks({
       <SidebarGroupLabel>Quicklinks</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          if (item.role && !session?.user.role.split("|").includes(item.role))
+
+          if (
+            item.role &&
+            !session?.user.role
+              .split("|")
+              .map((r) => r.toLowerCase())
+              .includes(item.role.toLowerCase())
+          )
             return null;
 
           return (
