@@ -1,5 +1,14 @@
 import { auth } from "@/auth";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
@@ -8,6 +17,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Layout({
@@ -32,6 +42,32 @@ export default async function Layout({
           <Breadcrumbs rootTitle="Dashboard" />
         </div>
       </header>
+
+      {!session.user.position ? (
+        <AlertDialog open>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Please log out and back in</AlertDialogTitle>
+              <AlertDialogDescription>
+                New features are now available which require a fresh session.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex flex-row items-center !justify-between w-full gap-2">
+              <p className="text-slate-500 text-sm">
+                Reason:{" "}
+                <code className="ml-1 text-xs bg-slate-100 px-2 py-1 rounded-sm">
+                  NoPosition
+                </code>
+              </p>
+              <AlertDialogAction asChild>
+                <Link href="/api/auth/signout">Log Out</Link>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      ) : (
+        ""
+      )}
 
       <main className="flex flex-1 flex-col gap-4 bg-muted/40 p-4 md:p-7">
         {children}
