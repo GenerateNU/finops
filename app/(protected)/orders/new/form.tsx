@@ -39,6 +39,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { LinkPreview } from "@/components/link-preview";
 import { Session } from "next-auth";
 import { formSchema } from "./form-schema";
 import { onSubmitAction } from "./form-submit";
@@ -346,6 +347,7 @@ export function OrderForm({ session }: { session: Session }) {
                           possible.
                         </FormDescription>
                         <FormMessage />
+                        <LinkPreview url={form.watch("productLink")} />
                       </FormItem>
                     )}
                   />
