@@ -38,7 +38,7 @@ export interface Vendor {
 export interface UrlUnfurl {
   hostname?: string;
   title?: string;
-  author?: string;
+  siteName?: string;
   description?: string;
   favicon?: string;
   imageUrl?: string;

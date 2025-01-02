@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn, isValidUrl } from "@/lib/utils";
 import { UrlUnfurl } from "@/types";
-import { SparklesIcon } from "lucide-react";
+import { ImageOffIcon, SparklesIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
@@ -14,7 +14,7 @@ interface LinkPreviewProps {
   className?: string;
 }
 
-export interface UnfurledData {
+interface UnfurledData {
   title?: string;
   description?: string;
   favicon?: string;
@@ -31,7 +31,7 @@ export interface UnfurledData {
 }
 
 export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
-  const [data, setData] = useState<UnfurledData | null>(null);
+  const [data, setData] = useState<UrlUnfurl | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,20 +51,21 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
           throw new Error(result.error || "Failed to fetch unfurled data");
         }
 
-        setData(result);
-        const unfurlData = result as UnfurledData;
-        setUnfurl({
+        const unfurledData = result as UnfurledData;
+        const unfurledDataObj = {
           hostname: new URL(url).hostname.replace("www.", "") ?? "",
-          title: unfurlData.open_graph?.title ?? unfurlData.title,
+          title: unfurledData.open_graph?.title ?? unfurledData.title,
           author:
-            unfurlData.twitter_card?.site ??
-            unfurlData.open_graph?.site_name ??
-            unfurlData.author,
+            unfurledData.twitter_card?.site ??
+            unfurledData.open_graph?.site_name ??
+            unfurledData.author,
           description:
-            unfurlData.open_graph?.description ?? unfurlData.description,
-          favicon: unfurlData.favicon,
-          imageUrl: unfurlData.open_graph?.images?.[0]?.url,
-        });
+            unfurledData.open_graph?.description ?? unfurledData.description,
+          favicon: unfurledData.favicon,
+          imageUrl: unfurledData.open_graph?.images?.[0]?.url,
+        };
+        setData(unfurledDataObj);
+        setUnfurl(unfurledDataObj);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Error fetching link preview"
@@ -108,10 +109,6 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
     );
   }
 
-  const siteName =
-    data?.twitter_card?.site ?? data?.open_graph?.site_name ?? data?.author;
-  const imageUrl = data?.open_graph?.images?.[0]?.url;
-
   return (
     <Card
       className={cn(
@@ -130,14 +127,16 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
         </p>
       </CardHeader>
       <CardContent className="p-4 flex items-start space-x-4">
-        {imageUrl && (
+        {data?.imageUrl && (
           <Avatar className="w-20 h-20 rounded-md flex-shrink-0">
             <AvatarImage
-              src={imageUrl}
+              src={data.imageUrl}
               alt="Product image"
               className="w-20 h-20 object-cover rounded-md"
             ></AvatarImage>
-            <AvatarFallback></AvatarFallback>
+            <AvatarFallback className="rounded-md">
+              <ImageOffIcon />
+            </AvatarFallback>
           </Avatar>
         )}
         <div className="flex-grow min-w-0">
@@ -153,15 +152,19 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
               </Avatar>
             ) : null}
             <span className="text-xs text-slate-600 truncate">
-              {siteName ?? new URL(url).host.replace("www.", "")}
+              {data?.siteName ?? new URL(url).host.replace("www.", "")}
             </span>
           </div>
-          <h3 className="text-sm font-semibold mb-1 truncate">
-            {data?.open_graph?.title ?? data?.title}
-          </h3>
-          <p className="text-xs text-slate-600 line-clamp-2">
-            {data?.open_graph?.description ?? data?.description}
-          </p>
+          {data?.title ? (
+            <h3 className="text-sm font-semibold mb-1 truncate">
+              {data.title}
+            </h3>
+          ) : null}
+          {data?.description ? (
+            <p className="text-xs text-slate-600 line-clamp-2">
+              {data.description}
+            </p>
+          ) : null}
           <a
             href={url}
             target="_blank"
