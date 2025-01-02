@@ -15,7 +15,7 @@ export const BRANCH_TEAMS = [
       "Arcade",
       "Candle Maker",
       "PlaitPilot",
-      "Uplift",
+      "Uplift Solutions",
     ],
   },
   {
@@ -95,9 +95,9 @@ export const BUDGETS: Budget[] = [
   },
   {
     branch: "Hardware",
-    subTeam: "Uplift",
+    subTeam: "Uplift Solutions",
     lineItem: "Materials",
-    code: "HW-UL-01",
+    code: "HW-US-01",
     purposes: ["Client Project Materials"],
   },
   {
@@ -123,9 +123,9 @@ export const BUDGETS: Budget[] = [
   },
   {
     branch: "Hardware",
-    subTeam: "Uplift",
+    subTeam: "Uplift Solutions",
     lineItem: "Morale",
-    code: "HW-UL-02",
+    code: "HW-US-02",
     purposes: ["Morale"],
   },
   {
