@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  BookTextIcon,
-  BoxesIcon,
+  BookText,
+  Boxes,
   ChartColumnBig,
-  CoinsIcon,
-  LockIcon,
+  Coins,
+  Lock,
   MessageSquare,
   Send,
 } from "lucide-react";
@@ -34,7 +34,7 @@ const data = {
     {
       title: "Orders",
       url: "/orders",
-      icon: BoxesIcon,
+      icon: Boxes,
       addNew: {
         url: "/orders/new",
         title: "Submit New Order",
@@ -53,7 +53,7 @@ const data = {
     {
       title: "Reimbursements",
       url: "/reimbursements",
-      icon: CoinsIcon,
+      icon: Coins,
       addNew: {
         url: "/reimbursements/new",
         title: "Submit New Reimbursement",
@@ -62,7 +62,7 @@ const data = {
     {
       title: "Manage",
       url: "/manage",
-      icon: LockIcon,
+      icon: Lock,
       adminOnly: true,
     },
   ],
@@ -70,23 +70,27 @@ const data = {
     {
       title: "Wiki",
       url: getEnv("NEXT_PUBLIC_WIKI_PROCUREMENT_URL"),
-      icon: BookTextIcon,
+      icon: BookText,
+      openNewTab: true,
     },
     {
       title: "Propose Expense",
       url: getEnv("NEXT_PUBLIC_BUDGET_BALANCES_SHEET_URL"),
       icon: Send,
+      openNewTab: true,
     },
     {
       title: "Budget Balances",
       url: getEnv("NEXT_PUBLIC_BUDGET_BALANCES_SHEET_URL"),
       icon: ChartColumnBig,
       role: "PL",
+      openNewTab: true,
     },
     {
       title: "Ask a Question",
       url: getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL"),
       icon: MessageSquare,
+      openNewTab: true,
     },
   ],
 };

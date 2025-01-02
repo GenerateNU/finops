@@ -21,6 +21,7 @@ export function NavQuicklinks({
     url: string;
     icon: LucideIcon;
     role?: string;
+    openNewTab?: boolean;
   }[];
   session: Session | null;
 }) {
@@ -35,7 +36,10 @@ export function NavQuicklinks({
           return (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <Link href={item.url} target="_blank">
+                <Link
+                  href={item.url}
+                  target={item.openNewTab ? "_blank" : undefined}
+                >
                   <item.icon />
                   <span>{item.title}</span>
                 </Link>
