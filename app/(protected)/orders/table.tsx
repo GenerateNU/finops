@@ -69,7 +69,13 @@ export async function MyOrdersTable() {
                   <span className="inline-block text-xs bg-slate-200 rounded-md px-2 py-0.5 mr-0.5">
                     {request.quantity ?? "0"}
                   </span>{" "}
-                  {request.description ?? "--"}
+                  <a
+                    href={request.productLink ?? "#"}
+                    target="_blank"
+                    className="text-blue-600 hover:underline"
+                  >
+                    {request.description ?? "--"}
+                  </a>
                 </div>
                 <div className="text-xs lg:text-sm text-slate-600 dark:text-slate-400">
                   from {request.vendor ?? "Unknown Vendor"}
