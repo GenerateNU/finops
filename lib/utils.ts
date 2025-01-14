@@ -29,6 +29,8 @@ export function getEnv(name: string): string {
       return process.env.NEXT_PUBLIC_EXPENSE_PROPOSAL_FORM_URL ?? "";
     case "NEXT_PUBLIC_BUDGET_BALANCES_SHEET_URL":
       return process.env.NEXT_PUBLIC_BUDGET_BALANCES_SHEET_URL ?? "";
+    case "NEXT_PUBLIC_EXPENSE_PROPOSAL_URL":
+      return process.env.NEXT_PUBLIC_EXPENSE_PROPOSAL_URL ?? "";
     case "NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME":
       return process.env.NEXT_PUBLIC_SLACK_HELP_CHANNEL_NAME ?? "";
     case "NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL":
