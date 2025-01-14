@@ -81,7 +81,7 @@ const data = {
     },
     {
       title: "Propose Expense",
-      url: getEnv("NEXT_PUBLIC_BUDGET_BALANCES_SHEET_URL"),
+      url: getEnv("NEXT_PUBLIC_EXPENSE_PROPOSAL_URL"),
       icon: TicketPlus,
       openNewTab: true,
     },
