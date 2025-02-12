@@ -58,7 +58,9 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
     } else {
       setAvailableItems(
         BUDGETS.filter(
-          (budgetItem) => budgetItem.branch === session.user.branch
+          (budgetItem) =>
+            budgetItem.branch === session.user.branch ||
+            budgetItem.branch === "Shared"
         )
       );
     }
