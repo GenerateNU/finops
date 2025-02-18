@@ -32,8 +32,7 @@ export async function createExpenseVoucher(
   const branch = budgetLineItem?.branch;
   const team = budgetLineItem?.subTeam;
 
-  const indexCode =
-    voucherData.expensePurpose === "Client Project Materials";
+  const indexCode = voucherData.expensePurpose === "Client Project Materials" ? "390255" : "368429";
 
   const auth = await google.auth.getClient({
     projectId: getEnv("GOOGLE_PROJECT_ID"),
