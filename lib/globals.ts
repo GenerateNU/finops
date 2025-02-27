@@ -235,6 +235,7 @@ export const VENDORS = [
   { name: "McMaster-Carr", url: "https://www.mcmaster.com" },
   { name: "Misumi", url: "https://us.misumi-ec.com" },
   { name: "Mouser Electronics", url: "https://www.mouser.com" },
+  { name: "Pololu", url: "https://www.pololu.com" },
   { name: "Prolabs", url: "https://www.prolabs.com" },
   { name: "Protolabs", url: "https://www.protolabs.com" },
   { name: "SendCutSend", url: "https://sendcutsend.com" },
