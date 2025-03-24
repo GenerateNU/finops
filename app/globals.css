@@ -2,14 +2,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
+@theme inline {
   --font-sans:
     var(--font-outfit), ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-mono:
     var(--font-space-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
 
+@theme {
   --color-generate-black: #231f20;
   --color-generate-blue: #187dff;
   --color-generate-gold: #ffbf3c;

@@ -24,9 +24,7 @@ export function DashboardSkeleton() {
             <GreetingIcon className="size-4" />
             Hey <Skeleton className="inline w-[80px] h-4 bg-slate-100/90" />
           </div>
-          <p className="font-mono font-bold text-6xl leading-0">
-            {getGreeting()}!
-          </p>
+          <p className="font-mono font-bold text-6xl">{getGreeting()}!</p>
         </Card>
 
         <Card>

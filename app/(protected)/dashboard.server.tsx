@@ -41,9 +41,7 @@ export default async function Dashboard() {
               <GreetingIcon className="size-4" />
               Hey {member.greeting},
             </p>
-            <p className="font-mono font-bold text-6xl leading-0">
-              {getGreeting()}!
-            </p>
+            <p className="font-mono font-bold text-6xl">{getGreeting()}!</p>
           </Card>
 
           <Card>
