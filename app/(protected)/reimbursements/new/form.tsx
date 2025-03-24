@@ -269,7 +269,7 @@ export function ExpenseVoucherForm({ session }: { session: Session }) {
                                 <Button
                                   variant="outline"
                                   className={cn(
-                                    "h-9 pl-3 text-left font-normal shadow-sm",
+                                    "h-9 pl-3 text-left font-normal shadow-xs",
                                     !field.value &&
                                       "text-slate-700 dark:text-slate-300"
                                   )}

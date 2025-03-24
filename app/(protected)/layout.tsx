@@ -52,10 +52,10 @@ export default async function Layout({
                 New features are now available which require a fresh session.
               </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter className="flex flex-row items-center !justify-between w-full gap-2">
+            <AlertDialogFooter className="flex flex-row items-center justify-between! w-full gap-2">
               <p className="text-slate-500 text-sm">
                 Reason:{" "}
-                <code className="ml-1 text-xs bg-slate-100 px-2 py-1 rounded-sm">
+                <code className="ml-1 text-xs bg-slate-100 px-2 py-1 rounded-xs">
                   NoPosition
                 </code>
               </p>

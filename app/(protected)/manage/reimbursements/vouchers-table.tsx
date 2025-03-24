@@ -28,7 +28,7 @@ export async function ExpenseVoucherFilesTable() {
 
   if (!vouchers || !vouchers.files || vouchers.files.length === 0) {
     return (
-      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm border-slate-200 dark:border-slate-800">
+      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-xs border-slate-200 dark:border-slate-800">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
             There are no expense vouchers
@@ -75,7 +75,7 @@ export async function ExpenseVoucherFilesTable() {
                 <Link
                   href={getDriveUrl("sheet", voucher.id)}
                   target="_blank"
-                  className="inline-flex gap-1.5 items-center text-generate-green font-mono uppercase font-semibold hover:bg-generate-green hover:text-white transition-colors px-1 rounded-sm text-base"
+                  className="inline-flex gap-1.5 items-center text-generate-green font-mono uppercase font-semibold hover:bg-generate-green hover:text-white transition-colors px-1 rounded-xs text-base"
                 >
                   Open
                   <ArrowUpRightIcon className="size-5" />

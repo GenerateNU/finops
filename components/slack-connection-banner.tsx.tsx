@@ -42,7 +42,7 @@ export async function SlackConnectionBanner() {
   //   <div className="flex justify-between w-full p-4 border-b border-slate-200 bg-slate-50 dark:bg-slate-700 dark:border-slate-600">
   //     <div className="flex items-center mx-auto">
   //       <p className="flex items-center text-sm font-normal text-slate-700 dark:text-slate-300">
-  //         <span className="inline-flex p-1.5 me-3 bg-slate-200 rounded-full dark:bg-slate-600 w-7 h-7 items-center justify-center flex-shrink-0">
+  //         <span className="inline-flex p-1.5 me-3 bg-slate-200 rounded-full dark:bg-slate-600 w-7 h-7 items-center justify-center shrink-0">
   //           <BadgeAlertIcon />
   //         </span>
   //         <span>Please connect your Slack profile.</span>

@@ -87,7 +87,7 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
                   className={cn(
                     "font-normal justify-between",
                     !field.value &&
-                      "text-slate-500 dark:placeholder:text-slate-400 shadow-sm"
+                      "text-slate-500 dark:placeholder:text-slate-400 shadow-xs"
                   )}
                 >
                   {field.value

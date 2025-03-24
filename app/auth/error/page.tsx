@@ -53,7 +53,7 @@ export default function AuthErrorPage() {
 
         <p className="text-slate-500 text-sm">
           Error code:{" "}
-          <code className="ml-1 text-xs bg-slate-100 px-2 py-1 rounded-sm">
+          <code className="ml-1 text-xs bg-slate-100 px-2 py-1 rounded-xs">
             {error || "Unknown"}
           </code>
         </p>

@@ -43,7 +43,7 @@ export async function TeamOrdersTable() {
   }
 
   return (
-    <div className="border border-slate-200 dark:border-slate-800 shadow-sm rounded-lg overflow-hidden">
+    <div className="border border-slate-200 dark:border-slate-800 shadow-xs rounded-lg overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow className="bg-slate-100">

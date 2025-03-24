@@ -66,7 +66,7 @@ export async function ReimbursementsTable() {
 
   if (!requests || requests.length === 0) {
     return (
-      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-sm border-slate-200 dark:border-slate-800">
+      <div className="flex items-center justify-center flex-1 p-8 border border-dashed rounded-lg shadow-xs border-slate-200 dark:border-slate-800">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
             There are no reimbursements

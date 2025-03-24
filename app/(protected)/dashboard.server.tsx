@@ -34,7 +34,7 @@ export default async function Dashboard() {
 
   return (
     <>
-      <div className="mx-auto w-full max-w-screen-lg flex flex-col gap-4">
+      <div className="mx-auto w-full max-w-(--breakpoint-lg) flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[45%_1fr_1fr] gap-4">
           <Card className="md:col-span-2 lg:col-span-1 flex flex-col bg-black text-white p-6 uppercase justify-end">
             <p className="ml-1 mb-2 font-mono text-sm inline-flex gap-2 items-center">

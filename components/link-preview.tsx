@@ -58,10 +58,10 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
     return (
       <Card className={cn("w-full bg-transparent", className)}>
         <CardContent className="p-4 flex items-center space-x-4">
-          <Skeleton className="h-20 w-20 flex-shrink-0 rounded-md" />
-          <div className="flex-grow">
+          <Skeleton className="h-20 w-20 shrink-0 rounded-md" />
+          <div className="grow">
             <div className="flex items-center mb-2 gap-2">
-              <Skeleton className="h-4 w-4 flex-shrink-0 rounded-md" />
+              <Skeleton className="h-4 w-4 shrink-0 rounded-md" />
               <Skeleton className="h-4 w-[100px] rounded-md" />
             </div>
             <Skeleton className="h-4 w-3/4 mb-2 rounded-md" />
@@ -101,7 +101,7 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
       </CardHeader>
       <CardContent className="p-4 flex items-start space-x-4">
         {data?.imageUrl && (
-          <Avatar className="w-20 h-20 rounded-md flex-shrink-0">
+          <Avatar className="w-20 h-20 rounded-md shrink-0">
             <AvatarImage
               src={data.imageUrl}
               alt="Product image"
@@ -112,7 +112,7 @@ export function LinkPreview({ url, setUnfurl, className }: LinkPreviewProps) {
             </AvatarFallback>
           </Avatar>
         )}
-        <div className="flex-grow min-w-0">
+        <div className="grow min-w-0">
           <div className="flex items-center mb-1 gap-2">
             {data?.favicon ? (
               <Avatar className="w-4 h-4">

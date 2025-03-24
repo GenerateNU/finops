@@ -16,7 +16,7 @@ type Props = {
 
 export const EmptyTable = ({ content }: Props) => {
   return (
-    <div className="flex items-center flex-1 p-8 border border-dashed rounded-lg shadow-sm border-slate-200 dark:border-slate-800">
+    <div className="flex items-center flex-1 p-8 border border-dashed rounded-lg shadow-xs border-slate-200 dark:border-slate-800">
       <div className="flex flex-col gap-1">
         <div className="mb-2 bg-slate-200 p-2 rounded-md w-max">
           <FrownIcon className="size-6" />
