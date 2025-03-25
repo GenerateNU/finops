@@ -69,9 +69,9 @@ export default async function Layout({
         ""
       )}
 
-      <main className="flex flex-1 flex-col gap-4 bg-muted/40 p-4 md:p-7">
+      <div className="flex flex-1 flex-col gap-4 bg-muted/40 p-4 md:p-7">
         {children}
-      </main>
+      </div>
 
       <Toaster />
     </>
