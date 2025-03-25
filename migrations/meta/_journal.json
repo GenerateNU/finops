@@ -8,6 +8,27 @@
       "when": 1742844903634,
       "tag": "0000_known_wasp",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742847078921,
+      "tag": "0001_brief_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742861255615,
+      "tag": "0002_quick_cloak",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1742864706254,
+      "tag": "0003_living_echo",
+      "breakpoints": true
     }
   ]
 }

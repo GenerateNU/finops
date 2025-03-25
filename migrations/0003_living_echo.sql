@@ -1,0 +1,2 @@
+ALTER TABLE "memberships" ADD CONSTRAINT "memberships_member_id_term_id_unique" UNIQUE("member_id","term_id");--> statement-breakpoint
+ALTER TABLE "terms" ADD CONSTRAINT "terms_term_year_unique" UNIQUE("term","year");
