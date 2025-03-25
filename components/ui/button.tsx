@@ -74,7 +74,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         children: (
           <>
             {before ? renderIcon(before) : null}
-            {children && <>{children.props.children}</>}
+            {children && <span>{children.props.children}</span>}
             {after ? renderIcon(after) : null}
           </>
         ),
@@ -82,7 +82,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ) : (
       <>
         {before ? renderIcon(before) : null}
-        {children && <>{children}</>}
+        {children && <span>{children}</span>}
         {after ? renderIcon(after) : null}
       </>
     );

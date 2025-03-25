@@ -39,7 +39,7 @@ export default async function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-white dark:bg-black font-sans antialiased",
+          "w-full max-w-full min-h-screen bg-white dark:bg-black font-sans antialiased",
           outfit.variable,
           spaceMono.variable
         )}
