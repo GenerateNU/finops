@@ -71,8 +71,8 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnPinning,
     },
-    debugTable: true,
-    debugColumns: true,
+    debugTable: showDebug,
+    debugColumns: showDebug,
   });
 
   const getCommonPinningStyles = (

@@ -16,7 +16,6 @@ export default async function MembersPage() {
         </p>
       </div>
 
-      {/* <DebugBlock snippet={members} /> */}
       <DataTable columns={columns} data={members}></DataTable>
     </>
   );
