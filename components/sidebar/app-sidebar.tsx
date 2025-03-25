@@ -8,6 +8,7 @@ import {
   Lock,
   MessageSquare,
   TicketPlus,
+  Users,
 } from "lucide-react";
 import * as React from "react";
 
@@ -56,6 +57,15 @@ const data = {
       addNew: {
         url: "/reimbursements/new",
         title: "Submit New Reimbursement",
+      },
+    },
+    {
+      title: "Member History",
+      url: "/members",
+      icon: Users,
+      addNew: {
+        url: "/members/upload",
+        title: "Upload Members",
       },
     },
     {
