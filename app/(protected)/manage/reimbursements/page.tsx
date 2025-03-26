@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import {
   Card,
   CardContent,
@@ -9,13 +7,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import dayjs from "@/lib/dayjs";
-
+import { Metadata } from "next";
+import { Suspense } from "react";
 import { DeleteFileForm } from "./delete-file-form";
 import { ReimbursementsTable, ReimbursementsTableSkeleton } from "./table";
 import {
   ExpenseVoucherFilesTable,
   VouchersTableSkeleton,
 } from "./vouchers-table";
+
+export const metadata: Metadata = {
+  title: "Manage Reimbursements",
+};
 
 export default function MyReimbursementsPage() {
   return (
