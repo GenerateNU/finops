@@ -25,12 +25,12 @@ export function DataTableViewOptions<TData>({
   setShowDebug,
 }: DataTableViewOptionsProps<TData>) {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
           size="sm"
-          className="h-8"
+          className="h-8 cursor-pointer"
           before={<Settings2 />}
         >
           Columns

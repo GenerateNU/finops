@@ -15,6 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import * as React from "react";
 
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,11 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const memoizedColumns = React.useMemo<Array<ColumnDef<TData, TValue>>>(
+    () => columns,
+    []
+  );
+
   const [sorting, setSorting] = React.useState<SortingState>([
     { desc: false, id: "name" },
   ]);
@@ -64,7 +70,7 @@ export function DataTable<TData, TValue>({
 
   const table = useReactTable({
     data,
-    columns,
+    columns: memoizedColumns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
@@ -84,6 +90,17 @@ export function DataTable<TData, TValue>({
     },
     debugTable: showDebug,
     debugColumns: showDebug,
+  });
+
+  const { rows } = table.getRowModel();
+
+  const parentRef = React.useRef<HTMLDivElement>(null);
+
+  const virtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 34,
+    overscan: 20,
   });
 
   const getCommonPinningStyles = (
@@ -142,11 +159,9 @@ export function DataTable<TData, TValue>({
           className="h-8"
         />
         <Popover>
-          <PopoverTrigger>
-            <div className="bg-slate-100 rounded-md size-8 aspect-square flex items-center justify-center border border-slate-200">
-              <InfoIcon className="size-4" />
-              <span className="sr-only">Information</span>
-            </div>
+          <PopoverTrigger className="bg-slate-100 rounded-md size-8 aspect-square flex items-center justify-center border border-slate-200 cursor-pointer">
+            <InfoIcon className="size-4" />
+            <span className="sr-only">Information</span>
           </PopoverTrigger>
           <PopoverContent align="end">
             <p className="text-sm text-slate-800 leading-none">
@@ -158,65 +173,89 @@ export function DataTable<TData, TValue>({
 
       {showDebug ? <DataTableDebug table={table} /> : null}
 
-      <div className="block rounded-md border max-w-full overflow-x-auto overflow-y-hidden">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className="bg-slate-50 hover:bg-slate-50"
-              >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      style={{ ...getCommonPinningStyles(header.column) }}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getSortedRowModel().rows?.length ? (
-              table.getSortedRowModel().rows.map((row) => (
+      <div ref={parentRef}>
+        <div
+          className="block rounded-md border max-w-full overflow-x-auto overflow-y-hidden"
+          style={
+            table.getSortedRowModel().rows?.length > 0
+              ? { height: `${virtualizer.getTotalSize() + 7}px` }
+              : {}
+          }
+        >
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  key={headerGroup.id}
+                  className="bg-slate-50 hover:bg-slate-50"
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className="px-3"
-                      style={{ ...getCommonPinningStyles(cell.column) }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        style={{
+                          width: header.getSize(),
+                          ...getCommonPinningStyles(header.column),
+                        }}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getSortedRowModel().rows?.length ? (
+                <>
+                  {virtualizer.getVirtualItems().map((virtualRow, index) => {
+                    const row = rows[virtualRow.index];
+                    return (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && "selected"}
+                        style={{
+                          height: `${virtualRow.size}px`,
+                          transform: `translateY(${
+                            virtualRow.start - index * virtualRow.size
+                          }px)`,
+                        }}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell
+                            key={cell.id}
+                            className="py-0 px-3 whitespace-nowrap"
+                            style={{ ...getCommonPinningStyles(cell.column) }}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    );
+                  })}
+                </>
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );
