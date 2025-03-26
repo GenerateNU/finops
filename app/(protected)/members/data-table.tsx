@@ -17,6 +17,13 @@ import {
 } from "@tanstack/react-table";
 import * as React from "react";
 
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Table,
   TableBody,
@@ -25,6 +32,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { InfoIcon, SearchIcon } from "lucide-react";
 import { DataTableViewOptions } from "./column-toggle";
 import { DataTableDebug } from "./debug";
 import { DataTableFilterVisualizer } from "./filter-visualizer";
@@ -43,6 +51,7 @@ export function DataTable<TData, TValue>({
   ]);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
+  const [globalFilter, setGlobalFilter] = React.useState<any>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -62,12 +71,14 @@ export function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getSortedRowModel: getSortedRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilter,
     onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
     onColumnPinningChange: setColumnPinning,
     state: {
       sorting,
       columnVisibility,
+      globalFilter,
       columnFilters,
       columnPinning,
     },
@@ -101,7 +112,7 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div>
+    <div className="space-y-4">
       <div className="flex flex-row gap-2 justify-between">
         <DataTableFilterVisualizer
           table={table}
@@ -114,9 +125,40 @@ export function DataTable<TData, TValue>({
         />
       </div>
 
+      <div className="flex flex-row gap-2 items-center">
+        <Label htmlFor="search">
+          <div className="bg-slate-100 rounded-md size-8 aspect-square flex items-center justify-center border border-slate-200">
+            <SearchIcon className="size-4" />
+            <span className="sr-only">Search</span>
+          </div>
+        </Label>
+        <Input
+          id="search"
+          name="search"
+          value={globalFilter}
+          onChange={(e) => table.setGlobalFilter(String(e.target.value))}
+          placeholder="Search..."
+          autoComplete="off"
+          className="h-8"
+        />
+        <Popover>
+          <PopoverTrigger>
+            <div className="bg-slate-100 rounded-md size-8 aspect-square flex items-center justify-center border border-slate-200">
+              <InfoIcon className="size-4" />
+              <span className="sr-only">Information</span>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent align="end">
+            <p className="text-sm text-slate-800 leading-none">
+              Begin typing to filter by name or email.
+            </p>
+          </PopoverContent>
+        </Popover>
+      </div>
+
       {showDebug ? <DataTableDebug table={table} /> : null}
 
-      <div className="mt-4 block rounded-md border max-w-full overflow-x-scroll overflow-y-hidden">
+      <div className="block rounded-md border max-w-full overflow-x-auto overflow-y-hidden">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
