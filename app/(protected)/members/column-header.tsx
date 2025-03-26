@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
@@ -60,7 +61,7 @@ export function DataTableColumnHeader<TData, TValue>({
   return (
     <div className="flex flex-row gap-1 items-center">
       <div className={cn("flex items-center space-x-2", className)}>
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
@@ -83,51 +84,52 @@ export function DataTableColumnHeader<TData, TValue>({
               {label}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="start"
-            className="max-h-[var(--radix-dropdown-menu-content-available-height)] overflow-y-auto"
-          >
+          <DropdownMenuContent align="start">
             <DropdownMenuLabel>Sort</DropdownMenuLabel>
 
-            <DropdownMenuItem
-              className="gap-2"
-              onClick={() => column.toggleSorting(false)}
-            >
-              <ArrowUp className="size-4 text-slate-800" />
-              Asc
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="gap-2"
-              onClick={() => column.toggleSorting(true)}
-            >
-              <ArrowDown className="size-4 text-slate-800" />
-              Desc
-            </DropdownMenuItem>
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                className="gap-2"
+                onClick={() => column.toggleSorting(false)}
+              >
+                <ArrowUp className="size-4 text-slate-800" />
+                Asc
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="gap-2"
+                onClick={() => column.toggleSorting(true)}
+              >
+                <ArrowDown className="size-4 text-slate-800" />
+                Desc
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
 
             {column.getCanPin() || column.getCanHide() ? (
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>Controls</DropdownMenuLabel>
 
-                {column.getCanPin() ? (
-                  column.getIsPinned() ? (
-                    <DropdownMenuItem
-                      className="gap-2"
-                      onClick={() => column.pin(false)}
-                    >
-                      <PinOffIcon className="size-4 text-slate-800" />
-                      Unpin
-                    </DropdownMenuItem>
-                  ) : (
-                    <DropdownMenuItem
-                      className="gap-2"
-                      onClick={() => column.pin("left")}
-                    >
-                      <PinIcon className="size-4 text-slate-800" />
-                      Pin
-                    </DropdownMenuItem>
-                  )
-                ) : null}
+                <DropdownMenuGroup>
+                  {column.getCanPin() ? (
+                    column.getIsPinned() ? (
+                      <DropdownMenuItem
+                        className="gap-2"
+                        onClick={() => column.pin(false)}
+                      >
+                        <PinOffIcon className="size-4 text-slate-800" />
+                        Unpin
+                      </DropdownMenuItem>
+                    ) : (
+                      <DropdownMenuItem
+                        className="gap-2"
+                        onClick={() => column.pin("left")}
+                      >
+                        <PinIcon className="size-4 text-slate-800" />
+                        Pin
+                      </DropdownMenuItem>
+                    )
+                  ) : null}
+                </DropdownMenuGroup>
 
                 {column.getCanHide() ? (
                   <DropdownMenuItem
@@ -149,14 +151,15 @@ export function DataTableColumnHeader<TData, TValue>({
                     <FilterIcon className="size-4" />
                     <span>Filter</span>
                   </DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuItem className="hover:bg-transparent" asChild>
+                  <DropdownMenuSubContent className="max-h-[min(300px,var(--radix-dropdown-menu-content-available-height))] overflow-y-auto">
+                    <DropdownMenuItem asChild>
                       <Input
                         id="search"
                         name="search"
                         aria-label="search"
                         type="text"
                         placeholder="Search..."
+                        className="rounded-sm cursor-text"
                         value={filterSearch}
                         onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
                           setFilterSearch(ev.target.value);
