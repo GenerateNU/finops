@@ -178,7 +178,7 @@ export function DataTable<TData, TValue>({
           className="block rounded-md border max-w-full overflow-x-auto overflow-y-hidden"
           style={
             table.getSortedRowModel().rows?.length > 0
-              ? { height: `${virtualizer.getTotalSize() + 7}px` }
+              ? { height: `${virtualizer.getTotalSize() + 42}px` }
               : {}
           }
         >
