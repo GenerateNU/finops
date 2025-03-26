@@ -1,6 +1,11 @@
 import { auth } from "@/auth";
 import { getEnv } from "@/lib/utils";
+import { Metadata } from "next";
 import { OrderForm } from "./form";
+
+export const metadata: Metadata = {
+  title: "New Order",
+};
 
 export default async function NewOrderPage() {
   const session = await auth();

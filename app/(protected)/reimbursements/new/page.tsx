@@ -1,10 +1,13 @@
-import { redirect } from "next/navigation";
-
 import { auth } from "@/auth";
-
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { ExpenseVoucherForm } from "./form";
 
 export const maxDuration = 60;
+
+export const metadata: Metadata = {
+  title: "New Reimbursement",
+};
 
 export default async function NewReimbursementPage() {
   const session = await auth();

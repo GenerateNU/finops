@@ -24,7 +24,10 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Generate FinOps",
+  title: {
+    default: "Generate FinOps",
+    template: "%s | Generate FinOps",
+  },
   description: "Making FinOps easier for everyone connected to Generate",
 };
 

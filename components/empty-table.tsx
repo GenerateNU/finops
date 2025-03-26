@@ -6,8 +6,8 @@ import { Button } from "./ui/button";
 type Props = {
   content: {
     title: string;
-    explanation: string;
-    addAction: {
+    explanation?: string;
+    addAction?: {
       title: string;
       url: string;
     };
@@ -22,28 +22,34 @@ export const EmptyTable = ({ content }: Props) => {
           <FrownIcon className="size-6" />
         </div>
         <h3 className="text-2xl font-bold tracking-tight">{content.title}</h3>
-        <p className="text-slate-500 dark:text-slate-400">
-          {content.explanation}
-        </p>
+        {content.explanation ? (
+          <p className="text-slate-500 dark:text-slate-400">
+            {content.explanation}
+          </p>
+        ) : null}
 
-        <div className="flex flex-row gap-2">
-          <Button className="mt-6 w-max" before={<PlusCircleIcon />} asChild>
-            <Link href={content.addAction.url}>{content.addAction.title}</Link>
-          </Button>
-          <Button
-            variant="ghost"
-            className="mt-6 w-max"
-            before={<BookTextIcon />}
-            asChild
-          >
-            <a
-              href={getEnv("NEXT_PUBLIC_WIKI_PROCUREMENT_URL")}
-              target="_blank"
+        {content.addAction ? (
+          <div className="flex flex-row gap-2">
+            <Button className="mt-6 w-max" before={<PlusCircleIcon />} asChild>
+              <Link href={content.addAction.url}>
+                {content.addAction.title}
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              className="mt-6 w-max"
+              before={<BookTextIcon />}
+              asChild
             >
-              View Wiki
-            </a>
-          </Button>
-        </div>
+              <a
+                href={getEnv("NEXT_PUBLIC_WIKI_PROCUREMENT_URL")}
+                target="_blank"
+              >
+                View Wiki
+              </a>
+            </Button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
