@@ -1,8 +1,5 @@
 "use client";
 
-import { ColumnDef, RowData } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,7 +9,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { GetMembersResponse } from "@/queries/select";
+import { ColumnDef, RowData } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 import { DataTableColumnHeader } from "./column-header";
 
 declare module "@tanstack/react-table" {
@@ -21,23 +21,13 @@ declare module "@tanstack/react-table" {
   }
 }
 
-export type Membership = {
-  id: number | null;
-  name: string;
-  email: string | null;
-  branch: string | null;
-  team: string | null;
-  role: string | null;
-  term: string | null;
-};
-
-export const columns: ColumnDef<Membership>[] = [
+export const columns: ColumnDef<GetMembersResponse>[] = [
   {
     id: "name",
     accessorKey: "name",
     meta: { label: "Name" },
     header: ({ column }) => <DataTableColumnHeader column={column} />,
-    // enableColumnFilter: false,
+    filterFn: "arrIncludesSome",
   },
   {
     id: "email",
@@ -52,6 +42,7 @@ export const columns: ColumnDef<Membership>[] = [
     meta: { label: "Term" },
     header: ({ column }) => <DataTableColumnHeader column={column} />,
     filterFn: "arrIncludesSome",
+    enableGlobalFilter: false,
   },
   {
     id: "branch",
@@ -59,20 +50,23 @@ export const columns: ColumnDef<Membership>[] = [
     meta: { label: "Branch" },
     header: ({ column }) => <DataTableColumnHeader column={column} />,
     filterFn: "arrIncludesSome",
+    enableGlobalFilter: false,
   },
   {
     id: "team",
     accessorKey: "team",
     meta: { label: "Team" },
     header: ({ column }) => <DataTableColumnHeader column={column} />,
-    enableColumnFilter: false,
+    filterFn: "arrIncludesSome",
+    enableGlobalFilter: false,
   },
   {
     id: "role",
     accessorKey: "role",
     meta: { label: "Role" },
     header: ({ column }) => <DataTableColumnHeader column={column} />,
-    enableColumnFilter: false,
+    filterFn: "arrIncludesSome",
+    enableGlobalFilter: false,
   },
   {
     id: "actions",
@@ -96,18 +90,27 @@ export const columns: ColumnDef<Membership>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(String(member.id))}
+              onClick={() =>
+                navigator.clipboard.writeText(String(member.memberId))
+              }
             >
               Copy member ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => alert("TODO: implement")}>
-              View member
+
+            <DropdownMenuItem asChild>
+              <Link href={`/members/${member.memberId}`}>View member</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
     size: 24,
+    enableColumnFilter: false,
+    enableGlobalFilter: false,
+    enableHiding: false,
+    enablePinning: false,
+    enableResizing: false,
+    enableSorting: false,
   },
 ];
