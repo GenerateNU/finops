@@ -53,7 +53,7 @@ export function DataTable<TData, TValue>({
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([
-    { desc: false, id: "name" },
+    { desc: false, id: "lastName" },
   ]);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({
     []
   );
   const [columnPinning, setColumnPinning] = React.useState<ColumnPinningState>({
-    left: ["name"],
+    left: [],
     right: [],
   });
 
