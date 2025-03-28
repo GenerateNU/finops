@@ -36,7 +36,7 @@ export function DataTableViewOptions<TData>({
           Columns
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[150px]">
+      <DropdownMenuContent align="end">
         <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
         {table
           .getAllColumns()
@@ -51,7 +51,7 @@ export function DataTableViewOptions<TData>({
                 onSelect={(ev) => ev.preventDefault()}
                 disabled={!column.getCanHide()}
               >
-                {column.id}
+                {column.columnDef.meta?.label ?? column.id}
               </DropdownMenuCheckboxItem>
             );
           })}
