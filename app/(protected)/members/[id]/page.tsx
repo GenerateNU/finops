@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getMember, getMembershipsByMemberId } from "@/queries/select";
+import { getMember, getMembershipsByContactId } from "@/queries/select";
 import { notFound } from "next/navigation";
 
 const emptyMembershipsTableData = {
@@ -24,33 +24,31 @@ export default async function MemberDetailPage({
     return notFound();
   }
 
-  const memberships = await getMembershipsByMemberId(member.id);
+  const memberships = await getMembershipsByContactId(member.id);
 
   return (
     <>
       <div className="grid w-full max-w-5xl gap-2">
         <h1 className="text-3xl font-semibold text-black dark:text-white">
-          {member.name}
+          {member.firstName} {member.lastName}
         </h1>
-        <p className="text-slate-500 dark:text-slate-400">
-          List of all Generate members and their roles
-        </p>
+        <p className="text-slate-500 dark:text-slate-400">Member Overview</p>
       </div>
 
       <div>
         <div className="space-y-4">
           <div>
             <label className="text-sm font-semibold text-slate-500 uppercase">
-              Name
+              Greeting
             </label>
-            <p>{member.name}</p>
+            <p>{member.greeting}</p>
           </div>
 
           <div>
             <label className="text-sm font-semibold text-slate-500 uppercase">
-              Email
+              Northeastern Email
             </label>
-            <p>{member.email}</p>
+            <p>{member.northeasternEmail}</p>
           </div>
         </div>
 
