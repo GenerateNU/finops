@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import {
   Card,
   CardContent,
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import dayjs from "@/lib/dayjs";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { DeleteFileForm } from "./delete-file-form";
 import { ReimbursementsTable, ReimbursementsTableSkeleton } from "./table";
@@ -20,7 +22,12 @@ export const metadata: Metadata = {
   title: "Manage Reimbursements",
 };
 
-export default function MyReimbursementsPage() {
+export default async function MyReimbursementsPage() {
+  const session = await auth();
+  if (!session || !session.user.role.includes("admin")) {
+    return notFound();
+  }
+
   return (
     <>
       <Card>

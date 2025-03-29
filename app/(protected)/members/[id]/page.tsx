@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { EmptyTable } from "@/components/empty-table";
 import {
   Table,
@@ -19,6 +20,11 @@ export default async function MemberDetailPage({
 }: {
   params: { id: string };
 }) {
+  const session = await auth();
+  if (!session || !session.user.role.includes("admin")) {
+    return notFound();
+  }
+
   const member = await getMember(parseInt(params.id));
   if (!member) {
     return notFound();

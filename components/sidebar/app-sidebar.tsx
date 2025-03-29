@@ -67,6 +67,7 @@ const data = {
         url: "/members/upload",
         title: "Upload Members",
       },
+      adminOnly: true,
     },
     {
       title: "Manage",
