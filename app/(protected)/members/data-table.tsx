@@ -5,17 +5,18 @@ import {
   ColumnDef,
   ColumnFiltersState,
   ColumnPinningState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getSortedRowModel,
+  SortingState,
+  Table as TableType,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import { useVirtualizer, Virtualizer } from "@tanstack/react-virtual";
 import * as React from "react";
 
 import { Input } from "@/components/ui/input";
@@ -43,6 +44,31 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
+function getCommonPinningStyles<TData>(
+  column: Column<TData>
+): React.CSSProperties {
+  const isPinned = column.getIsPinned();
+  const isLastLeftPinnedColumn =
+    isPinned === "left" && column.getIsLastColumn("left");
+  const isFirstRightPinnedColumn =
+    isPinned === "right" && column.getIsFirstColumn("right");
+
+  return {
+    boxShadow: isLastLeftPinnedColumn
+      ? "-4px 0 4px -4px gray inset"
+      : isFirstRightPinnedColumn
+      ? "4px 0 4px -4px gray inset"
+      : undefined,
+    left: isPinned === "left" ? `${column.getStart("left")}px` : undefined,
+    right: isPinned === "right" ? `${column.getAfter("right")}px` : undefined,
+    opacity: isPinned ? 0.95 : 1,
+    position: isPinned ? "sticky" : "relative",
+    // width: column.getSize(),
+    zIndex: isPinned ? 1 : 0,
+    backgroundColor: isPinned ? "var(--color-slate-50)" : "transparent",
+  };
+}
+
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -62,15 +88,18 @@ export function DataTable<TData, TValue>({
     []
   );
   const [columnPinning, setColumnPinning] = React.useState<ColumnPinningState>({
-    left: [],
-    right: [],
+    left: ["firstName", "lastName"],
+    right: ["actions"],
   });
 
   const [showDebug, setShowDebug] = React.useState<boolean>(false);
 
+  const rerender = React.useReducer(() => ({}), {})[1];
+
   const table = useReactTable({
     data,
     columns: memoizedColumns,
+    columnResizeMode: "onChange",
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
@@ -103,30 +132,22 @@ export function DataTable<TData, TValue>({
     overscan: 20,
   });
 
-  const getCommonPinningStyles = (
-    column: Column<TData>
-  ): React.CSSProperties => {
-    const isPinned = column.getIsPinned();
-    const isLastLeftPinnedColumn =
-      isPinned === "left" && column.getIsLastColumn("left");
-    const isFirstRightPinnedColumn =
-      isPinned === "right" && column.getIsFirstColumn("right");
-
-    return {
-      boxShadow: isLastLeftPinnedColumn
-        ? "-4px 0 4px -4px gray inset"
-        : isFirstRightPinnedColumn
-        ? "4px 0 4px -4px gray inset"
-        : undefined,
-      left: isPinned === "left" ? `${column.getStart("left")}px` : undefined,
-      right: isPinned === "right" ? `${column.getAfter("right")}px` : undefined,
-      opacity: isPinned ? 0.95 : 1,
-      position: isPinned ? "sticky" : "relative",
-      width: column.getSize(),
-      zIndex: isPinned ? 1 : 0,
-      backgroundColor: isPinned ? "var(--color-slate-50)" : "transparent",
-    };
-  };
+  /**
+   * Instead of calling `column.getSize()` on every render for every header
+   * and especially every data cell (very expensive),
+   * we will calculate all column sizes at once at the root table level in a useMemo
+   * and pass the column sizes down as CSS variables to the <table> element.
+   */
+  const columnSizeVars = React.useMemo(() => {
+    const headers = table.getFlatHeaders();
+    const colSizes: { [key: string]: number } = {};
+    for (let i = 0; i < headers.length; i++) {
+      const header = headers[i]!;
+      colSizes[`--header-${header.id}-size`] = header.getSize();
+      colSizes[`--col-${header.column.id}-size`] = header.column.getSize();
+    }
+    return colSizes;
+  }, [table.getState().columnSizingInfo, table.getState().columnSizing]);
 
   return (
     <div className="space-y-4">
@@ -182,7 +203,12 @@ export function DataTable<TData, TValue>({
               : {}
           }
         >
-          <Table>
+          <Table
+            style={{
+              ...columnSizeVars,
+              width: table.getTotalSize(),
+            }}
+          >
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
@@ -195,7 +221,7 @@ export function DataTable<TData, TValue>({
                         key={header.id}
                         colSpan={header.colSpan}
                         style={{
-                          width: header.getSize(),
+                          minWidth: `calc(var(--header-${header?.id}-size) * 1px)`,
                           ...getCommonPinningStyles(header.column),
                         }}
                       >
@@ -205,55 +231,31 @@ export function DataTable<TData, TValue>({
                               header.column.columnDef.header,
                               header.getContext()
                             )}
+                        {header.column.getCanResize() ? (
+                          <div
+                            {...{
+                              onDoubleClick: () => header.column.resetSize(),
+                              onMouseDown: header.getResizeHandler(),
+                              onTouchStart: header.getResizeHandler(),
+                              className: `absolute top-2 right-0 h-6 w-0.5 rounded-full bg-slate-200 bg-opacity-50 cursor-col-resize select-none touch-none ${
+                                header.column.getIsResizing()
+                                  ? "bg-generate-blue bg-opacity-100"
+                                  : ""
+                              }`,
+                            }}
+                          />
+                        ) : null}
                       </TableHead>
                     );
                   })}
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody>
-              {table.getSortedRowModel().rows?.length ? (
-                <>
-                  {virtualizer.getVirtualItems().map((virtualRow, index) => {
-                    const row = rows[virtualRow.index];
-                    return (
-                      <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
-                        style={{
-                          height: `${virtualRow.size}px`,
-                          transform: `translateY(${
-                            virtualRow.start - index * virtualRow.size
-                          }px)`,
-                        }}
-                      >
-                        {row.getVisibleCells().map((cell) => (
-                          <TableCell
-                            key={cell.id}
-                            className="py-0 px-3 whitespace-nowrap"
-                            style={{ ...getCommonPinningStyles(cell.column) }}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    );
-                  })}
-                </>
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
+            {table.getState().columnSizingInfo.isResizingColumn ? (
+              <MemoizedTBody table={table} virtualizer={virtualizer} />
+            ) : (
+              <TBody table={table} virtualizer={virtualizer} />
+            )}
           </Table>
         </div>
       </div>
@@ -265,3 +267,65 @@ export function DataTable<TData, TValue>({
     </div>
   );
 }
+
+//un-memoized normal table body component - see memoized version below
+function TBody<TData>({
+  table,
+  virtualizer,
+}: {
+  table: TableType<TData>;
+  virtualizer: Virtualizer<HTMLDivElement, Element>;
+}) {
+  const rows = table.getSortedRowModel().rows;
+  return (
+    <TableBody>
+      {rows.length ? (
+        <>
+          {virtualizer.getVirtualItems().map((virtualRow, index) => {
+            const row = rows[virtualRow.index];
+            return (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+                style={{
+                  height: `${virtualRow.size}px`,
+                  transform: `translateY(${
+                    virtualRow.start - index * virtualRow.size
+                  }px)`,
+                }}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell
+                    key={cell.id}
+                    className="py-0 px-3 whitespace-nowrap"
+                    style={{
+                      minWidth: `calc(var(--col-${cell.column.id}-size) * 1px)`,
+                      ...getCommonPinningStyles(cell.column),
+                    }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            );
+          })}
+        </>
+      ) : (
+        <TableRow>
+          <TableCell
+            colSpan={table.getAllFlatColumns().length}
+            className="h-24 text-center"
+          >
+            No results.
+          </TableCell>
+        </TableRow>
+      )}
+    </TableBody>
+  );
+}
+
+//special memoized wrapper for our table body that we will use during column resizing
+const MemoizedTBody = React.memo(
+  TBody,
+  (prev, next) => prev.table.options.data === next.table.options.data
+) as typeof TBody;
