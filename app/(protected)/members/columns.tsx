@@ -30,6 +30,13 @@ export const columns: ColumnDef<GetMembersResponse>[] = [
     enableColumnFilter: false,
   },
   {
+    id: "greeting",
+    accessorKey: "greeting",
+    meta: { label: "Greeting" },
+    header: ({ column }) => <DataTableColumnHeader column={column} />,
+    enableColumnFilter: false,
+  },
+  {
     id: "lastName",
     accessorKey: "lastName",
     meta: { label: "Last Name" },

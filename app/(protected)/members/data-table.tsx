@@ -257,6 +257,11 @@ export function DataTable<TData, TValue>({
           </Table>
         </div>
       </div>
+
+      <p className="p-2 bg-slate-50 border border-slate-200 rounded-md">
+        Showing <b>{table.getRowCount()}</b>{" "}
+        {table.getRowCount() === 1 ? "row" : "rows"}
+      </p>
     </div>
   );
 }
