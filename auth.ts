@@ -28,7 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       const isAuthorized = await fetch(
-        `${process.env.APP_URL}/api/permissions`,
+        `${process.env.APP_URL ? "http://127.0.0.1:3000" : ""}/api/permissions`,
         {
           method: "POST",
           body: JSON.stringify({
