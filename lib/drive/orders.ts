@@ -96,11 +96,9 @@ export async function createOrderRequest(
     })
     .catch((err) => console.log(err));
 
-  let requestId = branch.charAt(0);
-  requestId += team.charAt(0);
-  requestId += team.charAt(1);
-  requestId += newDbRowId;
-  requestId = requestId.toUpperCase();
+  // Use the budget code as the request ID prefix
+  let requestId = budgetLineItem.code;
+  requestId += "-" + newDbRowId;
 
   // send new order request notification in configured Slack channel
   await sendNewOrderReqNotification({
