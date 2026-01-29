@@ -3,7 +3,7 @@ export const BRANCHES = ["Hardware", "Software", "Data", "Operations"];
 export const BRANCH_TEAMS = [
   {
     name: "Hardware",
-    teams: ["Acrylic Bender", "Matcha Flow", "River Gauge", "Tree Planter"],
+    teams: ["Acrylix", "Matcha Flow", "River Gauge", "Growver"],
   },
   {
     name: "Software",
@@ -40,16 +40,16 @@ export const BUDGETS: Budget[] = [
   // Hardware
   {
     branch: "Hardware",
-    subTeam: "Acrylic Bender",
+    subTeam: "Acrylix",
     lineItem: "Materials",
-    code: "HW-AB-01",
+    code: "HW-AX-01",
     purposes: ["Client Project Materials"],
   },
   {
     branch: "Hardware",
-    subTeam: "Acrylic Bender",
+    subTeam: "Acrylix",
     lineItem: "Morale",
-    code: "HW-AB-02",
+    code: "HW-AX-02",
     purposes: ["Morale"],
   },
   {
@@ -82,16 +82,16 @@ export const BUDGETS: Budget[] = [
   },
   {
     branch: "Hardware",
-    subTeam: "Tree Planter",
+    subTeam: "Growver",
     lineItem: "Materials",
-    code: "HW-TP-01",
+    code: "HW-GV-01",
     purposes: ["Client Project Materials"],
   },
   {
     branch: "Hardware",
-    subTeam: "Tree Planter",
+    subTeam: "Growver",
     lineItem: "Morale",
-    code: "HW-TP-02",
+    code: "HW-GV-02",
     purposes: ["Morale"],
   },
 
