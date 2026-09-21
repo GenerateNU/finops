@@ -1,4 +1,4 @@
-export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strategy"];
+export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strategy", "Games"];
 
 export const BRANCH_TEAMS = [
   {
@@ -12,6 +12,10 @@ export const BRANCH_TEAMS = [
   {
     name: "Data",
     teams: ["Foresight", "NERD", "Remetra"],
+  },
+  {
+    name: "Games",
+    teams: ["Board", "Deeplight Games"],
   },
   {
     name: "Organizational Strategy",
@@ -182,25 +186,41 @@ export const BUDGETS: Budget[] = [
     code: "DT-FS-02",
     purposes: ["Morale"],
   },
+
+  // Games
   {
-    branch: "Data",
-    subTeam: "Remetra",
+    branch: "Games",
+    subTeam: "Chiefs",
     lineItem: "Morale",
-    code: "DT-ND-02",
+    code: "GM-CH-02",
     purposes: ["Morale"],
   },
   {
-    branch: "Data",
-    subTeam: "Remetra",
+    branch: "Games",
+    subTeam: "Board",
     lineItem: "Materials",
-    code: "DT-RM-01",
+    code: "GM-GD-01",
     purposes: ["Client Project Materials"],
   },
   {
-    branch: "Data",
-    subTeam: "Remetra",
+    branch: "Games",
+    subTeam: "Board",
     lineItem: "Morale",
-    code: "DT-RM-02",
+    code: "GM-GD-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Games",
+    subTeam: "Deeplight Games",
+    lineItem: "Materials",
+    code: "GM-DG-01",
+    purposes: ["Client Project Materials"],
+  },
+  {
+    branch: "Games",
+    subTeam: "Deeplight Games",
+    lineItem: "Morale",
+    code: "GM-DG-02",
     purposes: ["Morale"],
   },
 
