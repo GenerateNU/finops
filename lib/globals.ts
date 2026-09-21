@@ -11,7 +11,7 @@ export const BRANCH_TEAMS = [
   },
   {
     name: "Data",
-    teams: ["Foresight", "NERD", "Remetra"],
+    teams: ["Foresight", "Orion", "Remetra"],
   },
   {
     name: "Games",
