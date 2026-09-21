@@ -54,16 +54,16 @@ export const BUDGETS: Budget[] = [
   },
   {
     branch: "Hardware",
-    subTeam: "X-Ray",
+    subTeam: "Automated X-Ray",
     lineItem: "Materials",
-    code: "HW-XR-01",
+    code: "HW-AX-01",
     purposes: ["Client Project Materials"],
   },
   {
     branch: "Hardware",
-    subTeam: "X-Ray",
+    subTeam: "Automated X-Ray",
     lineItem: "Morale",
-    code: "HW-XR-02",
+    code: "HW-AX-02",
     purposes: ["Morale"],
   },
   {
@@ -84,14 +84,14 @@ export const BUDGETS: Budget[] = [
     branch: "Hardware",
     subTeam: "Myscology Foods",
     lineItem: "Materials",
-    code: "HW-MY-01",
+    code: "HW-MF-01",
     purposes: ["Client Project Materials"],
   },
   {
     branch: "Hardware",
     subTeam: "Myscology Foods",
     lineItem: "Morale",
-    code: "HW-MY-02",
+    code: "HW-MF-02",
     purposes: ["Morale"],
   },
 
