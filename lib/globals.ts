@@ -170,10 +170,31 @@ export const BUDGETS: Budget[] = [
   // Data
   {
     branch: "Data",
-    subTeam: "Foresight",
+    subTeam: "Chiefs",
+    lineItem: "Morale",
+    code: "DT-CH-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Data",
+    subTeam: "DT",
     lineItem: "Materials",
-    code: "DT-FS-01",
+    code: "DT-DT-01",
     purposes: ["Client Project Materials"],
+  },
+  {
+    branch: "Data",
+    subTeam: "Orion",
+    lineItem: "Materials",
+    code: "DT-OR-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Data",
+    subTeam: "Remetra",
+    lineItem: "Morale",
+    code: "DT-RT-02",
+    purposes: ["Morale"],
   },
   {
     branch: "Data",
@@ -184,14 +205,7 @@ export const BUDGETS: Budget[] = [
   },
   {
     branch: "Data",
-    subTeam: "NERD",
-    lineItem: "Materials",
-    code: "DT-ND-01",
-    purposes: ["Client Project Materials"],
-  },
-  {
-    branch: "Data",
-    subTeam: "NERD",
+    subTeam: "Remetra",
     lineItem: "Morale",
     code: "DT-ND-02",
     purposes: ["Morale"],
