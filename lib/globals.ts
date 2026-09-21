@@ -98,24 +98,24 @@ export const BUDGETS: Budget[] = [
   // Software
   {
     branch: "Software",
-    subTeam: "Boutline",
+    subTeam: "Chiefs",
+    lineItem: "Morale",
+    code: "SW-CH-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Software",
+    subTeam: "SW",
     lineItem: "Materials",
-    code: "SW-BL-01",
+    code: "SW-SW-01",
     purposes: ["Client Project Materials"],
   },
   {
     branch: "Software",
     subTeam: "Boutline",
     lineItem: "Morale",
-    code: "SW-BL-02",
+    code: "SW-BT-02",
     purposes: ["Morale"],
-  },
-  {
-    branch: "Software",
-    subTeam: "Inspirate Consulting",
-    lineItem: "Materials",
-    code: "SW-IC-01",
-    purposes: ["Client Project Materials"],
   },
   {
     branch: "Software",
@@ -127,13 +127,6 @@ export const BUDGETS: Budget[] = [
   {
     branch: "Software",
     subTeam: "Tomoji",
-    lineItem: "Materials",
-    code: "SW-TJ-01",
-    purposes: ["Client Project Materials"],
-  },
-  {
-    branch: "Software",
-    subTeam: "Tomoji",
     lineItem: "Morale",
     code: "SW-TJ-02",
     purposes: ["Morale"],
@@ -141,29 +134,15 @@ export const BUDGETS: Budget[] = [
   {
     branch: "Software",
     subTeam: "TermiTag",
-    lineItem: "Materials",
-    code: "SW-TM-01",
-    purposes: ["Client Project Materials"],
-  },
-  {
-    branch: "Software",
-    subTeam: "TermiTag",
     lineItem: "Morale",
-    code: "SW-TM-02",
+    code: "SW-TT-02",
     purposes: ["Morale"],
   },
   {
     branch: "Software",
     subTeam: "Infra",
-    lineItem: "Materials",
-    code: "SW-IN-01",
-    purposes: ["Client Project Materials"],
-  },
-  {
-    branch: "Software",
-    subTeam: "Infra",
     lineItem: "Morale",
-    code: "SW-IN-02",
+    code: "SW-IF-02",
     purposes: ["Morale"],
   },
 
