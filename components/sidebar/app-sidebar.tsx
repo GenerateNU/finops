@@ -90,18 +90,22 @@ const data = {
       role: "PL",
       openNewTab: true,
     },
+/*
     {
       title: "Propose Expense",
       url: getEnv("NEXT_PUBLIC_EXPENSE_PROPOSAL_URL"),
       icon: TicketPlus,
       openNewTab: true,
     },
+
+    */
     {
       title: "Ask a Question",
       url: getEnv("NEXT_PUBLIC_SLACK_HELP_CHANNEL_URL"),
       icon: MessageSquare,
       openNewTab: true,
     },
+    
   ],
 };
 

@@ -1,30 +1,25 @@
-export const BRANCHES = ["Engagement", "Hardware", "Operations", "Software"];
+export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strategy", "Games"];
 
 export const BRANCH_TEAMS = [
   {
-    name: "Executive Director",
-    teams: ["Discretionary", "Morale"],
-  },
-  {
-    name: "Engagement",
-    teams: ["Community", "Content"],
-  },
-  {
     name: "Hardware",
-    teams: [
-      "Arcade",
-      "Candle Maker",
-      "PlaitPilot",
-      "Uplift Solutions",
-    ],
-  },
-  {
-    name: "Operations",
-    teams: ["Alumni Relations", "EatWell", "Finance", "Internal Insights", "Learning & Development"],
+    teams: ["Affectrum Vault", "X-Ray", "Cicada Health", "Myscology Foods"],
   },
   {
     name: "Software",
-    teams: ["Arenius", "Dearly", "PlateMate", "Vetted"],
+    teams: ["Boutline", "Inspirate Consulting", "Tomoji", "TermiTag", "Infra"],
+  },
+  {
+    name: "Data",
+    teams: ["Foresight", "Orion", "Remetra"],
+  },
+  {
+    name: "Games",
+    teams: ["Board", "Deeplight Games"],
+  },
+  {
+    name: "Organizational Strategy",
+    teams: ["Operations", "Marketing", "Finance"],
   },
 ];
 
@@ -37,132 +32,74 @@ export type Budget = {
 };
 
 export const BUDGETS: Budget[] = [
+  // Shared
   {
     branch: "Shared",
-    subTeam: "Flex Spending",
+    subTeam: "Other",
     lineItem: "Pre-Approved",
-    code: "MG-ZB-50",
+    code: "SH-OT-50",
     purposes: ["Client Project Materials", "Morale", "Promotional Materials", "Other"],
   },
+
+  // Hardware
   {
-    branch: "Management",
-    subTeam: "Directors",
-    lineItem: "Morale",
-    code: "MG-DR-02",
-    purposes: ["Morale"],
+    branch: "Hardware",
+    subTeam: "Affectrum Vault",
+    lineItem: "Materials",
+    code: "HW-AV-01",
+    purposes: ["Client Project Materials"],
   },
   {
-    branch: "Engagement",
-    subTeam: "Community",
+    branch: "Hardware",
+    subTeam: "Affectrum Vault",
     lineItem: "Morale",
-    code: "EG-CY-02",
-    purposes: ["Morale"],
-  },
-  {
-    branch: "Engagement",
-    subTeam: "Content",
-    lineItem: "Morale",
-    code: "EG-CT-02",
+    code: "HW-AV-02",
     purposes: ["Morale"],
   },
   {
     branch: "Hardware",
-    subTeam: "Chiefs",
+    subTeam: "Automated X-Ray",
+    lineItem: "Materials",
+    code: "HW-AX-01",
+    purposes: ["Client Project Materials"],
+  },
+  {
+    branch: "Hardware",
+    subTeam: "Automated X-Ray",
+    lineItem: "Morale",
+    code: "HW-AX-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Hardware",
+    subTeam: "Cicada Health",
+    lineItem: "Materials",
+    code: "HW-CH-01",
+    purposes: ["Client Project Materials"],
+  },
+  {
+    branch: "Hardware",
+    subTeam: "Cicada Health",
     lineItem: "Morale",
     code: "HW-CH-02",
     purposes: ["Morale"],
   },
   {
     branch: "Hardware",
-    subTeam: "Arcade",
+    subTeam: "Myscology Foods",
     lineItem: "Materials",
-    code: "HW-AC-01",
+    code: "HW-MF-01",
     purposes: ["Client Project Materials"],
   },
   {
     branch: "Hardware",
-    subTeam: "Candle Maker",
-    lineItem: "Materials",
-    code: "HW-CM-01",
-    purposes: ["Client Project Materials"],
-  },
-  {
-    branch: "Hardware",
-    subTeam: "PlaitPilot",
-    lineItem: "Materials",
-    code: "HW-PP-01",
-    purposes: ["Client Project Materials"],
-  },
-  {
-    branch: "Hardware",
-    subTeam: "Uplift Solutions",
-    lineItem: "Materials",
-    code: "HW-US-01",
-    purposes: ["Client Project Materials"],
-  },
-  {
-    branch: "Hardware",
-    subTeam: "Arcade",
+    subTeam: "Myscology Foods",
     lineItem: "Morale",
-    code: "HW-AC-02",
+    code: "HW-MF-02",
     purposes: ["Morale"],
   },
-  {
-    branch: "Hardware",
-    subTeam: "Candle Maker",
-    lineItem: "Morale",
-    code: "HW-CM-02",
-    purposes: ["Morale"],
-  },
-  {
-    branch: "Hardware",
-    subTeam: "PlaitPilot",
-    lineItem: "Morale",
-    code: "HW-PP-02",
-    purposes: ["Morale"],
-  },
-  {
-    branch: "Hardware",
-    subTeam: "Uplift Solutions",
-    lineItem: "Morale",
-    code: "HW-US-02",
-    purposes: ["Morale"],
-  },
-  {
-    branch: "Operations",
-    subTeam: "Alumni Relations",
-    lineItem: "Morale",
-    code: "OP-AR-02",
-    purposes: ["Morale"],
-  },
-  {
-    branch: "Operations",
-    subTeam: "EatWell",
-    lineItem: "Morale",
-    code: "OP-EW-02",
-    purposes: ["Morale"],
-  },
-  {
-    branch: "Operations",
-    subTeam: "Finance",
-    lineItem: "Morale",
-    code: "OP-FN-02",
-    purposes: ["Morale"],
-  },
-  {
-    branch: "Operations",
-    subTeam: "Internal Insights",
-    lineItem: "Morale",
-    code: "OP-II-02",
-    purposes: ["Morale"],
-  },
-  {
-    branch: "Operations",
-    subTeam: "Learning & Development",
-    lineItem: "Morale",
-    code: "OP-LD-02",
-    purposes: ["Morale"],
-  },
+
+  // Software
   {
     branch: "Software",
     subTeam: "Chiefs",
@@ -172,30 +109,141 @@ export const BUDGETS: Budget[] = [
   },
   {
     branch: "Software",
-    subTeam: "Arenius",
+    subTeam: "SW",
+    lineItem: "Materials",
+    code: "SW-SW-01",
+    purposes: ["Client Project Materials"],
+  },
+  {
+    branch: "Software",
+    subTeam: "Boutline",
     lineItem: "Morale",
-    code: "SW-AN-02",
+    code: "SW-BT-02",
     purposes: ["Morale"],
   },
   {
     branch: "Software",
-    subTeam: "Dearly",
+    subTeam: "Inspirate Consulting",
     lineItem: "Morale",
-    code: "SW-DY-02",
+    code: "SW-IC-02",
     purposes: ["Morale"],
   },
   {
     branch: "Software",
-    subTeam: "PlateMate",
+    subTeam: "Tomoji",
     lineItem: "Morale",
-    code: "SW-PM-02",
+    code: "SW-TJ-02",
     purposes: ["Morale"],
   },
   {
     branch: "Software",
-    subTeam: "Vetted",
+    subTeam: "TermiTag",
     lineItem: "Morale",
-    code: "SW-VD-02",
+    code: "SW-TT-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Software",
+    subTeam: "Infra",
+    lineItem: "Morale",
+    code: "SW-IF-02",
+    purposes: ["Morale"],
+  },
+
+  // Data
+  {
+    branch: "Data",
+    subTeam: "Chiefs",
+    lineItem: "Morale",
+    code: "DT-CH-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Data",
+    subTeam: "DT",
+    lineItem: "Materials",
+    code: "DT-DT-01",
+    purposes: ["Client Project Materials"],
+  },
+  {
+    branch: "Data",
+    subTeam: "Orion",
+    lineItem: "Materials",
+    code: "DT-OR-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Data",
+    subTeam: "Remetra",
+    lineItem: "Morale",
+    code: "DT-RT-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Data",
+    subTeam: "Foresight",
+    lineItem: "Morale",
+    code: "DT-FS-02",
+    purposes: ["Morale"],
+  },
+
+  // Games
+  {
+    branch: "Games",
+    subTeam: "Chiefs",
+    lineItem: "Morale",
+    code: "GM-CH-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Games",
+    subTeam: "Board",
+    lineItem: "Materials",
+    code: "GM-GD-01",
+    purposes: ["Client Project Materials"],
+  },
+  {
+    branch: "Games",
+    subTeam: "Board",
+    lineItem: "Morale",
+    code: "GM-GD-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Games",
+    subTeam: "Deeplight Games",
+    lineItem: "Materials",
+    code: "GM-DG-01",
+    purposes: ["Client Project Materials"],
+  },
+  {
+    branch: "Games",
+    subTeam: "Deeplight Games",
+    lineItem: "Morale",
+    code: "GM-DG-02",
+    purposes: ["Morale"],
+  },
+
+  // Organizational Strategy
+  {
+    branch: "Organizational Strategy",
+    subTeam: "Operations",
+    lineItem: "Morale",
+    code: "OS-OP-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Organizational Strategy",
+    subTeam: "Marketing",
+    lineItem: "Morale",
+    code: "OS-MK-02",
+    purposes: ["Morale"],
+  },
+  {
+    branch: "Organizational Strategy",
+    subTeam: "Finance",
+    lineItem: "Morale",
+    code: "OS-FN-02",
     purposes: ["Morale"],
   },
 ];
