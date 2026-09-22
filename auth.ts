@@ -6,6 +6,8 @@ import { PostPermissionsResponse } from "./app/api/permissions/route";
 import { getEnv } from "./lib/utils";
 import { UserRole } from "./types";
 
+const baseURL = process.env.APP_URL ?? "http://127.0.0.1:3000";
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     EntraIDProvider({
@@ -26,9 +28,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         console.error("Email does not exist in profile");
         return false;
       }
-
       const isAuthorized = await fetch(
-        `${process.env.APP_URL ? "http://127.0.0.1:3000" : ""}/api/permissions`,
+        `${baseURL}/api/permissions`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -53,7 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         // Get user role
         const rosterData = await fetch(
-          `${process.env.APP_URL}/api/permissions`,
+          `${baseURL}/api/permissions`,
           {
             method: "POST",
             body: JSON.stringify({
