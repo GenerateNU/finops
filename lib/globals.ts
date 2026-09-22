@@ -158,6 +158,8 @@ export const BUDGETS: Budget[] = [
     code: "DT-CH-02",
     purposes: ["Morale"],
   },
+
+  // Data
   {
     branch: "Data",
     subTeam: "DT",
