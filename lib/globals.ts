@@ -7,7 +7,7 @@ export const BRANCH_TEAMS = [
   },
   {
     name: "Software",
-    teams: ["Boutline", "Inspirate Consulting", "Tomoji", "TermiTag", "Infra"],
+    teams: ["Boutline", "Inspirate Consulting", "Tomoji", "Birdie and Claire", "Infra"],
   },
   {
     name: "Data",
@@ -137,9 +137,9 @@ export const BUDGETS: Budget[] = [
   },
   {
     branch: "Software",
-    subTeam: "TermiTag",
+    subTeam: "Birdie and Claire",
     lineItem: "Morale",
-    code: "SW-TT-02",
+    code: "SW-BC-02",
     purposes: ["Morale"],
   },
   {
