@@ -1,25 +1,29 @@
-export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strategy", "Games"];
+export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strategy", "Games", "Management"];
 
 export const BRANCH_TEAMS = [
   {
     name: "Hardware",
-    teams: ["Affectrum Vault", "X-Ray", "Cicada Health", "Myscology Foods"],
+    teams: ["Affectrum Vault", "X-Ray", "Cicada Health", "Mycsology Foods", "Chiefs"],
   },
   {
     name: "Software",
-    teams: ["Boutline", "Inspirate Consulting", "Tomoji", "Birdie and Claire", "Infra"],
+    teams: ["Boutline", "Inspirate Consulting", "Tomoji", "Birdie and Claire", "Infra", "Chiefs"],
   },
   {
     name: "Data",
-    teams: ["Foresight", "Orion", "Remetra"],
+    teams: ["Foresight", "Orion", "Remetra", "Chiefs"],
   },
   {
     name: "Games",
-    teams: ["Board", "Deeplight Games"],
+    teams: ["Board", "Deeplight Games", "Chiefs"],
   },
   {
     name: "Organizational Strategy",
-    teams: ["Operations", "Marketing", "Finance"],
+    teams: ["Operations", "Marketing", "Finance", "Chiefs"],
+  },
+  {
+    name: "Management",
+    teams: ["Director"],
   },
 ];
 
@@ -41,6 +45,22 @@ export const BUDGETS: Budget[] = [
     purposes: ["Client Project Materials", "Morale", "Promotional Materials", "Other"],
   },
 
+  // Management
+  {
+    branch: "Management",
+    subTeam: "Director",
+    lineItem: "Discretionary",
+    code: "MG-DR-50",
+    purposes: ["Discretionary"],
+  },
+  {
+    branch: "Management",
+    subTeam: "Director",
+    lineItem: "Morale",
+    code: "MG-DR-02",
+    purposes: ["Morale"],
+  },
+
   // Hardware
   {
     branch: "Hardware",
@@ -58,14 +78,14 @@ export const BUDGETS: Budget[] = [
   },
   {
     branch: "Hardware",
-    subTeam: "Automated X-Ray",
+    subTeam: "X-Ray",
     lineItem: "Materials",
     code: "HW-AX-01",
     purposes: ["Client Project Materials"],
   },
   {
     branch: "Hardware",
-    subTeam: "Automated X-Ray",
+    subTeam: "X-Ray",
     lineItem: "Morale",
     code: "HW-AX-02",
     purposes: ["Morale"],
@@ -86,16 +106,24 @@ export const BUDGETS: Budget[] = [
   },
   {
     branch: "Hardware",
-    subTeam: "Myscology Foods",
+    subTeam: "Mycsology Foods",
     lineItem: "Materials",
     code: "HW-MF-01",
     purposes: ["Client Project Materials"],
   },
   {
     branch: "Hardware",
-    subTeam: "Myscology Foods",
+    subTeam: "Mycsology Foods",
     lineItem: "Morale",
     code: "HW-MF-02",
+    purposes: ["Morale"],
+  },
+
+  {
+    branch: "Hardware",
+    subTeam: "Chiefs",
+    lineItem: "Morale",
+    code: "HW-CF-02",
     purposes: ["Morale"],
   },
 
@@ -158,8 +186,6 @@ export const BUDGETS: Budget[] = [
     code: "DT-CH-02",
     purposes: ["Morale"],
   },
-
-  // Data
   {
     branch: "Data",
     subTeam: "DT",
@@ -227,6 +253,13 @@ export const BUDGETS: Budget[] = [
   },
 
   // Organizational Strategy
+  {
+    branch: "Organizational Strategy",
+    subTeam: "Chiefs",
+    lineItem: "Morale",
+    code: "OS-CH-02",
+    purposes: ["Morale"],
+  },
   {
     branch: "Organizational Strategy",
     subTeam: "Operations",

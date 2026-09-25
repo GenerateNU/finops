@@ -521,10 +521,11 @@ export async function getMember(email: string) {
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (!email || (email && row[columnIndex] === email)) {
+      if (!email || (email && row[columnIndex]?.trim() === email.trim())) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {
-          obj[camelize(header)] = row[columnIndex];
+          const value = row[columnIndex];
+          obj[camelize(header)] = typeof value === "string" ? value.trim() : value;
         });
         obj["id"] = i + 2; // add 2 to account for header rows
         objects.push(obj);
