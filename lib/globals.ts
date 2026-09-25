@@ -3,23 +3,23 @@ export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strateg
 export const BRANCH_TEAMS = [
   {
     name: "Hardware",
-    teams: ["Affectrum Vault", "X-Ray", "Cicada Health", "Myscology Foods"],
+    teams: ["Affectrum Vault", "X-Ray", "Cicada Health", "Myscology Foods", "Chiefs"],
   },
   {
     name: "Software",
-    teams: ["Boutline", "Inspirate Consulting", "Tomoji", "Birdie and Claire", "Infra"],
+    teams: ["Boutline", "Inspirate Consulting", "Tomoji", "Birdie and Claire", "Infra", "Chiefs"],
   },
   {
     name: "Data",
-    teams: ["Foresight", "Orion", "Remetra"],
+    teams: ["Foresight", "Orion", "Remetra", "Chiefs"],
   },
   {
     name: "Games",
-    teams: ["Board", "Deeplight Games"],
+    teams: ["Board", "Deeplight Games", "Chiefs"],
   },
   {
     name: "Organizational Strategy",
-    teams: ["Operations", "Marketing", "Finance"],
+    teams: ["Operations", "Marketing", "Finance", "Chiefs"],
   },
 ];
 
@@ -58,14 +58,14 @@ export const BUDGETS: Budget[] = [
   },
   {
     branch: "Hardware",
-    subTeam: "Automated X-Ray",
+    subTeam: "X-Ray",
     lineItem: "Materials",
     code: "HW-AX-01",
     purposes: ["Client Project Materials"],
   },
   {
     branch: "Hardware",
-    subTeam: "Automated X-Ray",
+    subTeam: "X-Ray",
     lineItem: "Morale",
     code: "HW-AX-02",
     purposes: ["Morale"],
