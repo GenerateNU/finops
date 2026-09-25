@@ -521,7 +521,10 @@ export async function getMember(email: string) {
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (!email || (email && row[columnIndex]?.trim() === email.trim())) {
+      if (
+        !email ||
+        row[columnIndex]?.trim().toLowerCase() === email.trim().toLowerCase()
+      ) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {
           const value = row[columnIndex];
