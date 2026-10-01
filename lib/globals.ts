@@ -25,6 +25,7 @@ export const BRANCH_TEAMS = [
       "External Relations & Content",
       "Marketing",
       "Finance",
+      "Internal Traditions"
     ],
   },
   {
@@ -123,6 +124,13 @@ export const BUDGETS: Budget[] = [
     lineItem: "Morale",
     code: "FN-FN-02",
     purposes: ["Morale"],
+  },
+  {
+    branch: "Organizational Strategy",
+    subTeam: "Internal Traditions",
+    lineItem: "General Events",
+    code: "OP-IT-03",
+    purposes: ["Other"],
   },
 
   // Hardware
