@@ -70,11 +70,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const innerContent = useAsChild ? (
       React.cloneElement(children as React.ReactElement<any>, {
-        className: cn(children.props.className, "gap-2"),
+        className: cn((children as React.ReactElement<any>).props.className, "gap-2"),
         children: (
           <>
             {before ? renderIcon(before) : null}
-            {children && <span>{children.props.children}</span>}
+            {children && <span>{(children as React.ReactElement<any>).props.children}</span>}
             {after ? renderIcon(after) : null}
           </>
         ),

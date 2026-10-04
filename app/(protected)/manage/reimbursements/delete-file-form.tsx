@@ -2,8 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderIcon, TrashIcon, TriangleAlert, XIcon } from "lucide-react";
-import { useEffect, useRef, useTransition } from "react";
-import { useFormState } from "react-dom";
+import { useActionState, useEffect, useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -26,7 +25,7 @@ import { onSubmitAction } from "./form-submit";
 
 export function DeleteFileForm() {
   const [loading, setTransitioning] = useTransition();
-  const [state, formAction] = useFormState(onSubmitAction, {
+  const [state, formAction] = useActionState(onSubmitAction, {
     success: false,
     message: "",
   });

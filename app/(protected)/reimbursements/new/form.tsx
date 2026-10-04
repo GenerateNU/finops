@@ -13,8 +13,7 @@ import {
 } from "lucide-react";
 import { Session } from "next-auth";
 import Link from "next/link";
-import { useEffect, useRef, useState, useTransition } from "react";
-import { useFormState } from "react-dom";
+import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -59,7 +58,7 @@ import { onSubmitAction } from "./form-submit";
 export function ExpenseVoucherForm({ session }: { session: Session }) {
   const [loading, setTransitioning] = useTransition();
   const [selectedPurpose, setSelectedPurpose] = useState("");
-  const [state, formAction] = useFormState(onSubmitAction, {
+  const [state, formAction] = useActionState(onSubmitAction, {
     success: false,
     message: "",
   });

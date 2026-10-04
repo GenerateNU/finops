@@ -13,7 +13,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     EntraIDProvider({
       clientId: getEnv("AUTH_MICROSOFT_ENTRA_ID_ID"),
       clientSecret: getEnv("AUTH_MICROSOFT_ENTRA_ID_SECRET"),
-      tenantId: getEnv("AUTH_MICROSOFT_ENTRA_ID_TENANT_ID"),
+      issuer: `https://login.microsoftonline.com/${getEnv("AUTH_MICROSOFT_ENTRA_ID_TENANT_ID")}/v2.0`,
       authorization: {
         params: {
           scope: "openid email profile User.Read",

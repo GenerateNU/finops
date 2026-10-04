@@ -15,11 +15,12 @@ const emptyMembershipsTableData = {
   title: "No memberships found",
 };
 
-export default async function MemberDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function MemberDetailPage(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
   const session = await auth();
   if (!session || !session.user.role.includes("admin")) {
     return notFound();
