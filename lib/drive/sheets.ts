@@ -283,7 +283,7 @@ export async function getReimbursementRequests(email?: string) {
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: getEnv("REIMBURSEMENT_REQUESTS_DB_FILE_ID"),
-      range: "B2:N",
+      range: "B2:O",
     });
 
     const rows = response.data.values;
