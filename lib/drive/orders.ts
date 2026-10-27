@@ -7,6 +7,16 @@ import { BUDGETS } from "../globals";
 import { sendNewOrderReqNotification } from "../slack/team-notification";
 import { camelize, getEnv } from "../utils";
 
+// Map roster team aliases to the names used by order budgets.
+const NORMALIZED_ORDER_TEAM = new Map([
+  ["x-ray", "automated x-ray"],
+]);
+
+function normalizeOrderTeam(team: string | undefined): string {
+  const normalized = team?.trim().toLowerCase() ?? "";
+  return NORMALIZED_ORDER_TEAM.get(normalized) ?? normalized;
+}
+
 /**
  * Create an order request with the given request data.
  *
@@ -129,8 +139,9 @@ export async function createOrderRequest(
  * @returns the resulting rows
  */
 export async function getOrderRequests({ email, team }: { email?: string; team?: string }) {
-  if (!email && !team) {
-    console.log("`email` and `team` filters applied. Please use only one.")
+  const normalizedTeam = normalizeOrderTeam(team);
+  if (!email && !normalizedTeam) {
+    console.log("An email or team filter is required.");
     return [];
   }
 
@@ -196,7 +207,7 @@ export async function getOrderRequests({ email, team }: { email?: string; team?:
         objects.push(obj);
       }
 
-      else if ((team && row[teamColumnIndex] === team)) {
+      else if (normalizedTeam && normalizeOrderTeam(row[teamColumnIndex]) === normalizedTeam) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {
           obj[camelize(header)] = row[columnIndex];
