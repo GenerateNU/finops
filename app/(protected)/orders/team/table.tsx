@@ -15,8 +15,9 @@ import {
 } from "@/components/ui/table";
 import dayjs from "@/lib/dayjs";
 import { getOrderRequests } from "@/lib/drive/orders";
+import { getTeamOrderScope } from "@/lib/globals";
 
-let emptyTableData = {
+const emptyTableData = {
   title: "Your team has no orders",
   explanation: "There are no requests associated with your team.",
   addAction: {
@@ -31,15 +32,18 @@ export async function TeamOrdersTable() {
     return redirect("/auth/login");
   }
 
-  emptyTableData = {
+  const scope = getTeamOrderScope(session.user);
+  const content = {
     ...emptyTableData,
-    explanation: `There are no requests associated with your team, ${session.user.team}.`,
+    explanation: scope
+      ? `There are no requests associated with ${scope.branch}${scope.team ? ` / ${scope.team}` : ""}.`
+      : "Your account does not have a team order scope assigned.",
   };
 
-  const requests = await getOrderRequests({ team: session.user.team });
+  const requests = scope ? await getOrderRequests(scope) : [];
 
   if (!requests || requests.length === 0) {
-    return <EmptyTable content={emptyTableData} />;
+    return <EmptyTable content={content} />;
   }
 
   return (

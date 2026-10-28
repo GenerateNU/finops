@@ -1,5 +1,32 @@
 export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strategy", "Games", "Management"];
 
+type AccessUser = { role: string; branch?: string; team?: string; position?: string };
+
+function isDirector(user: AccessUser): boolean {
+  return user.position?.trim().toLowerCase() === "director";
+}
+
+export function getAvailableBudgets(user: AccessUser): Budget[] {
+  const roles = user.role.split("|").map((role) => role.trim().toLowerCase());
+  if (roles.includes("admin")) return BUDGETS;
+
+  return BUDGETS.filter(
+    (budget) =>
+      budget.branch === user.branch ||
+      (isDirector(user) && budget.branch === "Management") ||
+      budget.branch === "Shared"
+  );
+}
+
+export function getTeamOrderScope(
+  user: AccessUser
+): { branch: string; team?: string } | undefined {
+  if (!user.branch?.trim()) return undefined;
+  if (isDirector(user)) return { branch: user.branch };
+  if (!user.team?.trim()) return undefined;
+  return { branch: user.branch, team: user.team };
+}
+
 export const BRANCH_TEAMS = [
   {
     name: "Hardware",

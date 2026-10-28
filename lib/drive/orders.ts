@@ -132,16 +132,19 @@ export async function createOrderRequest(
 }
 
 /**
- * Get all recorded order requests for the given email or team. If not provided, returns all requests.
+ * Get orders matching the supplied filters. All supplied filters must match.
+ * No filters returns no orders.
  *
  * @param email the email to filter results by
  * @param team the team to filter results by
+ * @param branch the branch to filter results by (alone for directors)
  * @returns the resulting rows
  */
-export async function getOrderRequests({ email, team }: { email?: string; team?: string }) {
+export async function getOrderRequests({ email, team, branch }: { email?: string; team?: string; branch?: string }) {
   const normalizedTeam = normalizeOrderTeam(team);
-  if (!email && !normalizedTeam) {
-    console.log("An email or team filter is required.");
+  const normalizedBranch = branch?.trim().toLowerCase();
+  if (!email && !normalizedTeam && !normalizedBranch) {
+    console.log("An email, team, or branch filter is required.");
     return [];
   }
 
@@ -186,35 +189,25 @@ export async function getOrderRequests({ email, team }: { email?: string; team?:
       return [];
     }
 
+    const branchColumnIndex = rows[0].indexOf("Branch");
+    if (normalizedBranch && branchColumnIndex === -1) {
+      console.log(`Column "Branch" not found.`);
+      return [];
+    }
+
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (!email && !team) {
-        const obj: any = {};
-        rows[0].forEach((header, columnIndex) => {
-          obj[camelize(header)] = row[columnIndex];
-        });
-        obj["id"] = i + 2; // add 2 to account for header rows
-        objects.push(obj);
-      }
+      if (email && row[emailColumnIndex] !== email) continue;
+      if (normalizedTeam && normalizeOrderTeam(row[teamColumnIndex]) !== normalizedTeam) continue;
+      if (normalizedBranch && row[branchColumnIndex]?.trim().toLowerCase() !== normalizedBranch) continue;
 
-      else if ((email && row[emailColumnIndex] === email)) {
-        const obj: any = {};
-        rows[0].forEach((header, columnIndex) => {
-          obj[camelize(header)] = row[columnIndex];
-        });
-        obj["id"] = i + 2; // add 2 to account for header rows
-        objects.push(obj);
-      }
-
-      else if (normalizedTeam && normalizeOrderTeam(row[teamColumnIndex]) === normalizedTeam) {
-        const obj: any = {};
-        rows[0].forEach((header, columnIndex) => {
-          obj[camelize(header)] = row[columnIndex];
-        });
-        obj["id"] = i + 2; // add 2 to account for header rows
-        objects.push(obj);
-      }
+      const obj: any = {};
+      rows[0].forEach((header, columnIndex) => {
+        obj[camelize(header)] = row[columnIndex];
+      });
+      obj["id"] = i + 2; // add 2 to account for header rows
+      objects.push(obj);
     }
 
     return objects;
