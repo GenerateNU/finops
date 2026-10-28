@@ -1,6 +1,8 @@
 "use server";
 
+import { auth } from "@/auth";
 import { createExpenseVoucher } from "@/lib/drive/sheets";
+import { getAvailableBudgets } from "@/lib/globals";
 import { sendNotification } from "@/lib/slack/receipt-reminder";
 
 import { formServerSchema } from "./form-schema";
@@ -35,6 +37,13 @@ export async function onSubmitAction(
       fields,
       issues: parsed.error.issues.map((issue) => issue.message),
     };
+  }
+
+  const session = await auth();
+  if (!session?.user || !getAvailableBudgets(session.user).some(
+    (budget) => budget.code === parsed.data.budget
+  )) {
+    return { success: false, message: "You do not have access to this budget." };
   }
 
   // create voucher

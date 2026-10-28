@@ -26,11 +26,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { Budget, BUDGETS, BUDGETS_BY_TEAM } from "@/lib/globals";
+import { BUDGETS, BUDGETS_BY_TEAM, getAvailableBudgets } from "@/lib/globals";
 import { cn } from "@/lib/utils";
-import { UserRole } from "@/types";
 import { Session } from "next-auth";
-import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 
 export function BudgetPicker<TFieldValues extends FieldValues>({
@@ -44,27 +42,7 @@ export function BudgetPicker<TFieldValues extends FieldValues>({
   form: UseFormReturn<TFieldValues>;
   purpose?: string;
 }) {
-  const [availableItems, setAvailableItems] = useState<Budget[]>([]);
-
-  useEffect(() => {
-    if (
-      session.user.role
-        .split("|")
-        .map((r) => r.toLowerCase())
-        .includes(UserRole.ADMIN)
-    ) {
-      console.info("[DEBUG] User is an admin; showing all budget line items.");
-      setAvailableItems(BUDGETS);
-    } else {
-      setAvailableItems(
-        BUDGETS.filter(
-          (budgetItem) =>
-            budgetItem.branch === session.user.branch ||
-            budgetItem.branch === "Shared"
-        )
-      );
-    }
-  }, []);
+  const availableItems = getAvailableBudgets(session.user);
 
   return (
     <FormField

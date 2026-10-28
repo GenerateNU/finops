@@ -37,3 +37,17 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Trigger deployment with Generate email
 Deployments are handled manually via the Generate Vercel project.
+
+## Director access
+
+Access is derived from the Official Roster's existing **Branch** and **Position**
+fields. For example, the Software director should have Branch `Software` and
+Position `Director`; FinOps Access can remain `MEMBER`. No extra columns or
+branch-specific access roles are needed.
+
+Directors automatically receive Management budget access in addition to their
+branch and Shared budgets. Team Orders shows all orders in their branch.
+Ordinary members' Team Orders remains limited to their branch and team.
+
+Roster changes take effect after signing out and back in because membership
+is captured at login.

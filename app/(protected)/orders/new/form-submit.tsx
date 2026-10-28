@@ -1,6 +1,8 @@
 "use server";
 
+import { auth } from "@/auth";
 import { createOrderRequest } from "@/lib/drive/orders";
+import { getAvailableBudgets } from "@/lib/globals";
 import { sendOrderConfirmation } from "@/lib/slack/order-confirmation";
 import { formSchema } from "./form-schema";
 
@@ -41,6 +43,13 @@ export async function onSubmitAction(
       message: "Invalid product cost",
       fields: parsed.data,
     };
+  }
+
+  const session = await auth();
+  if (!session?.user || !getAvailableBudgets(session.user).some(
+    (budget) => budget.code === parsed.data.budget
+  )) {
+    return { success: false, message: "You do not have access to this budget." };
   }
 
   // log request
