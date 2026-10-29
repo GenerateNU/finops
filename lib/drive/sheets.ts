@@ -4,9 +4,9 @@ import { drive_v3, google } from "googleapis";
 
 import { ExpenseVoucher } from "@/types";
 
-import { BUDGETS } from "../globals";
+import { BUDGETS, PATTERNS } from "../globals";
 import { sendNewReimbursementReqNotification } from "../slack/team-notification";
-import { camelize, getDriveUrl, getEnv } from "../utils";
+import { camelize, getDriveUrl, getEnv, normalize } from "../utils";
 
 /**
  * Create and autofill an expense voucher based on the spreadsheet template and the given expense data.
@@ -222,7 +222,7 @@ export async function createExpenseVoucher(
     .then((res) => {
       const range = res.data.updates?.updatedRange;
       if (range) {
-        const matches = range.match(/\d+/);
+        const matches = range.match(PATTERNS.RANGE_ROW);
         if (matches) {
           return matches[0].padStart(2, "0");
         }
@@ -298,10 +298,11 @@ export async function getReimbursementRequests(email?: string) {
       return [];
     }
 
+    const normalizedEmail = normalize(email);
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (!email || (email && row[columnIndex] === email)) {
+      if (!normalizedEmail || normalize(row[columnIndex]) === normalizedEmail) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {
           obj[camelize(header)] = row[columnIndex];
@@ -518,13 +519,11 @@ export async function getMember(email: string) {
       return [];
     }
 
+    const normalizedEmail = normalize(email);
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (
-        !email ||
-        row[columnIndex]?.trim().toLowerCase() === email.trim().toLowerCase()
-      ) {
+      if (!normalizedEmail || normalize(row[columnIndex]) === normalizedEmail) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {
           const value = row[columnIndex];

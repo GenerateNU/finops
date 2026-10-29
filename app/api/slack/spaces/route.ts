@@ -1,7 +1,11 @@
 import { getMember } from "@/lib/drive/sheets";
+import { normalize } from "@/lib/utils";
 import { App as SlackApp } from "@slack/bolt";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+
+// Slack auto-links emails as <mailto:a@b.com|a@b.com>
+const SLACK_MAILTO_PATTERN: RegExp = /^<mailto:([^|>]+)(\|[^>]*)?>$/;
 
 // Define Zod schema for request validation
 const schema = z.object({
@@ -24,8 +28,8 @@ const slackApp = new SlackApp({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
-function formatAccessStatus(status: string): string {
-  switch (status.toLowerCase()) {
+function formatAccessStatus(status: string | undefined): string {
+  switch (normalize(status)) {
     case "true":
       return "ACTIVE ✅";
     case "pending":
@@ -65,7 +69,7 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" },
     });
 
-    const params = parsed.data.text.split(" ");
+    const params = parsed.data.text.trim().split(/\s+/);
     if (params.length !== 1 || params[0] === "") {
       // send error message
       return NextResponse.json(
@@ -74,7 +78,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const email = params[0];
+    const email = params[0].replace(SLACK_MAILTO_PATTERN, "$1");
     const member = await getMember(email);
     const spaces = {
       shermLobby: member.shermLobbyAccess,

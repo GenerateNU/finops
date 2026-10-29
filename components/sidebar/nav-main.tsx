@@ -12,6 +12,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { hasRole } from "@/lib/globals";
 import { UserRole } from "@/types";
 import { Session } from "next-auth";
 import Link from "next/link";
@@ -46,10 +47,7 @@ export function NavMain({
         {items.map((item) => {
           if (
             item.adminOnly &&
-            !session?.user.role
-              .split("|")
-              .map((r) => r.toLowerCase())
-              .includes(UserRole.ADMIN)
+            !hasRole(session?.user, UserRole.ADMIN)
           )
             return null;
 

@@ -1,9 +1,8 @@
 "use server";
 
-import { auth } from "@/auth";
 import { createExpenseVoucher } from "@/lib/drive/sheets";
-import { getAvailableBudgets } from "@/lib/globals";
 import { sendNotification } from "@/lib/slack/receipt-reminder";
+import { getSubmitterEmail } from "@/lib/submitter";
 
 import { formServerSchema } from "./form-schema";
 
@@ -39,19 +38,18 @@ export async function onSubmitAction(
     };
   }
 
-  const session = await auth();
-  if (!session?.user || !getAvailableBudgets(session.user).some(
-    (budget) => budget.code === parsed.data.budget
-  )) {
-    return { success: false, message: "You do not have access to this budget." };
+  const submitter = await getSubmitterEmail(parsed.data.budget);
+  if ("error" in submitter) {
+    return { success: false, message: submitter.error };
   }
+  const { email } = submitter;
 
   // create voucher
-  const res = await createExpenseVoucher(parsed.data);
+  const res = await createExpenseVoucher({ ...parsed.data, email });
 
   // send receipt reminder Slack message to payee
   await sendNotification({
-    recipientEmail: parsed.data.email,
+    recipientEmail: email,
     receiptFolderUrl: res.receiptsFolderUrl,
     requestId: res.requestId,
   }).catch((err: any) => {

@@ -3,7 +3,7 @@ import EntraIDProvider from "next-auth/providers/microsoft-entra-id";
 
 import { getUserProfile } from "@/lib/profile";
 import { PostPermissionsResponse } from "./app/api/permissions/route";
-import { getEnv } from "./lib/utils";
+import { getEnv, normalize } from "./lib/utils";
 import { UserRole } from "./types";
 
 const baseURL = process.env.APP_URL ?? "http://127.0.0.1:3000";
@@ -75,7 +75,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // Enrich token with user details
         token.user = {
           name: user.name,
-          email: user.email,
+          email: normalize(user.email),
           image: user.image,
           nuid: graphProfile.nuid,
           role: rosterData?.role || UserRole.MEMBER,

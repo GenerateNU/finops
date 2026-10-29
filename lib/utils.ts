@@ -6,6 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function normalize(value: string | undefined | null): string {
+  return value?.trim().toLowerCase() ?? "";
+}
+
 export function camelize(str: string) {
   return str
     .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {

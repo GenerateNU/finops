@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 import dayjs from "@/lib/dayjs";
+import { PATTERNS } from "@/lib/globals";
+
+const DIGITS_PATTERN: RegExp = /^\d+$/;
+const ISO_DATE_PATTERN: RegExp =
+  /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/;
 
 const baseSchema = {
   name: z.string().trim().min(2, {
@@ -17,15 +22,20 @@ const baseSchema = {
     .length(9, {
       message: "NUID should be nine (9) digits",
     })
-    .regex(/^\d+$/, { message: "NUID must contain only digits" }),
+    .regex(DIGITS_PATTERN, { message: "NUID must contain only digits" }),
   address: z.string().trim().min(10, {
     message: "Address is required",
   }),
 
   transactionDate: z.date({ message: "Transaction date is required" }),
-  expenseTotal: z.coerce.string({
-    message: "Expense total is required",
-  }),
+  expenseTotal: z
+    .string({
+      message: "Expense total is required",
+    })
+    .trim()
+    .min(1, { message: "Expense total is required" })
+    // pipe so only the first failing check is reported
+    .pipe(z.string().regex(PATTERNS.DECIMAL_AMOUNT, { message: "Invalid expense total" })),
   expensePurpose: z.string().trim().min(5, {
     message: "Expense purpose is required",
   }),
@@ -61,10 +71,7 @@ export const formServerSchema = z.object({
     .pipe(z.boolean()),
   transactionDate: z
     .string({ message: "Transaction date is required" })
-    .regex(
-      /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
-      "Transaction date must be a valid ISO date",
-    )
+    .regex(ISO_DATE_PATTERN, "Transaction date must be a valid ISO date")
     .transform((x) => dayjs(x).toDate())
     .pipe(z.date()),
 });
