@@ -5,7 +5,7 @@ import { PATTERNS } from "@/lib/globals";
 
 const DIGITS_PATTERN: RegExp = /^\d+$/;
 const ISO_DATE_PATTERN: RegExp =
-  /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/;
+  /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/;
 
 const baseSchema = {
   name: z.string().trim().min(2, {
@@ -28,11 +28,14 @@ const baseSchema = {
   }),
 
   transactionDate: z.date({ message: "Transaction date is required" }),
-  expenseTotal: z.coerce
+  expenseTotal: z
     .string({
       message: "Expense total is required",
     })
-    .regex(PATTERNS.DECIMAL_AMOUNT, { message: "Invalid expense total" }),
+    .trim()
+    .min(1, { message: "Expense total is required" })
+    // pipe so only the first failing check is reported
+    .pipe(z.string().regex(PATTERNS.DECIMAL_AMOUNT, { message: "Invalid expense total" })),
   expensePurpose: z.string().trim().min(5, {
     message: "Expense purpose is required",
   }),

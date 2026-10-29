@@ -1,4 +1,4 @@
-import { VENDORS } from "@/lib/globals";
+import { PATTERNS, VENDORS } from "@/lib/globals";
 import { z } from "zod";
 
 const WHOLE_NUMBER_PATTERN: RegExp = /^[1-9]\d*$/;
@@ -23,9 +23,19 @@ export const formSchema = z.object({
   productDescription: z.string().trim().min(3, {
     message: "Product description is required",
   }),
-  unitCost: z.coerce.string({
-    message: "Product cost is required",
-  }),
+  unitCost: z
+    .string({
+      message: "Product cost is required",
+    })
+    .trim()
+    .min(1, { message: "Product cost is required" })
+    // pipe so only the first failing check is reported
+    .pipe(z.string().regex(PATTERNS.DECIMAL_AMOUNT, { message: "Invalid product cost" }))
+    .pipe(
+      z.string().refine((cost) => Number(cost) > 0, {
+        message: "Product cost must be greater than $0",
+      })
+    ),
   quantity: z
     .string({
       message: "Product quantity is required",

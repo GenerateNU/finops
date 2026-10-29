@@ -1,7 +1,6 @@
 "use server";
 
 import { createOrderRequest } from "@/lib/drive/orders";
-import { PATTERNS } from "@/lib/globals";
 import { sendOrderConfirmation } from "@/lib/slack/order-confirmation";
 import { getSubmitterEmail } from "@/lib/submitter";
 import { formSchema } from "./form-schema";
@@ -34,14 +33,6 @@ export async function onSubmitAction(
       message: "Invalid form data",
       fields,
       issues: parsed.error.issues.map((issue) => issue.message),
-    };
-  }
-
-  if (!parsed.data.unitCost.match(PATTERNS.DECIMAL_AMOUNT)) {
-    return {
-      success: false,
-      message: "Invalid product cost",
-      fields: parsed.data,
     };
   }
 

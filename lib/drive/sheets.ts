@@ -519,13 +519,11 @@ export async function getMember(email: string) {
       return [];
     }
 
+    const normalizedEmail = normalize(email);
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (
-        !email ||
-        normalize(row[columnIndex]) === normalize(email)
-      ) {
+      if (!normalizedEmail || normalize(row[columnIndex]) === normalizedEmail) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {
           const value = row[columnIndex];

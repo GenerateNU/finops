@@ -25,21 +25,26 @@ export function getAvailableBudgets(user: AccessUser): Budget[] {
   if (hasRole(user, UserRole.ADMIN)) return BUDGETS;
 
   const branch = normalize(user.branch);
-  return BUDGETS.filter(
-    (budget) =>
-      (branch && normalize(budget.branch) === branch) ||
-      (isDirector(user) && budget.branch === "Management") ||
-      budget.branch === "Shared"
-  );
+  const director = isDirector(user);
+  return BUDGETS.filter((budget) => {
+    const budgetBranch = normalize(budget.branch);
+    return (
+      (branch && budgetBranch === branch) ||
+      (director && budgetBranch === "management") ||
+      budgetBranch === "shared"
+    );
+  });
 }
 
 export function getTeamOrderScope(
   user: AccessUser
 ): { branch: string; team?: string } | undefined {
-  if (!user.branch?.trim()) return undefined;
-  if (isDirector(user)) return { branch: user.branch };
-  if (!user.team?.trim()) return undefined;
-  return { branch: user.branch, team: user.team };
+  const branch = user.branch?.trim();
+  if (!branch) return undefined;
+  if (isDirector(user)) return { branch };
+  const team = user.team?.trim();
+  if (!team) return undefined;
+  return { branch, team };
 }
 
 export const BRANCH_TEAMS = [
