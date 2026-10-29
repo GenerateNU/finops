@@ -1,3 +1,4 @@
+import { UserRole } from "@/types";
 import { normalize } from "./utils";
 
 export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strategy", "Games", "Management"];
@@ -13,7 +14,7 @@ function isDirector(user: AccessUser): boolean {
 }
 
 export function getAvailableBudgets(user: AccessUser): Budget[] {
-  if (hasRole(user, "admin")) return BUDGETS;
+  if (hasRole(user, UserRole.ADMIN)) return BUDGETS;
 
   const branch = normalize(user.branch);
   return BUDGETS.filter(
