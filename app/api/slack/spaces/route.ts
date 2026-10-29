@@ -1,4 +1,5 @@
 import { getMember } from "@/lib/drive/sheets";
+import { normalize } from "@/lib/utils";
 import { App as SlackApp } from "@slack/bolt";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -25,7 +26,7 @@ const slackApp = new SlackApp({
 });
 
 function formatAccessStatus(status: string | undefined): string {
-  switch (status?.trim().toLowerCase()) {
+  switch (normalize(status)) {
     case "true":
       return "ACTIVE ✅";
     case "pending":

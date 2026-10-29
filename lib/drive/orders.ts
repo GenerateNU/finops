@@ -5,7 +5,7 @@ import { OrderRequest } from "@/types";
 
 import { BUDGETS } from "../globals";
 import { sendNewOrderReqNotification } from "../slack/team-notification";
-import { camelize, getEnv } from "../utils";
+import { camelize, getEnv, normalize } from "../utils";
 
 // Map roster team aliases to the names used by order budgets.
 const NORMALIZED_ORDER_TEAM = new Map([
@@ -13,7 +13,7 @@ const NORMALIZED_ORDER_TEAM = new Map([
 ]);
 
 function normalizeOrderTeam(team: string | undefined): string {
-  const normalized = team?.trim().toLowerCase() ?? "";
+  const normalized = normalize(team);
   return NORMALIZED_ORDER_TEAM.get(normalized) ?? normalized;
 }
 
@@ -142,8 +142,8 @@ export async function createOrderRequest(
  */
 export async function getOrderRequests({ email, team, branch }: { email?: string; team?: string; branch?: string }) {
   const normalizedTeam = normalizeOrderTeam(team);
-  const normalizedEmail = email?.trim().toLowerCase();
-  const normalizedBranch = branch?.trim().toLowerCase();
+  const normalizedEmail = normalize(email);
+  const normalizedBranch = normalize(branch);
   if (!normalizedEmail && !normalizedTeam && !normalizedBranch) {
     console.log("An email, team, or branch filter is required.");
     return [];
@@ -199,9 +199,9 @@ export async function getOrderRequests({ email, team, branch }: { email?: string
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (normalizedEmail && row[emailColumnIndex]?.trim().toLowerCase() !== normalizedEmail) continue;
+      if (normalizedEmail && normalize(row[emailColumnIndex]) !== normalizedEmail) continue;
       if (normalizedTeam && normalizeOrderTeam(row[teamColumnIndex]) !== normalizedTeam) continue;
-      if (normalizedBranch && row[branchColumnIndex]?.trim().toLowerCase() !== normalizedBranch) continue;
+      if (normalizedBranch && normalize(row[branchColumnIndex]) !== normalizedBranch) continue;
 
       const obj: any = {};
       rows[0].forEach((header, columnIndex) => {

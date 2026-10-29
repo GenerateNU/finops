@@ -6,7 +6,7 @@ import { ExpenseVoucher } from "@/types";
 
 import { BUDGETS } from "../globals";
 import { sendNewReimbursementReqNotification } from "../slack/team-notification";
-import { camelize, getDriveUrl, getEnv } from "../utils";
+import { camelize, getDriveUrl, getEnv, normalize } from "../utils";
 
 /**
  * Create and autofill an expense voucher based on the spreadsheet template and the given expense data.
@@ -298,11 +298,11 @@ export async function getReimbursementRequests(email?: string) {
       return [];
     }
 
-    const normalizedEmail = email?.trim().toLowerCase();
+    const normalizedEmail = normalize(email);
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (!normalizedEmail || row[columnIndex]?.trim().toLowerCase() === normalizedEmail) {
+      if (!normalizedEmail || normalize(row[columnIndex]) === normalizedEmail) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {
           obj[camelize(header)] = row[columnIndex];
@@ -524,7 +524,7 @@ export async function getMember(email: string) {
       const row = rows[i];
       if (
         !email ||
-        row[columnIndex]?.trim().toLowerCase() === email.trim().toLowerCase()
+        normalize(row[columnIndex]) === normalize(email)
       ) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {

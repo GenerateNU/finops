@@ -1,9 +1,8 @@
 "use server";
 
-import { auth } from "@/auth";
 import { createExpenseVoucher } from "@/lib/drive/sheets";
-import { getAvailableBudgets } from "@/lib/globals";
 import { sendNotification } from "@/lib/slack/receipt-reminder";
+import { getSubmitterEmail } from "@/lib/submitter";
 
 import { formServerSchema } from "./form-schema";
 
@@ -39,28 +38,11 @@ export async function onSubmitAction(
     };
   }
 
-  if (!parsed.data.expenseTotal.match(/^\d+(\.\d+)?$/)) {
-    return {
-      success: false,
-      message: "Invalid expense total",
-      fields: Object.fromEntries(
-        Object.entries(formData).map(([key, value]) => [key, value.toString()])
-      ),
-    };
+  const submitter = await getSubmitterEmail(parsed.data.budget);
+  if ("error" in submitter) {
+    return { success: false, message: submitter.error };
   }
-
-  const session = await auth();
-  if (!session?.user?.email) {
-    return { success: false, message: "You must be signed in to submit a reimbursement." };
-  }
-  if (!getAvailableBudgets(session.user).some(
-    (budget) => budget.code === parsed.data.budget
-  )) {
-    return { success: false, message: "You do not have access to this budget." };
-  }
-
-  // the form's email field is read-only, so always record the signed-in email
-  const email = session.user.email.trim().toLowerCase();
+  const { email } = submitter;
 
   // create voucher
   const res = await createExpenseVoucher({ ...parsed.data, email });

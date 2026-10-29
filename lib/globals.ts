@@ -1,10 +1,8 @@
+import { normalize } from "./utils";
+
 export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strategy", "Games", "Management"];
 
 type AccessUser = { role: string; branch?: string; team?: string; position?: string };
-
-function normalize(value: string | undefined): string {
-  return value?.trim().toLowerCase() ?? "";
-}
 
 export function hasRole(user: { role?: string } | undefined, role: string): boolean {
   return (user?.role ?? "").split("|").map(normalize).includes(normalize(role));

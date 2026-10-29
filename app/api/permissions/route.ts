@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getMember } from "@/lib/drive/sheets";
+import { normalize } from "@/lib/utils";
 import { UserRole } from "@/types";
 
 const schema = z.object({ email: z.string().email() });
@@ -38,7 +39,7 @@ export async function POST(
   try {
     const member = await getMember(parsed.data.email);
 
-    const finOpsAccess = member?.finOpsAccess?.trim().toLowerCase();
+    const finOpsAccess = normalize(member?.finOpsAccess);
     if (finOpsAccess === "false") {
       return NextResponse.json(
         {

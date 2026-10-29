@@ -23,9 +23,11 @@ const baseSchema = {
   }),
 
   transactionDate: z.date({ message: "Transaction date is required" }),
-  expenseTotal: z.coerce.string({
-    message: "Expense total is required",
-  }),
+  expenseTotal: z.coerce
+    .string({
+      message: "Expense total is required",
+    })
+    .regex(/^\d+(\.\d+)?$/, { message: "Invalid expense total" }),
   expensePurpose: z.string().trim().min(5, {
     message: "Expense purpose is required",
   }),
