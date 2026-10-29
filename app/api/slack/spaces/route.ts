@@ -4,6 +4,9 @@ import { App as SlackApp } from "@slack/bolt";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+// Slack auto-links emails as <mailto:a@b.com|a@b.com>
+const SLACK_MAILTO_PATTERN: RegExp = /^<mailto:([^|>]+)(\|[^>]*)?>$/;
+
 // Define Zod schema for request validation
 const schema = z.object({
   token: z.string(),
@@ -75,8 +78,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Slack auto-links emails as <mailto:a@b.com|a@b.com>
-    const email = params[0].replace(/^<mailto:([^|>]+)(\|[^>]*)?>$/, "$1");
+    const email = params[0].replace(SLACK_MAILTO_PATTERN, "$1");
     const member = await getMember(email);
     const spaces = {
       shermLobby: member.shermLobbyAccess,

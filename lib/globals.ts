@@ -1,6 +1,14 @@
 import { UserRole } from "@/types";
 import { normalize } from "./utils";
 
+// Patterns shared across forms and sheet helpers.
+export const PATTERNS = {
+  // non-negative amount, e.g. "12" or "12.50"
+  DECIMAL_AMOUNT: /^\d+(\.\d+)?$/,
+  // first number in an A1 range, i.e. the row of an appended range like "B125:P125"
+  RANGE_ROW: /\d+/,
+} as const satisfies Record<string, RegExp>;
+
 export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strategy", "Games", "Management"];
 
 type AccessUser = { role: string; branch?: string; team?: string; position?: string };

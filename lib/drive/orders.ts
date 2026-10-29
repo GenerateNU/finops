@@ -3,7 +3,7 @@ import { google } from "googleapis";
 
 import { OrderRequest } from "@/types";
 
-import { BUDGETS } from "../globals";
+import { BUDGETS, PATTERNS } from "../globals";
 import { sendNewOrderReqNotification } from "../slack/team-notification";
 import { camelize, getEnv, normalize } from "../utils";
 
@@ -97,7 +97,7 @@ export async function createOrderRequest(
     .then((res) => {
       const range = res.data.updates?.updatedRange;
       if (range) {
-        const matches = range.match(/\d+/);
+        const matches = range.match(PATTERNS.RANGE_ROW);
         if (matches) {
           return matches[0].padStart(2, "0");
         }

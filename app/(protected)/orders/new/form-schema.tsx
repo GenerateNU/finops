@@ -1,6 +1,8 @@
 import { VENDORS } from "@/lib/globals";
 import { z } from "zod";
 
+const WHOLE_NUMBER_PATTERN: RegExp = /^[1-9]\d*$/;
+
 export const formSchema = z.object({
   name: z.string().trim().min(2, {
     message: "Name is required",
@@ -29,5 +31,5 @@ export const formSchema = z.object({
       message: "Product quantity is required",
     })
     .trim()
-    .regex(/^[1-9]\d*$/, { message: "Quantity must be a whole number" }),
+    .regex(WHOLE_NUMBER_PATTERN, { message: "Quantity must be a whole number" }),
 });

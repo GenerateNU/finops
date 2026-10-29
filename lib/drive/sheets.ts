@@ -4,7 +4,7 @@ import { drive_v3, google } from "googleapis";
 
 import { ExpenseVoucher } from "@/types";
 
-import { BUDGETS } from "../globals";
+import { BUDGETS, PATTERNS } from "../globals";
 import { sendNewReimbursementReqNotification } from "../slack/team-notification";
 import { camelize, getDriveUrl, getEnv, normalize } from "../utils";
 
@@ -222,7 +222,7 @@ export async function createExpenseVoucher(
     .then((res) => {
       const range = res.data.updates?.updatedRange;
       if (range) {
-        const matches = range.match(/\d+/);
+        const matches = range.match(PATTERNS.RANGE_ROW);
         if (matches) {
           return matches[0].padStart(2, "0");
         }
