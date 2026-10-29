@@ -24,8 +24,8 @@ const slackApp = new SlackApp({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
-function formatAccessStatus(status: string): string {
-  switch (status.toLowerCase()) {
+function formatAccessStatus(status: string | undefined): string {
+  switch (status?.trim().toLowerCase()) {
     case "true":
       return "ACTIVE ✅";
     case "pending":
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" },
     });
 
-    const params = parsed.data.text.split(" ");
+    const params = parsed.data.text.trim().split(/\s+/);
     if (params.length !== 1 || params[0] === "") {
       // send error message
       return NextResponse.json(
@@ -74,7 +74,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const email = params[0];
+    // Slack auto-links emails as <mailto:a@b.com|a@b.com>
+    const email = params[0].replace(/^<mailto:([^|>]+)(\|[^>]*)?>$/, "$1");
     const member = await getMember(email);
     const spaces = {
       shermLobby: member.shermLobbyAccess,

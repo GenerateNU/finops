@@ -46,18 +46,24 @@ export async function onSubmitAction(
   }
 
   const session = await auth();
-  if (!session?.user || !getAvailableBudgets(session.user).some(
+  if (!session?.user?.email) {
+    return { success: false, message: "You must be signed in to submit an order." };
+  }
+  if (!getAvailableBudgets(session.user).some(
     (budget) => budget.code === parsed.data.budget
   )) {
     return { success: false, message: "You do not have access to this budget." };
   }
 
+  // the form's email field is read-only, so always record the signed-in email
+  const email = session.user.email.trim().toLowerCase();
+
   // log request
-  const order = await createOrderRequest(parsed.data);
+  const order = await createOrderRequest({ ...parsed.data, email });
 
   // send receipt reminder Slack message to payee
   await sendOrderConfirmation({
-    recipientEmail: parsed.data.email,
+    recipientEmail: email,
     requestId: order.requestId,
   }).catch((err: any) => {
     console.error(err);

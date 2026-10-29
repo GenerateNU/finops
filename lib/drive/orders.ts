@@ -142,8 +142,9 @@ export async function createOrderRequest(
  */
 export async function getOrderRequests({ email, team, branch }: { email?: string; team?: string; branch?: string }) {
   const normalizedTeam = normalizeOrderTeam(team);
+  const normalizedEmail = email?.trim().toLowerCase();
   const normalizedBranch = branch?.trim().toLowerCase();
-  if (!email && !normalizedTeam && !normalizedBranch) {
+  if (!normalizedEmail && !normalizedTeam && !normalizedBranch) {
     console.log("An email, team, or branch filter is required.");
     return [];
   }
@@ -198,7 +199,7 @@ export async function getOrderRequests({ email, team, branch }: { email?: string
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (email && row[emailColumnIndex] !== email) continue;
+      if (normalizedEmail && row[emailColumnIndex]?.trim().toLowerCase() !== normalizedEmail) continue;
       if (normalizedTeam && normalizeOrderTeam(row[teamColumnIndex]) !== normalizedTeam) continue;
       if (normalizedBranch && row[branchColumnIndex]?.trim().toLowerCase() !== normalizedBranch) continue;
 

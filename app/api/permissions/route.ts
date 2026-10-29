@@ -38,7 +38,8 @@ export async function POST(
   try {
     const member = await getMember(parsed.data.email);
 
-    if (member?.finOpsAccess.toLowerCase() === "false") {
+    const finOpsAccess = member?.finOpsAccess?.trim().toLowerCase();
+    if (finOpsAccess === "false") {
       return NextResponse.json(
         {
           isAuthorized: false,
@@ -52,7 +53,7 @@ export async function POST(
       isAuthorized: true,
       message: "User authenticated",
       data: {
-        role: member?.finOpsAccess.toLowerCase() || UserRole.MEMBER,
+        role: finOpsAccess || UserRole.MEMBER,
         branch: member?.branch,
         team: member?.team,
         position: member?.position

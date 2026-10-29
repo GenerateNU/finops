@@ -28,5 +28,6 @@ export const formSchema = z.object({
     .string({
       message: "Product quantity is required",
     })
-    .trim(),
+    .trim()
+    .regex(/^[1-9]\d*$/, { message: "Quantity must be a whole number" }),
 });

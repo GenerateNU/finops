@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { hasRole } from "@/lib/globals";
 import {
   Card,
   CardContent,
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 
 export default async function MyReimbursementsPage() {
   const session = await auth();
-  if (!session || !session.user.role.includes("admin")) {
+  if (!session || !hasRole(session.user, "admin")) {
     return notFound();
   }
 

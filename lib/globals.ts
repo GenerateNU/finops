@@ -2,17 +2,25 @@ export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strateg
 
 type AccessUser = { role: string; branch?: string; team?: string; position?: string };
 
+function normalize(value: string | undefined): string {
+  return value?.trim().toLowerCase() ?? "";
+}
+
+export function hasRole(user: { role?: string } | undefined, role: string): boolean {
+  return (user?.role ?? "").split("|").map(normalize).includes(normalize(role));
+}
+
 function isDirector(user: AccessUser): boolean {
-  return user.position?.trim().toLowerCase() === "director";
+  return normalize(user.position) === "director";
 }
 
 export function getAvailableBudgets(user: AccessUser): Budget[] {
-  const roles = user.role.split("|").map((role) => role.trim().toLowerCase());
-  if (roles.includes("admin")) return BUDGETS;
+  if (hasRole(user, "admin")) return BUDGETS;
 
+  const branch = normalize(user.branch);
   return BUDGETS.filter(
     (budget) =>
-      budget.branch === user.branch ||
+      (branch && normalize(budget.branch) === branch) ||
       (isDirector(user) && budget.branch === "Management") ||
       budget.branch === "Shared"
   );

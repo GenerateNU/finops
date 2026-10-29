@@ -298,10 +298,11 @@ export async function getReimbursementRequests(email?: string) {
       return [];
     }
 
+    const normalizedEmail = email?.trim().toLowerCase();
     const objects = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (!email || (email && row[columnIndex] === email)) {
+      if (!normalizedEmail || row[columnIndex]?.trim().toLowerCase() === normalizedEmail) {
         const obj: any = {};
         rows[0].forEach((header, columnIndex) => {
           obj[camelize(header)] = row[columnIndex];

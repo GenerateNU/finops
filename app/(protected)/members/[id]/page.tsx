@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { hasRole } from "@/lib/globals";
 import { EmptyTable } from "@/components/empty-table";
 import {
   Table,
@@ -22,7 +23,7 @@ export default async function MemberDetailPage(
 ) {
   const params = await props.params;
   const session = await auth();
-  if (!session || !session.user.role.includes("admin")) {
+  if (!session || !hasRole(session.user, "admin")) {
     return notFound();
   }
 

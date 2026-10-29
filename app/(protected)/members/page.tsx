@@ -2,6 +2,7 @@ import { getMembers } from "@/queries/select";
 import { Metadata } from "next";
 
 import { auth } from "@/auth";
+import { hasRole } from "@/lib/globals";
 import { notFound } from "next/navigation";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default async function MembersPage() {
   const session = await auth();
-  if (!session || !session.user.role.includes("admin")) {
+  if (!session || !hasRole(session.user, "admin")) {
     return notFound();
   }
 
