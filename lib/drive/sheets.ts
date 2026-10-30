@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { drive_v3, google } from "googleapis";
+import { drive_v3, google, sheets_v4 } from "googleapis";
 // import PDFMerger from "pdf-merger-js";
 
 import { ExpenseVoucher } from "@/types";
@@ -276,9 +276,13 @@ export async function getReimbursementRequests(email?: string) {
         token_url: "https://oauth2.googleapis.com/token",
         universe_domain: "googleapis.com",
       },
-      scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+      scopes: [
+        "https://www.googleapis.com/auth/drive.readonly",
+        "https://www.googleapis.com/auth/spreadsheets",
+      ],
     });
 
+    const drive = google.drive({ version: "v3", auth });
     const sheets = google.sheets({ version: "v4", auth });
 
     const response = await sheets.spreadsheets.values.get({
@@ -311,11 +315,78 @@ export async function getReimbursementRequests(email?: string) {
       }
     }
 
+    await markUploadedReceipts(drive, sheets, rows[0], objects);
+
     return objects;
   } catch (err) {
     console.error("The API returned an error:", err);
     throw err;
   }
+}
+
+/**
+ * Move requests from "Missing Receipt" to "In Review" once a file appears in their receipts folder.
+ * Updates both the database sheet and the given request objects in place.
+ *
+ * @param drive the Drive client
+ * @param sheets the Sheets client
+ * @param headers the database header row, starting at column B
+ * @param requests the request objects to check
+ */
+async function markUploadedReceipts(
+  drive: drive_v3.Drive,
+  sheets: sheets_v4.Sheets,
+  headers: string[],
+  requests: any[],
+) {
+  const statusIndex = headers.indexOf("Status");
+  if (statusIndex === -1) {
+    console.log(`Column "Status" not found.`);
+    return;
+  }
+  const statusColumn = String.fromCharCode("B".charCodeAt(0) + statusIndex);
+
+  const missing = requests.filter(
+    (request) =>
+      request.status === "Missing Receipt" && request.receiptsFolderId,
+  );
+
+  // check each receipts folder for at least one file
+  const uploaded = (
+    await Promise.all(
+      missing.map((request) =>
+        drive.files
+          .list({
+            q: `'${request.receiptsFolderId}' in parents and trashed = false`,
+            fields: "files(id)",
+            pageSize: 1,
+          })
+          .then((res) => ((res.data.files?.length ?? 0) > 0 ? request : null))
+          .catch((err) => {
+            console.log(err);
+            return null;
+          }),
+      ),
+    )
+  ).filter((request) => request !== null);
+
+  if (uploaded.length === 0) return;
+
+  await sheets.spreadsheets.values
+    .batchUpdate({
+      spreadsheetId: getEnv("REIMBURSEMENT_REQUESTS_DB_FILE_ID"),
+      requestBody: {
+        data: uploaded.map((request) => ({
+          range: `${statusColumn}${request.id}`,
+          values: [["In Review"]],
+        })),
+        valueInputOption: "USER_ENTERED",
+      },
+    })
+    .then(() => {
+      uploaded.forEach((request) => (request.status = "In Review"));
+    })
+    .catch((err) => console.log(err));
 }
 
 /**
