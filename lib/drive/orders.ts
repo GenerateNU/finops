@@ -72,7 +72,7 @@ export async function createOrderRequest(
   const newDbRowId = await sheets.spreadsheets.values
     .append({
       spreadsheetId: getEnv("ORDER_REQUESTS_DB_FILE_ID"),
-      range: rangePrefix + "B3:P",
+      range: rangePrefix + "A1:R",
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [
@@ -168,7 +168,7 @@ export async function getOrderRequests({ email, team, branch }: { email?: string
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: getEnv("ORDER_REQUESTS_DB_FILE_ID"),
-      range: "B2:R",
+      range: "'Order Requests'!A1:R",
     });
 
     const rows = response.data.values;
@@ -206,7 +206,7 @@ export async function getOrderRequests({ email, team, branch }: { email?: string
       rows[0].forEach((header, columnIndex) => {
         obj[camelize(header)] = row[columnIndex];
       });
-      obj["id"] = i + 2; // add 2 to account for header rows
+      obj["id"] = i + 1; // add 1 to account for the header row
       objects.push(obj);
     }
 
