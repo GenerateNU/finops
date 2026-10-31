@@ -1,11 +1,30 @@
 version: 2
+
 updates:
   - package-ecosystem: bun
-    directory: "/"
+    directory: /
     schedule:
       interval: weekly
+    # Room for the current backlog of major bumps, which each get their own PR
+    open-pull-requests-limit: 10
+    cooldown:
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 3
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
 
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: /
     schedule:
       interval: weekly
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      actions:
+        patterns: ["*"]
