@@ -8,6 +8,8 @@ dayjs.extend(advancedFormat);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-dayjs.tz.guess();
+const tz = "America/New_York";
+
+dayjs.tz.setDefault(tz);
 
 export default dayjs;
