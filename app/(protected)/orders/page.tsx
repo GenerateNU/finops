@@ -25,7 +25,7 @@ export default function MyOrdersPage() {
 
       <div className="flex flex-col items-start gap-4 pt-3 border-t border-t-slate-200 dark:border-t-slate-800">
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          Last updated: {dayjs().format("MMMM Do [at] h:mm a")}
+          Last updated: {dayjs().format("MMMM Do [at] h:mm a z")}
         </p>
       </div>
     </>
