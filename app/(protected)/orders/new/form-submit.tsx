@@ -1,9 +1,8 @@
 "use server";
 
-import { auth } from "@/auth";
 import { createOrderRequest } from "@/lib/drive/orders";
-import { getAvailableBudgets } from "@/lib/globals";
 import { sendOrderConfirmation } from "@/lib/slack/order-confirmation";
+import { getSubmitterEmail } from "@/lib/submitter";
 import { formSchema } from "./form-schema";
 
 export type FormState = {
@@ -37,27 +36,18 @@ export async function onSubmitAction(
     };
   }
 
-  if (!parsed.data.unitCost.match(/^\d+(\.\d+)?$/)) {
-    return {
-      success: false,
-      message: "Invalid product cost",
-      fields: parsed.data,
-    };
+  const submitter = await getSubmitterEmail(parsed.data.budget);
+  if ("error" in submitter) {
+    return { success: false, message: submitter.error };
   }
-
-  const session = await auth();
-  if (!session?.user || !getAvailableBudgets(session.user).some(
-    (budget) => budget.code === parsed.data.budget
-  )) {
-    return { success: false, message: "You do not have access to this budget." };
-  }
+  const { email } = submitter;
 
   // log request
-  const order = await createOrderRequest(parsed.data);
+  const order = await createOrderRequest({ ...parsed.data, email });
 
   // send receipt reminder Slack message to payee
   await sendOrderConfirmation({
-    recipientEmail: parsed.data.email,
+    recipientEmail: email,
     requestId: order.requestId,
   }).catch((err: any) => {
     console.error(err);

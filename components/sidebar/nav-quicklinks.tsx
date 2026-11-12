@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { hasRole } from "@/lib/globals";
 import { Session } from "next-auth";
 import Link from "next/link";
 
@@ -33,10 +34,7 @@ export function NavQuicklinks({
 
           if (
             item.role &&
-            !session?.user.role
-              .split("|")
-              .map((r) => r.toLowerCase())
-              .includes(item.role.toLowerCase())
+            !hasRole(session?.user, item.role)
           )
             return null;
 

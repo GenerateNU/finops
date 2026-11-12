@@ -1,30 +1,50 @@
+import { UserRole } from "@/types";
+import { normalize } from "./utils";
+
+// Patterns shared across forms and sheet helpers.
+export const PATTERNS = {
+  // non-negative amount, e.g. "12" or "12.50"
+  DECIMAL_AMOUNT: /^\d+(\.\d+)?$/,
+  // first number in an A1 range, i.e. the row of an appended range like "B125:P125"
+  RANGE_ROW: /\d+/,
+} as const satisfies Record<string, RegExp>;
+
 export const BRANCHES = ["Hardware", "Software", "Data", "Organizational Strategy", "Games", "Management"];
 
 type AccessUser = { role: string; branch?: string; team?: string; position?: string };
 
+export function hasRole(user: { role?: string } | undefined, role: string): boolean {
+  return (user?.role ?? "").split("|").map(normalize).includes(normalize(role));
+}
+
 function isDirector(user: AccessUser): boolean {
-  return user.position?.trim().toLowerCase() === "director";
+  return normalize(user.position) === "director";
 }
 
 export function getAvailableBudgets(user: AccessUser): Budget[] {
-  const roles = user.role.split("|").map((role) => role.trim().toLowerCase());
-  if (roles.includes("admin")) return BUDGETS;
+  if (hasRole(user, UserRole.ADMIN)) return BUDGETS;
 
-  return BUDGETS.filter(
-    (budget) =>
-      budget.branch === user.branch ||
-      (isDirector(user) && budget.branch === "Management") ||
-      budget.branch === "Shared"
-  );
+  const branch = normalize(user.branch);
+  const director = isDirector(user);
+  return BUDGETS.filter((budget) => {
+    const budgetBranch = normalize(budget.branch);
+    return (
+      (branch && budgetBranch === branch) ||
+      (director && budgetBranch === "management") ||
+      budgetBranch === "shared"
+    );
+  });
 }
 
 export function getTeamOrderScope(
   user: AccessUser
 ): { branch: string; team?: string } | undefined {
-  if (!user.branch?.trim()) return undefined;
-  if (isDirector(user)) return { branch: user.branch };
-  if (!user.team?.trim()) return undefined;
-  return { branch: user.branch, team: user.team };
+  const branch = user.branch?.trim();
+  if (!branch) return undefined;
+  if (isDirector(user)) return { branch };
+  const team = user.team?.trim();
+  if (!team) return undefined;
+  return { branch, team };
 }
 
 export const BRANCH_TEAMS = [

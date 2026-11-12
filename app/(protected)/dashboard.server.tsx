@@ -3,7 +3,7 @@ import { GreetingIcon } from "@/components/greeting-icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getMember } from "@/lib/drive/sheets";
-import { getEnv, getGreeting } from "@/lib/utils";
+import { getEnv, getGreeting, normalize } from "@/lib/utils";
 
 import {
   ArrowRightIcon,
@@ -200,13 +200,14 @@ export default async function Dashboard() {
 }
 
 function Indicator({ predicate }: { predicate: string }) {
-  if (predicate && predicate.toLowerCase() === "true") {
+  const status = normalize(predicate);
+  if (status === "true") {
     return <CheckCircle2Icon className="text-generate-green size-6 shrink-0" />;
-  } else if (predicate && predicate.toLowerCase() === "pending") {
+  } else if (status === "pending") {
     return (
       <CircleEllipsisIcon className="text-generate-purple size-6 shrink-0" />
     );
-  } else if (predicate && predicate.toLowerCase() === "false") {
+  } else if (status === "false") {
     return <XCircleIcon className="text-generate-red size-6 shrink-0" />;
   }
   return <CircleHelpIcon className="text-generate-gold size-6 shrink-0" />;
